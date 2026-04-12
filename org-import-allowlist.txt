@@ -1,0 +1,9 @@
+# Allow-listed repositories inside PlayDay-iOS to import .deb assets from.
+# One repository name per line, comments and blank lines are ignored.
+# Example:
+# tweak-one
+# tweak-two
+
+LowerInstall
+stash-unified
+wifi-fix-old-iOS

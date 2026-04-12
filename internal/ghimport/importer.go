@@ -1,0 +1,300 @@
+package ghimport
+
+import (
+	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"fmt"
+	"io"
+	"log/slog"
+	"net/http"
+	"os"
+	"path/filepath"
+	"slices"
+	"strings"
+	"time"
+
+	"github.com/PlayDay-iOS/repo/internal/config"
+	"github.com/PlayDay-iOS/repo/internal/deb"
+	"github.com/PlayDay-iOS/repo/internal/fileutil"
+	"github.com/google/go-github/v84/github"
+)
+
+// Options configures the import command.
+type Options struct {
+	RootDir            string
+	ConfigPath         string
+	AllowlistPath      string
+	Suite              string
+	IncludePrereleases bool
+	Logger             *slog.Logger
+}
+
+var linkFile = os.Link
+var copyFileExclusive = fileutil.CopyFileExclusive
+
+// Run executes the import process.
+func Run(opts Options) error {
+	log := opts.Logger
+	if log == nil {
+		log = slog.Default()
+	}
+
+	cfg, err := config.Load(opts.ConfigPath)
+	if err != nil {
+		return fmt.Errorf("loading config: %w", err)
+	}
+
+	suite := opts.Suite
+	if suite == "" {
+		suite = cfg.PrimarySuite()
+	}
+	if !slices.Contains(cfg.Suites, suite) {
+		return fmt.Errorf("suite %q not in configured suites: %v", suite, cfg.Suites)
+	}
+
+	destDir := filepath.Join(opts.RootDir, "pool", suite, cfg.PrimaryComponent())
+	if err := os.MkdirAll(destDir, 0755); err != nil {
+		return fmt.Errorf("creating destination dir: %w", err)
+	}
+
+	repos, err := ReadAllowlist(log, opts.AllowlistPath)
+	if err != nil {
+		return err
+	}
+	if len(repos) == 0 {
+		log.Info("allowlist is empty, nothing to import")
+		return nil
+	}
+
+	token := os.Getenv("GH_TOKEN")
+	if token == "" {
+		token = os.Getenv("GITHUB_TOKEN")
+	}
+
+	apiBase := os.Getenv("GITHUB_API_BASE")
+	if apiBase == "" {
+		apiBase = "https://api.github.com"
+	}
+	perPage := 100
+
+	client, err := NewGitHubClient(token, apiBase)
+	if err != nil {
+		return fmt.Errorf("creating GitHub client: %w", err)
+	}
+
+	dlClient := &http.Client{
+		Transport: client.Client().Transport,
+		Timeout:   60 * time.Second,
+	}
+
+	allowedArch := cfg.AllowedArchitectures()
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Minute)
+	defer cancel()
+
+	// Create a temp directory for downloads (cleaned up at end)
+	tmpDir, err := os.MkdirTemp("", "ghimport-*")
+	if err != nil {
+		return fmt.Errorf("creating temp dir: %w", err)
+	}
+	defer os.RemoveAll(tmpDir)
+
+	var added, skipped, rejected int
+
+	for _, repoName := range repos {
+		log.Info("scanning repo", "org", cfg.OrgName, "repo", repoName)
+
+		releases, err := FetchAllReleases(ctx, log, client, cfg.OrgName, repoName, perPage)
+		if err != nil {
+			log.Warn("failed to fetch releases, skipping", "repo", repoName, "error", err)
+			skipped++
+			continue
+		}
+
+		assets := collectDebAssets(releases, opts.IncludePrereleases)
+		if len(assets) == 0 {
+			log.Info("no matching .deb assets found", "repo", repoName)
+			continue
+		}
+
+		safeRepo := sanitizeFilename(repoName)
+		for _, a := range assets {
+			result := processAsset(log, a, safeRepo, tmpDir, destDir, allowedArch, dlClient)
+			switch result {
+			case assetAdded:
+				added++
+			case assetSkipped:
+				skipped++
+			case assetRejected:
+				rejected++
+			}
+		}
+	}
+
+	log.Info("import complete", "suite", suite, "added", added, "skipped", skipped, "rejected", rejected)
+	return nil
+}
+
+type assetResult int
+
+const (
+	assetAdded assetResult = iota
+	assetSkipped
+	assetRejected
+)
+
+func processAsset(log *slog.Logger, a debAsset, safeRepo, tmpDir, destDir string, allowedArch map[string]bool, dlClient *http.Client) assetResult {
+	safeName := sanitizeFilename(a.name)
+	tmpPath := filepath.Join(tmpDir, fmt.Sprintf("%s_%s", safeRepo, safeName))
+	defer os.Remove(tmpPath)
+
+	log.Info("downloading asset", "name", a.name, "tag", a.tagName)
+	if err := DownloadFile(a.downloadURL, tmpPath, dlClient); err != nil {
+		log.Warn("failed to download, skipping", "name", a.name, "error", err)
+		return assetSkipped
+	}
+
+	debFile, err := os.Open(tmpPath)
+	if err != nil {
+		log.Warn("failed to open downloaded file, skipping", "name", a.name, "error", err)
+		return assetSkipped
+	}
+
+	control, err := deb.ExtractControlFromReader(debFile, a.name)
+	debFile.Close()
+	if err != nil {
+		log.Warn("rejected: failed to parse .deb control", "name", a.name, "error", err)
+		return assetRejected
+	}
+
+	if err := deb.ValidateControl(control, allowedArch); err != nil {
+		log.Warn("rejected: invalid control metadata", "name", a.name, "error", err)
+		return assetRejected
+	}
+
+	arch := control.Get("Architecture")
+	pkg := control.Get("Package")
+	ver := control.Get("Version")
+
+	if containsPathChars(pkg) || containsPathChars(ver) || containsPathChars(arch) {
+		log.Warn("rejected: control fields contain invalid path characters", "name", a.name)
+		return assetRejected
+	}
+
+	canonicalName := fmt.Sprintf("%s_%s_%s.deb", pkg, ver, arch)
+	destPath := filepath.Join(destDir, canonicalName)
+
+	cleanDest := filepath.Clean(destPath)
+	if !strings.HasPrefix(cleanDest, filepath.Clean(destDir)+string(os.PathSeparator)) {
+		log.Warn("rejected: path traversal detected in control fields", "name", a.name)
+		return assetRejected
+	}
+
+	return placeFile(log, tmpPath, destPath, canonicalName)
+}
+
+func placeFile(log *slog.Logger, tmpPath, destPath, canonicalName string) assetResult {
+	// Use os.Link for atomic "create only if not exists" semantics,
+	// avoiding a TOCTOU race between stat and rename.
+	linkErr := linkFile(tmpPath, destPath)
+	if linkErr == nil {
+		log.Info("added package", "name", canonicalName)
+		return assetAdded
+	}
+
+	if os.IsExist(linkErr) {
+		existingHash, err := fileSHA256(destPath)
+		if err != nil {
+			log.Warn("failed to read existing file, skipping", "name", canonicalName, "error", err)
+			return assetSkipped
+		}
+		incomingHash, err := fileSHA256(tmpPath)
+		if err != nil {
+			log.Warn("failed to hash incoming file, skipping", "name", canonicalName, "error", err)
+			return assetSkipped
+		}
+
+		if existingHash == incomingHash {
+			log.Debug("unchanged", "name", canonicalName)
+			return assetSkipped
+		}
+		log.Warn("rejected: already exists with different content", "name", canonicalName)
+		return assetRejected
+	}
+
+	if err := copyFileExclusive(tmpPath, destPath); err != nil {
+		if os.IsExist(err) {
+			log.Debug("already placed by concurrent process", "name", canonicalName)
+		} else {
+			log.Warn("failed to place file, skipping", "name", canonicalName, "error", err)
+		}
+		return assetSkipped
+	}
+	log.Info("added package", "name", canonicalName)
+	return assetAdded
+}
+
+type debAsset struct {
+	name        string
+	downloadURL string
+	tagName     string
+}
+
+func collectDebAssets(releases []*github.RepositoryRelease, includePrereleases bool) []debAsset {
+	var assets []debAsset
+	for _, r := range releases {
+		if r.GetDraft() {
+			continue
+		}
+		if !includePrereleases && r.GetPrerelease() {
+			continue
+		}
+		for _, a := range r.Assets {
+			name := a.GetName()
+			dlURL := a.GetBrowserDownloadURL()
+			if !strings.HasSuffix(strings.ToLower(name), ".deb") || dlURL == "" {
+				continue
+			}
+			assets = append(assets, debAsset{
+				name:        name,
+				downloadURL: dlURL,
+				tagName:     r.GetTagName(),
+			})
+		}
+	}
+	return assets
+}
+
+func sanitizeFilename(name string) string {
+	var b strings.Builder
+	for _, r := range name {
+		switch {
+		case r >= 'a' && r <= 'z', r >= 'A' && r <= 'Z', r >= '0' && r <= '9', r == '-', r == '_', r == '.':
+			b.WriteRune(r)
+		default:
+			b.WriteByte('-')
+		}
+	}
+	result := b.String()
+	if result == "" {
+		return "unknown"
+	}
+	return result
+}
+
+func containsPathChars(s string) bool {
+	return strings.ContainsAny(s, "/\\\x00")
+}
+
+func fileSHA256(path string) (string, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+	h := sha256.New()
+	if _, err := io.Copy(h, f); err != nil {
+		return "", err
+	}
+	return hex.EncodeToString(h.Sum(nil)), nil
+}

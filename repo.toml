@@ -1,0 +1,17 @@
+[repo]
+name = "PlayDay iOS Repo"
+url  = "https://playday-ios.github.io/repo/"
+
+[metadata]
+origin        = "PlayDay-iOS"
+label         = "PlayDay-iOS"
+suites        = ["stable", "beta"]
+components    = ["main"]
+architectures = ["iphoneos-arm", "iphoneos-arm64", "all"]
+description   = "APT repository for iOS packages published by PlayDay."
+
+[github]
+org_name = "PlayDay-iOS"
+
+[signing]
+# gpg_key_file = ""  # env GPG_KEY_FILE overrides
