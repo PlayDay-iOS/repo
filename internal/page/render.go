@@ -39,7 +39,7 @@ func TitleCase(s string) string {
 }
 
 // RenderLandingPage renders the HTML landing page into outputDir/index.html.
-func RenderLandingPage(outputDir string, cfg *config.RepoConfig, templatePath string) error {
+func RenderLandingPage(outputDir string, cfg *config.RepoConfig, templatePath string, buildTime time.Time) error {
 	tmplBytes, err := os.ReadFile(templatePath)
 	if err != nil {
 		return fmt.Errorf("reading template %s: %w", templatePath, err)
@@ -69,7 +69,7 @@ func RenderLandingPage(outputDir string, cfg *config.RepoConfig, templatePath st
 		RepoName:    cfg.Name,
 		RepoURL:     repoURL,
 		Suites:      suites,
-		GeneratedAt: time.Now().UTC().Format("2006-01-02 15:04 UTC"),
+		GeneratedAt: buildTime.UTC().Format("2006-01-02 15:04 UTC"),
 	}
 
 	if err := os.MkdirAll(outputDir, 0755); err != nil {

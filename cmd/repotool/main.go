@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"runtime/debug"
 	"strconv"
+	"time"
 
 	"github.com/spf13/cobra"
 
@@ -166,5 +167,5 @@ func runRender(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	return page.RenderLandingPage(output, cfg, tmplPath)
+	return page.RenderLandingPage(output, cfg, tmplPath, build.ResolveBuildTime(time.Time{}))
 }

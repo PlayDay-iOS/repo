@@ -3,7 +3,6 @@ package ghimport
 import (
 	"context"
 	"encoding/json"
-	"log/slog"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -14,7 +13,6 @@ import (
 	"github.com/google/go-github/v84/github"
 )
 
-var testLog = slog.Default()
 
 func TestNewGitHubClient_NoToken(t *testing.T) {
 	client, err := NewGitHubClient("", "")
@@ -63,7 +61,7 @@ func TestFetchAllReleases_SinglePage(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	got, err := FetchAllReleases(context.Background(), testLog, client, "org", "repo", 10)
+	got, err := FetchAllReleases(context.Background(), testLogger(), client, "org", "repo", 10)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -102,7 +100,7 @@ func TestFetchAllReleases_Pagination(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	got, err := FetchAllReleases(context.Background(), testLog, client, "org", "repo", 1)
+	got, err := FetchAllReleases(context.Background(), testLogger(), client, "org", "repo", 1)
 	if err != nil {
 		t.Fatal(err)
 	}

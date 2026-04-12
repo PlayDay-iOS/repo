@@ -3,11 +3,24 @@ package page
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/PlayDay-iOS/repo/internal/config"
 )
+
+// projectRoot returns the repository root by navigating up from this test file.
+func projectRoot(t *testing.T) string {
+	t.Helper()
+	_, thisFile, _, ok := runtime.Caller(0)
+	if !ok {
+		t.Fatal("runtime.Caller failed")
+	}
+	// thisFile is internal/page/render_test.go → go up 3 levels
+	return filepath.Join(filepath.Dir(thisFile), "..", "..")
+}
 
 func TestRenderLandingPage(t *testing.T) {
 	dir := t.TempDir()
@@ -25,7 +38,7 @@ func TestRenderLandingPage(t *testing.T) {
 	}
 
 	outDir := filepath.Join(dir, "out")
-	if err := RenderLandingPage(outDir, cfg, tmplPath); err != nil {
+	if err := RenderLandingPage(outDir, cfg, tmplPath, time.Now()); err != nil {
 		t.Fatal(err)
 	}
 
@@ -74,7 +87,7 @@ func TestWriteSuiteIndexHTML(t *testing.T) {
 
 func TestLandingTemplateHasCollapsibleDetailsMenus(t *testing.T) {
 	dir := t.TempDir()
-	templatePath := filepath.Join("..", "..", "templates", "index.html.tmpl")
+	templatePath := filepath.Join(projectRoot(t), "templates", "index.html.tmpl")
 
 	cfg := &config.RepoConfig{
 		Name:   "Test Repo",
@@ -83,7 +96,7 @@ func TestLandingTemplateHasCollapsibleDetailsMenus(t *testing.T) {
 	}
 
 	outDir := filepath.Join(dir, "out")
-	if err := RenderLandingPage(outDir, cfg, templatePath); err != nil {
+	if err := RenderLandingPage(outDir, cfg, templatePath, time.Now()); err != nil {
 		t.Fatal(err)
 	}
 

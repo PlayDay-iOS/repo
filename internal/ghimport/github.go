@@ -102,7 +102,7 @@ func DownloadFile(dlURL, dst string, httpClient *http.Client) (err error) {
 		return fmt.Errorf("download too large: %d bytes exceeds %d byte limit", resp.ContentLength, MaxDownloadSize)
 	}
 
-	f, err := os.Create(dst)
+	f, err := os.OpenFile(dst, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
 	}

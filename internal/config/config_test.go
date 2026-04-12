@@ -53,7 +53,12 @@ gpg_key_file = "/path/to/key.asc"
 func TestLoad_Defaults(t *testing.T) {
 	dir := t.TempDir()
 	confPath := filepath.Join(dir, "repo.toml")
-	if err := os.WriteFile(confPath, []byte("[repo]\n[metadata]\n"), 0644); err != nil {
+	if err := os.WriteFile(confPath, []byte(`
+[repo]
+name = "Test"
+url  = "https://example.com/repo/"
+[metadata]
+`), 0644); err != nil {
 		t.Fatal(err)
 	}
 
@@ -62,9 +67,6 @@ func TestLoad_Defaults(t *testing.T) {
 		t.Fatalf("Load failed: %v", err)
 	}
 
-	if cfg.Name != "PlayDay iOS Repo" {
-		t.Errorf("default Name = %q", cfg.Name)
-	}
 	if len(cfg.Suites) != 1 || cfg.Suites[0] != "stable" {
 		t.Errorf("default Suites = %v", cfg.Suites)
 	}
@@ -76,7 +78,7 @@ func TestLoad_Defaults(t *testing.T) {
 func TestLoad_EnvOverride(t *testing.T) {
 	dir := t.TempDir()
 	confPath := filepath.Join(dir, "repo.toml")
-	if err := os.WriteFile(confPath, []byte("[repo]\n[metadata]\n[signing]\ngpg_key_file = \"from-file\"\n"), 0644); err != nil {
+	if err := os.WriteFile(confPath, []byte("[repo]\nname = \"Test\"\nurl = \"https://example.com/repo/\"\n[metadata]\n[signing]\ngpg_key_file = \"from-file\"\n"), 0644); err != nil {
 		t.Fatal(err)
 	}
 
@@ -94,7 +96,7 @@ func TestLoad_EnvOverride(t *testing.T) {
 func TestLoad_EmptyArchitectures(t *testing.T) {
 	dir := t.TempDir()
 	confPath := filepath.Join(dir, "repo.toml")
-	if err := os.WriteFile(confPath, []byte("[repo]\n[metadata]\narchitectures = []\n"), 0644); err != nil {
+	if err := os.WriteFile(confPath, []byte("[repo]\nname = \"Test\"\nurl = \"https://example.com/repo/\"\n[metadata]\narchitectures = []\n"), 0644); err != nil {
 		t.Fatal(err)
 	}
 	_, err := Load(confPath)
@@ -106,7 +108,7 @@ func TestLoad_EmptyArchitectures(t *testing.T) {
 func TestLoad_EmptyComponents(t *testing.T) {
 	dir := t.TempDir()
 	confPath := filepath.Join(dir, "repo.toml")
-	if err := os.WriteFile(confPath, []byte("[repo]\n[metadata]\ncomponents = []\n"), 0644); err != nil {
+	if err := os.WriteFile(confPath, []byte("[repo]\nname = \"Test\"\nurl = \"https://example.com/repo/\"\n[metadata]\ncomponents = []\n"), 0644); err != nil {
 		t.Fatal(err)
 	}
 	_, err := Load(confPath)
@@ -130,6 +132,36 @@ components = ["main", "extras"]
 	_, err := Load(confPath)
 	if err == nil {
 		t.Fatal("expected error for multiple components")
+	}
+}
+
+func TestLoad_MissingNameErrors(t *testing.T) {
+	dir := t.TempDir()
+	confPath := filepath.Join(dir, "repo.toml")
+	if err := os.WriteFile(confPath, []byte("[repo]\nurl = \"https://example.com/repo/\"\n[metadata]\n"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	_, err := Load(confPath)
+	if err == nil {
+		t.Fatal("expected error for missing repo.name")
+	}
+}
+
+func TestLoad_InvalidArchitectureNameErrors(t *testing.T) {
+	dir := t.TempDir()
+	confPath := filepath.Join(dir, "repo.toml")
+	if err := os.WriteFile(confPath, []byte(`
+[repo]
+name = "Test"
+url  = "https://example.com/repo/"
+[metadata]
+architectures = ["../../etc"]
+`), 0644); err != nil {
+		t.Fatal(err)
+	}
+	_, err := Load(confPath)
+	if err == nil {
+		t.Fatal("expected error for invalid architecture name")
 	}
 }
 

@@ -3,6 +3,7 @@ package deb
 import (
 	"fmt"
 	"io"
+	"strings"
 
 	"pault.ag/go/debian/control"
 	deblib "pault.ag/go/debian/deb"
@@ -18,9 +19,18 @@ func NewControlData(keys []string, values map[string]string) *ControlData {
 	return &ControlData{paragraph: control.Paragraph{Order: keys, Values: values}}
 }
 
-// Get returns the value for the exact key name, or "".
+// Get returns the value for the given key (case-insensitive), or "".
 func (c *ControlData) Get(key string) string {
-	return c.paragraph.Values[key]
+	if v, ok := c.paragraph.Values[key]; ok {
+		return v
+	}
+	lower := strings.ToLower(key)
+	for k, v := range c.paragraph.Values {
+		if strings.ToLower(k) == lower {
+			return v
+		}
+	}
+	return ""
 }
 
 // Order returns the field names in their original order.

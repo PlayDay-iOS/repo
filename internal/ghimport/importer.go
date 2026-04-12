@@ -30,8 +30,16 @@ type Options struct {
 	Logger             *slog.Logger
 }
 
-var linkFile = os.Link
-var copyFileExclusive = fileutil.CopyFileExclusive
+// filePlacer holds the functions used for placing files into the pool.
+type filePlacer struct {
+	link          func(oldname, newname string) error
+	copyExclusive func(src, dst string) error
+}
+
+var defaultPlacer = filePlacer{
+	link:          os.Link,
+	copyExclusive: fileutil.CopyFileExclusive,
+}
 
 // Run executes the import process.
 func Run(opts Options) error {
@@ -119,7 +127,7 @@ func Run(opts Options) error {
 
 		safeRepo := sanitizeFilename(repoName)
 		for _, a := range assets {
-			result := processAsset(log, a, safeRepo, tmpDir, destDir, allowedArch, dlClient)
+			result := processAsset(log, a, safeRepo, tmpDir, destDir, allowedArch, dlClient, defaultPlacer)
 			switch result {
 			case assetAdded:
 				added++
@@ -143,7 +151,7 @@ const (
 	assetRejected
 )
 
-func processAsset(log *slog.Logger, a debAsset, safeRepo, tmpDir, destDir string, allowedArch map[string]bool, dlClient *http.Client) assetResult {
+func processAsset(log *slog.Logger, a debAsset, safeRepo, tmpDir, destDir string, allowedArch map[string]bool, dlClient *http.Client, placer filePlacer) assetResult {
 	safeName := sanitizeFilename(a.name)
 	tmpPath := filepath.Join(tmpDir, fmt.Sprintf("%s_%s", safeRepo, safeName))
 	defer os.Remove(tmpPath)
@@ -190,13 +198,13 @@ func processAsset(log *slog.Logger, a debAsset, safeRepo, tmpDir, destDir string
 		return assetRejected
 	}
 
-	return placeFile(log, tmpPath, destPath, canonicalName)
+	return placeFile(log, tmpPath, destPath, canonicalName, placer)
 }
 
-func placeFile(log *slog.Logger, tmpPath, destPath, canonicalName string) assetResult {
+func placeFile(log *slog.Logger, tmpPath, destPath, canonicalName string, placer filePlacer) assetResult {
 	// Use os.Link for atomic "create only if not exists" semantics,
 	// avoiding a TOCTOU race between stat and rename.
-	linkErr := linkFile(tmpPath, destPath)
+	linkErr := placer.link(tmpPath, destPath)
 	if linkErr == nil {
 		log.Info("added package", "name", canonicalName)
 		return assetAdded
@@ -222,7 +230,7 @@ func placeFile(log *slog.Logger, tmpPath, destPath, canonicalName string) assetR
 		return assetRejected
 	}
 
-	if err := copyFileExclusive(tmpPath, destPath); err != nil {
+	if err := placer.copyExclusive(tmpPath, destPath); err != nil {
 		if os.IsExist(err) {
 			log.Debug("already placed by concurrent process", "name", canonicalName)
 		} else {

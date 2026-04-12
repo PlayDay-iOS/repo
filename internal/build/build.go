@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"slices"
+	"strconv"
 	"strings"
 	"time"
 
@@ -22,7 +23,22 @@ type Options struct {
 	OutputDir    string
 	ConfigPath   string
 	TemplatePath string
+	BuildTime    time.Time
 	Logger       *slog.Logger
+}
+
+// ResolveBuildTime returns the build timestamp from the given override,
+// the SOURCE_DATE_EPOCH environment variable, or the current time.
+func ResolveBuildTime(override time.Time) time.Time {
+	if !override.IsZero() {
+		return override
+	}
+	if v := os.Getenv("SOURCE_DATE_EPOCH"); v != "" {
+		if epoch, err := strconv.ParseInt(v, 10, 64); err == nil {
+			return time.Unix(epoch, 0).UTC()
+		}
+	}
+	return time.Now().UTC()
 }
 
 // Run executes the full repository build.
@@ -82,87 +98,14 @@ func Run(opts Options) error {
 		return fmt.Errorf("checking source pool: %w", statErr)
 	}
 
+	buildTime := ResolveBuildTime(opts.BuildTime)
+
 	// Build each suite
 	component := cfg.PrimaryComponent()
 	allowedArch := cfg.AllowedArchitectures()
 	for _, suite := range cfg.Suites {
-		suiteDir := filepath.Join(opts.OutputDir, suite)
-		if err := os.MkdirAll(suiteDir, 0755); err != nil {
-			return fmt.Errorf("creating suite dir %s: %w", suite, err)
-		}
-
-		// Scan pool for this suite
-		poolSuiteDir := filepath.Join(opts.OutputDir, "pool", suite, component)
-		poolInfo, statErr := os.Stat(poolSuiteDir)
-		if statErr != nil && !os.IsNotExist(statErr) {
-			return fmt.Errorf("checking pool dir %s: %w", poolSuiteDir, statErr)
-		}
-
-		if statErr != nil || !poolInfo.IsDir() {
-			// Empty suite — write empty Packages
-			if err := repo.WritePackagesAll(nil, suiteDir); err != nil {
-				return fmt.Errorf("writing empty packages for %s: %w", suite, err)
-			}
-		} else {
-			entries, err := deb.ScanPool(opts.OutputDir, poolSuiteDir, allowedArch)
-			if err != nil {
-				return fmt.Errorf("scanning pool for %s: %w", suite, err)
-			}
-
-			if err := repo.WritePackagesAll(entries, suiteDir); err != nil {
-				return fmt.Errorf("writing packages for %s: %w", suite, err)
-			}
-		}
-
-		// Mirror pool into suite dir for legacy client compat
-		suitePoolSource := filepath.Join(opts.OutputDir, "pool", suite)
-		if _, err := os.Stat(suitePoolSource); err == nil {
-			suitePoolTarget := filepath.Join(suiteDir, "pool", suite)
-			if err := os.MkdirAll(suitePoolTarget, 0755); err != nil {
-				return fmt.Errorf("creating pool mirror dir for %s: %w", suite, err)
-			}
-			if err := fileutil.CopyDir(suitePoolSource, suitePoolTarget); err != nil {
-				return fmt.Errorf("mirroring pool for %s: %w", suite, err)
-			}
-		}
-
-		iconSrc := filepath.Join(opts.RootDir, "resources", "CydiaIcon.png")
-		if _, err := os.Stat(iconSrc); err == nil {
-			if err := fileutil.CopyFile(iconSrc, filepath.Join(suiteDir, "CydiaIcon.png")); err != nil {
-				return fmt.Errorf("copying suite icon for %s: %w", suite, err)
-			}
-		}
-
-		// Generate Release
-		suiteSuffix := " (" + page.TitleCase(suite) + ")"
-		withSuffix := func(base string) string {
-			if base == "" {
-				return ""
-			}
-			return base + suiteSuffix
-		}
-		releaseParams := repo.ReleaseParams{
-			Origin:        withSuffix(cfg.Origin),
-			Label:         withSuffix(cfg.Label),
-			Suite:         suite,
-			Codename:      suite,
-			Architectures: strings.Join(cfg.Architectures, " "),
-			Components:    ".",
-			Description:   withSuffix(cfg.Description),
-			Date:          time.Now().UTC(),
-		}
-		if err := repo.WriteRelease(releaseParams, suiteDir); err != nil {
-			return fmt.Errorf("writing release for %s: %w", suite, err)
-		}
-
-		// Sign
-		if err := repo.SignRelease(suiteDir, armoredKey, passphrase); err != nil {
-			return fmt.Errorf("signing %s: %w", suite, err)
-		}
-
-		// Suite index page
-		if err := page.WriteSuiteIndexHTML(suiteDir, suite, cfg.URL); err != nil {
-			return fmt.Errorf("writing suite index for %s: %w", suite, err)
+		if err := buildSuite(opts, cfg, suite, component, allowedArch, armoredKey, passphrase, buildTime); err != nil {
+			return err
 		}
 	}
 
@@ -180,11 +123,92 @@ func Run(opts Options) error {
 	}
 
 	// Render landing page
-	if err := page.RenderLandingPage(opts.OutputDir, cfg, opts.TemplatePath); err != nil {
+	if err := page.RenderLandingPage(opts.OutputDir, cfg, opts.TemplatePath, buildTime); err != nil {
 		return fmt.Errorf("rendering landing page: %w", err)
 	}
 
 	log.Info("repository built", "output", opts.OutputDir)
+	return nil
+}
+
+func buildSuite(opts Options, cfg *config.RepoConfig, suite, component string, allowedArch map[string]bool, armoredKey, passphrase string, buildTime time.Time) error {
+	suiteDir := filepath.Join(opts.OutputDir, suite)
+	if err := os.MkdirAll(suiteDir, 0755); err != nil {
+		return fmt.Errorf("creating suite dir %s: %w", suite, err)
+	}
+
+	// Scan pool for this suite
+	poolSuiteDir := filepath.Join(opts.OutputDir, "pool", suite, component)
+	poolInfo, statErr := os.Stat(poolSuiteDir)
+	if statErr != nil && !os.IsNotExist(statErr) {
+		return fmt.Errorf("checking pool dir %s: %w", poolSuiteDir, statErr)
+	}
+
+	if statErr != nil || !poolInfo.IsDir() {
+		if err := repo.WritePackagesAll(nil, suiteDir); err != nil {
+			return fmt.Errorf("writing empty packages for %s: %w", suite, err)
+		}
+	} else {
+		entries, err := deb.ScanPool(opts.OutputDir, poolSuiteDir, allowedArch)
+		if err != nil {
+			return fmt.Errorf("scanning pool for %s: %w", suite, err)
+		}
+		if err := repo.WritePackagesAll(entries, suiteDir); err != nil {
+			return fmt.Errorf("writing packages for %s: %w", suite, err)
+		}
+	}
+
+	// Mirror pool into suite dir for legacy client compat
+	suitePoolSource := filepath.Join(opts.OutputDir, "pool", suite)
+	if _, err := os.Stat(suitePoolSource); err == nil {
+		suitePoolTarget := filepath.Join(suiteDir, "pool", suite)
+		if err := os.MkdirAll(suitePoolTarget, 0755); err != nil {
+			return fmt.Errorf("creating pool mirror dir for %s: %w", suite, err)
+		}
+		if err := fileutil.CopyDir(suitePoolSource, suitePoolTarget); err != nil {
+			return fmt.Errorf("mirroring pool for %s: %w", suite, err)
+		}
+	}
+
+	iconSrc := filepath.Join(opts.RootDir, "resources", "CydiaIcon.png")
+	if _, err := os.Stat(iconSrc); err == nil {
+		if err := fileutil.CopyFile(iconSrc, filepath.Join(suiteDir, "CydiaIcon.png")); err != nil {
+			return fmt.Errorf("copying suite icon for %s: %w", suite, err)
+		}
+	}
+
+	// Generate Release
+	suiteSuffix := " (" + page.TitleCase(suite) + ")"
+	withSuffix := func(base string) string {
+		if base == "" {
+			return ""
+		}
+		return base + suiteSuffix
+	}
+	releaseParams := repo.ReleaseParams{
+		Origin:        withSuffix(cfg.Origin),
+		Label:         withSuffix(cfg.Label),
+		Suite:         suite,
+		Codename:      suite,
+		Architectures: strings.Join(cfg.Architectures, " "),
+		Components:    ".",
+		Description:   withSuffix(cfg.Description),
+		Date:          buildTime,
+	}
+	if err := repo.WriteRelease(releaseParams, suiteDir); err != nil {
+		return fmt.Errorf("writing release for %s: %w", suite, err)
+	}
+
+	// Sign
+	if err := repo.SignRelease(suiteDir, armoredKey, passphrase); err != nil {
+		return fmt.Errorf("signing %s: %w", suite, err)
+	}
+
+	// Suite index page
+	if err := page.WriteSuiteIndexHTML(suiteDir, suite, cfg.URL); err != nil {
+		return fmt.Errorf("writing suite index for %s: %w", suite, err)
+	}
+
 	return nil
 }
 

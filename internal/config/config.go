@@ -26,12 +26,9 @@ func Load(path string) (*RepoConfig, error) {
 	v.SetConfigFile(path)
 
 	// Defaults
-	v.SetDefault("repo.name", "PlayDay iOS Repo")
-	v.SetDefault("repo.url", "https://playday-ios.github.io/repo/")
 	v.SetDefault("metadata.suites", []string{"stable"})
 	v.SetDefault("metadata.components", []string{"main"})
 	v.SetDefault("metadata.architectures", []string{"iphoneos-arm", "iphoneos-arm64", "all"})
-	v.SetDefault("github.org_name", "PlayDay-iOS")
 
 	// Environment overrides
 	if err := v.BindEnv("signing.gpg_key_file", "GPG_KEY_FILE"); err != nil {
@@ -58,6 +55,10 @@ func Load(path string) (*RepoConfig, error) {
 		OrgName:       v.GetString("github.org_name"),
 	}
 
+	cfg.Name = strings.TrimSpace(cfg.Name)
+	if cfg.Name == "" {
+		return nil, fmt.Errorf("repo.name is required")
+	}
 	cfg.URL = strings.TrimSpace(cfg.URL)
 	if cfg.URL == "" {
 		return nil, fmt.Errorf("repo.url is required")
@@ -93,6 +94,11 @@ func Load(path string) (*RepoConfig, error) {
 	for _, c := range cfg.Components {
 		if !validate.Name.MatchString(c) {
 			return nil, fmt.Errorf("invalid component name %q: must be alphanumeric with .-_ only", c)
+		}
+	}
+	for _, a := range cfg.Architectures {
+		if !validate.Name.MatchString(a) {
+			return nil, fmt.Errorf("invalid architecture name %q: must be alphanumeric with .-_ only", a)
 		}
 	}
 

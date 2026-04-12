@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/PlayDay-iOS/repo/internal/fileutil"
 	"github.com/google/go-github/v84/github"
 )
 
@@ -140,13 +141,14 @@ func TestPlaceFile_FallsBackToCopyOnLinkError(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	origLink := linkFile
-	linkFile = func(oldname, newname string) error {
-		return os.ErrPermission
+	placer := filePlacer{
+		link: func(oldname, newname string) error {
+			return os.ErrPermission
+		},
+		copyExclusive: fileutil.CopyFileExclusive,
 	}
-	defer func() { linkFile = origLink }()
 
-	result := placeFile(testLogger(), tmpPath, destPath, "out.deb")
+	result := placeFile(testLogger(), tmpPath, destPath, "out.deb", placer)
 	if result != assetAdded {
 		t.Fatalf("expected assetAdded, got %v", result)
 	}
@@ -166,7 +168,7 @@ func TestPlaceFile_ExistingDifferentContentRejected(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	result := placeFile(testLogger(), tmpPath, destPath, "out.deb")
+	result := placeFile(testLogger(), tmpPath, destPath, "out.deb", defaultPlacer)
 	if result != assetRejected {
 		t.Fatalf("expected assetRejected, got %v", result)
 	}

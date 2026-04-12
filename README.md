@@ -14,8 +14,10 @@ Built as a single Go binary (`repotool`) with no external tool dependencies.
 
 Notes:
 
+- `repo.name` and `repo.url` are required in `repo.toml`.
 - `metadata.components` currently must contain exactly one entry.
 - Published suite roots use `./` source style (`deb <url>/<suite>/ ./`).
+- Set `SOURCE_DATE_EPOCH` for reproducible builds (Unix timestamp).
 
 ## Build and publish
 
@@ -72,6 +74,14 @@ repotool --version
 Alternative key source:
 
 - `signing.gpg_key_file` in `repo.toml` (or env override `GPG_KEY_FILE`)
+
+To export the public key for client trust setup:
+
+```sh
+gpg --armor --export <key-id> > repo-public.key
+```
+
+The build copies `repo-public.key` (if present at the repo root) into the output directory.
 
 In GitHub Actions, set these repository secrets (workflow maps them to runtime env vars above):
 
