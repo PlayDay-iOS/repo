@@ -9,8 +9,7 @@ import (
 	"time"
 
 	"github.com/PlayDay-iOS/repo/internal/config"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
+	"github.com/PlayDay-iOS/repo/internal/textutil"
 )
 
 // SuiteInfo holds per-suite data for the landing page template.
@@ -31,11 +30,9 @@ type TemplateData struct {
 	GeneratedAt string
 }
 
-var titleCaser = cases.Title(language.English)
-
 // TitleCase converts a string to title case using English locale rules.
 func TitleCase(s string) string {
-	return titleCaser.String(s)
+	return textutil.TitleCase(s)
 }
 
 // RenderLandingPage renders the HTML landing page into outputDir/index.html.

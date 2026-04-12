@@ -6,7 +6,6 @@ import (
 	"os"
 	"path/filepath"
 	"slices"
-	"strconv"
 	"strings"
 	"time"
 
@@ -15,28 +14,26 @@ import (
 	"github.com/PlayDay-iOS/repo/internal/fileutil"
 	"github.com/PlayDay-iOS/repo/internal/page"
 	"github.com/PlayDay-iOS/repo/internal/repo"
+	"github.com/PlayDay-iOS/repo/internal/textutil"
 )
 
 // Options configures the build.
 type Options struct {
-	RootDir      string
-	OutputDir    string
-	ConfigPath   string
-	TemplatePath string
-	BuildTime    time.Time
-	Logger       *slog.Logger
+	RootDir       string
+	OutputDir     string
+	ConfigPath    string
+	TemplatePath  string
+	BuildTime     time.Time
+	GPGKey        string // armored private key (takes precedence over config gpg_key_file)
+	GPGPassphrase string
+	Logger        *slog.Logger
 }
 
 // ResolveBuildTime returns the build timestamp from the given override,
-// the SOURCE_DATE_EPOCH environment variable, or the current time.
+// or the current time if the override is zero.
 func ResolveBuildTime(override time.Time) time.Time {
 	if !override.IsZero() {
 		return override
-	}
-	if v := os.Getenv("SOURCE_DATE_EPOCH"); v != "" {
-		if epoch, err := strconv.ParseInt(v, 10, 64); err == nil {
-			return time.Unix(epoch, 0).UTC()
-		}
 	}
 	return time.Now().UTC()
 }
@@ -53,12 +50,15 @@ func Run(opts Options) error {
 		return fmt.Errorf("loading config: %w", err)
 	}
 
-	// Load GPG key: env var takes precedence over config file path
-	armoredKey, err := loadGPGKey(cfg.GPGKeyFile)
-	if err != nil {
-		return fmt.Errorf("loading GPG key: %w", err)
+	// Load GPG key: Options.GPGKey takes precedence over config file path
+	armoredKey := opts.GPGKey
+	if armoredKey == "" {
+		var keyErr error
+		armoredKey, keyErr = loadGPGKey(cfg.GPGKeyFile)
+		if keyErr != nil {
+			return fmt.Errorf("loading GPG key: %w", keyErr)
+		}
 	}
-	passphrase := os.Getenv("GPG_PASSPHRASE")
 
 	// Clean and create output directory
 	absOut, err := filepath.Abs(opts.OutputDir)
@@ -79,23 +79,12 @@ func Run(opts Options) error {
 	}
 	opts.OutputDir = absOut
 
-	outputPool := filepath.Join(opts.OutputDir, "pool")
-	if err := os.MkdirAll(outputPool, 0755); err != nil {
-		return fmt.Errorf("creating output pool dir: %w", err)
+	if err := os.MkdirAll(absOut, 0755); err != nil {
+		return fmt.Errorf("creating output dir: %w", err)
 	}
 
 	if err := os.WriteFile(filepath.Join(absOut, outputMarker), nil, 0644); err != nil {
 		return fmt.Errorf("writing output marker: %w", err)
-	}
-
-	// Copy pool from source
-	sourcePool := filepath.Join(opts.RootDir, "pool")
-	if info, statErr := os.Stat(sourcePool); statErr == nil && info.IsDir() {
-		if err := fileutil.CopyDir(sourcePool, outputPool); err != nil {
-			return fmt.Errorf("copying pool: %w", err)
-		}
-	} else if statErr != nil && !os.IsNotExist(statErr) {
-		return fmt.Errorf("checking source pool: %w", statErr)
 	}
 
 	buildTime := ResolveBuildTime(opts.BuildTime)
@@ -104,7 +93,7 @@ func Run(opts Options) error {
 	component := cfg.PrimaryComponent()
 	allowedArch := cfg.AllowedArchitectures()
 	for _, suite := range cfg.Suites {
-		if err := buildSuite(opts, cfg, suite, component, allowedArch, armoredKey, passphrase, buildTime); err != nil {
+		if err := buildSuite(opts, cfg, suite, component, allowedArch, armoredKey, opts.GPGPassphrase, buildTime); err != nil {
 			return err
 		}
 	}
@@ -137,8 +126,8 @@ func buildSuite(opts Options, cfg *config.RepoConfig, suite, component string, a
 		return fmt.Errorf("creating suite dir %s: %w", suite, err)
 	}
 
-	// Scan pool for this suite
-	poolSuiteDir := filepath.Join(opts.OutputDir, "pool", suite, component)
+	// Scan source pool for this suite
+	poolSuiteDir := filepath.Join(opts.RootDir, "pool", suite, component)
 	poolInfo, statErr := os.Stat(poolSuiteDir)
 	if statErr != nil && !os.IsNotExist(statErr) {
 		return fmt.Errorf("checking pool dir %s: %w", poolSuiteDir, statErr)
@@ -149,7 +138,7 @@ func buildSuite(opts Options, cfg *config.RepoConfig, suite, component string, a
 			return fmt.Errorf("writing empty packages for %s: %w", suite, err)
 		}
 	} else {
-		entries, err := deb.ScanPool(opts.OutputDir, poolSuiteDir, allowedArch)
+		entries, err := deb.ScanPool(opts.RootDir, poolSuiteDir, allowedArch)
 		if err != nil {
 			return fmt.Errorf("scanning pool for %s: %w", suite, err)
 		}
@@ -158,15 +147,15 @@ func buildSuite(opts Options, cfg *config.RepoConfig, suite, component string, a
 		}
 	}
 
-	// Mirror pool into suite dir for legacy client compat
-	suitePoolSource := filepath.Join(opts.OutputDir, "pool", suite)
+	// Copy pool into suite dir for client access
+	suitePoolSource := filepath.Join(opts.RootDir, "pool", suite)
 	if _, err := os.Stat(suitePoolSource); err == nil {
 		suitePoolTarget := filepath.Join(suiteDir, "pool", suite)
 		if err := os.MkdirAll(suitePoolTarget, 0755); err != nil {
-			return fmt.Errorf("creating pool mirror dir for %s: %w", suite, err)
+			return fmt.Errorf("creating pool dir for %s: %w", suite, err)
 		}
 		if err := fileutil.CopyDir(suitePoolSource, suitePoolTarget); err != nil {
-			return fmt.Errorf("mirroring pool for %s: %w", suite, err)
+			return fmt.Errorf("copying pool for %s: %w", suite, err)
 		}
 	}
 
@@ -178,7 +167,7 @@ func buildSuite(opts Options, cfg *config.RepoConfig, suite, component string, a
 	}
 
 	// Generate Release
-	suiteSuffix := " (" + page.TitleCase(suite) + ")"
+	suiteSuffix := " (" + textutil.TitleCase(suite) + ")"
 	withSuffix := func(base string) string {
 		if base == "" {
 			return ""
@@ -229,6 +218,7 @@ func validateOutputDir(absPath string) error {
 		"/bin", "/sbin", "/usr", "/lib", "/lib64",
 		"/etc", "/var", "/root", "/home",
 		"/boot", "/dev", "/proc", "/sys", "/run",
+		"/tmp", "/opt", "/srv", "/mnt", "/media", "/snap",
 	}
 	if slices.Contains(blocked, absPath) {
 		return fmt.Errorf("refusing to use system directory as output dir: %s", absPath)
@@ -270,9 +260,6 @@ func validateExistingOutputDir(absPath, marker string) error {
 }
 
 func loadGPGKey(keyFile string) (string, error) {
-	if v := os.Getenv("GPG_PRIVATE_KEY"); v != "" {
-		return v, nil
-	}
 	if keyFile != "" {
 		data, err := os.ReadFile(keyFile)
 		if err != nil {

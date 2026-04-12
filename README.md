@@ -99,7 +99,7 @@ How it works:
 
 1. Add allowed repository names to `org-import-allowlist.txt`.
 2. Run import workflow manually or wait for schedule.
-3. Choose `target_suite` (`stable` or `beta`) when running manually.
+3. Set `target_suite` to the desired suite name when running manually (defaults to `stable`).
 4. Imported packages are validated and committed under `pool/<target_suite>/main/`.
 5. Build/deploy workflow publishes updated metadata.
 

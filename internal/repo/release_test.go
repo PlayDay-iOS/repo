@@ -52,7 +52,7 @@ func TestWriteRelease_BasicFields(t *testing.T) {
 	}
 }
 
-func TestWriteRelease_SkipsSelfReference(t *testing.T) {
+func TestWriteRelease_ExcludesNonIndexFiles(t *testing.T) {
 	dir := t.TempDir()
 	if err := os.WriteFile(filepath.Join(dir, "Packages"), []byte("test"), 0644); err != nil {
 		t.Fatal(err)

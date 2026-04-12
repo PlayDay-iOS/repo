@@ -80,6 +80,24 @@ func main() {
 	}
 }
 
+// parseBuildTime reads SOURCE_DATE_EPOCH for reproducible builds.
+func parseBuildTime() time.Time {
+	if v := os.Getenv("SOURCE_DATE_EPOCH"); v != "" {
+		if epoch, err := strconv.ParseInt(v, 10, 64); err == nil {
+			return time.Unix(epoch, 0).UTC()
+		}
+	}
+	return time.Time{}
+}
+
+// ghToken returns the GitHub token from GH_TOKEN or GITHUB_TOKEN.
+func ghToken() string {
+	if v := os.Getenv("GH_TOKEN"); v != "" {
+		return v
+	}
+	return os.Getenv("GITHUB_TOKEN")
+}
+
 func runBuild(cmd *cobra.Command, args []string) error {
 	root, err := os.Getwd()
 	if err != nil {
@@ -100,10 +118,13 @@ func runBuild(cmd *cobra.Command, args []string) error {
 	}
 
 	return build.Run(build.Options{
-		RootDir:      root,
-		OutputDir:    output,
-		ConfigPath:   cfgPath,
-		TemplatePath: tmplPath,
+		RootDir:       root,
+		OutputDir:     output,
+		ConfigPath:    cfgPath,
+		TemplatePath:  tmplPath,
+		BuildTime:     parseBuildTime(),
+		GPGKey:        os.Getenv("GPG_PRIVATE_KEY"),
+		GPGPassphrase: os.Getenv("GPG_PASSPHRASE"),
 	})
 }
 
@@ -122,25 +143,31 @@ func runImport(cmd *cobra.Command, args []string) error {
 		allowlist = filepath.Join(root, "org-import-allowlist.txt")
 	}
 
-	opts := ghimport.Options{
-		RootDir:            root,
-		ConfigPath:         cfgPath,
-		AllowlistPath:      allowlist,
-		Suite:              flagSuite,
-		IncludePrereleases: flagPrereleases,
-	}
-
-	// Env overrides
-	if v := os.Getenv("TARGET_SUITE"); v != "" && flagSuite == "" {
-		opts.Suite = v
-	}
-	if envVal := os.Getenv("INCLUDE_PRERELEASES"); envVal != "" && !cmd.Flags().Changed("include-prereleases") {
-		if v, parseErr := strconv.ParseBool(envVal); parseErr == nil {
-			opts.IncludePrereleases = v
+	suite := flagSuite
+	if suite == "" {
+		if v := os.Getenv("TARGET_SUITE"); v != "" {
+			suite = v
 		}
 	}
 
-	return ghimport.Run(opts)
+	prereleases := flagPrereleases
+	if !cmd.Flags().Changed("include-prereleases") {
+		if envVal := os.Getenv("INCLUDE_PRERELEASES"); envVal != "" {
+			if v, parseErr := strconv.ParseBool(envVal); parseErr == nil {
+				prereleases = v
+			}
+		}
+	}
+
+	return ghimport.Run(ghimport.Options{
+		RootDir:            root,
+		ConfigPath:         cfgPath,
+		AllowlistPath:      allowlist,
+		Suite:              suite,
+		IncludePrereleases: prereleases,
+		Token:              ghToken(),
+		APIBase:            os.Getenv("GITHUB_API_BASE"),
+	})
 }
 
 func runRender(cmd *cobra.Command, args []string) error {
@@ -167,5 +194,5 @@ func runRender(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	return page.RenderLandingPage(output, cfg, tmplPath, build.ResolveBuildTime(time.Time{}))
+	return page.RenderLandingPage(output, cfg, tmplPath, build.ResolveBuildTime(parseBuildTime()))
 }

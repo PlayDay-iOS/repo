@@ -3,6 +3,7 @@ package config
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -122,6 +123,7 @@ func TestLoad_MultipleComponentsRejected(t *testing.T) {
 	confPath := filepath.Join(dir, "repo.toml")
 	if err := os.WriteFile(confPath, []byte(`
 [repo]
+name = "Test"
 url = "https://example.com/repo"
 [metadata]
 components = ["main", "extras"]
@@ -132,6 +134,31 @@ components = ["main", "extras"]
 	_, err := Load(confPath)
 	if err == nil {
 		t.Fatal("expected error for multiple components")
+	}
+	if !strings.Contains(err.Error(), "exactly one component") {
+		t.Errorf("expected component count error, got: %v", err)
+	}
+}
+
+func TestLoad_DuplicateSuitesRejected(t *testing.T) {
+	dir := t.TempDir()
+	confPath := filepath.Join(dir, "repo.toml")
+	if err := os.WriteFile(confPath, []byte(`
+[repo]
+name = "Test"
+url = "https://example.com/repo"
+[metadata]
+suites = ["stable", "stable"]
+`), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	_, err := Load(confPath)
+	if err == nil {
+		t.Fatal("expected error for duplicate suites")
+	}
+	if !strings.Contains(err.Error(), "duplicate suite") {
+		t.Errorf("expected duplicate suite error, got: %v", err)
 	}
 }
 

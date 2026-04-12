@@ -25,12 +25,6 @@ func writePackages(entries []*deb.PackageEntry, w io.Writer) error {
 			return err
 		}
 	}
-	// Trailing newline after last stanza for strict APT client compatibility
-	if len(entries) > 0 {
-		if _, err := io.WriteString(w, "\n"); err != nil {
-			return err
-		}
-	}
 	return nil
 }
 

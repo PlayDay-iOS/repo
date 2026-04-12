@@ -27,6 +27,8 @@ type Options struct {
 	AllowlistPath      string
 	Suite              string
 	IncludePrereleases bool
+	Token              string // GitHub API token (GH_TOKEN or GITHUB_TOKEN)
+	APIBase            string // GitHub API base URL (default: https://api.github.com)
 	Logger             *slog.Logger
 }
 
@@ -75,18 +77,13 @@ func Run(opts Options) error {
 		return nil
 	}
 
-	token := os.Getenv("GH_TOKEN")
-	if token == "" {
-		token = os.Getenv("GITHUB_TOKEN")
-	}
-
-	apiBase := os.Getenv("GITHUB_API_BASE")
+	apiBase := opts.APIBase
 	if apiBase == "" {
 		apiBase = "https://api.github.com"
 	}
 	perPage := 100
 
-	client, err := NewGitHubClient(token, apiBase)
+	client, err := NewGitHubClient(opts.Token, apiBase)
 	if err != nil {
 		return fmt.Errorf("creating GitHub client: %w", err)
 	}

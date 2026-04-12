@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/PlayDay-iOS/repo/internal/testutil"
 )
@@ -140,6 +141,11 @@ suites = ["stable"]
 	if _, err := os.Stat(mirrorPath); err != nil {
 		t.Error("pool mirror should exist at stable/pool/stable/main/test.deb")
 	}
+
+	// Verify no orphaned top-level pool in output
+	if _, err := os.Stat(filepath.Join(output, "pool")); !os.IsNotExist(err) {
+		t.Error("top-level pool/ should not exist in output")
+	}
 }
 
 func TestRun_RejectsDisallowedArchitectureFromPool(t *testing.T) {
@@ -194,23 +200,6 @@ suites = ["stable"]
 	}
 }
 
-func TestLoadGPGKey_EnvTakesPrecedence(t *testing.T) {
-	dir := t.TempDir()
-	keyFile := filepath.Join(dir, "key.asc")
-	if err := os.WriteFile(keyFile, []byte("file-key"), 0644); err != nil {
-		t.Fatal(err)
-	}
-
-	t.Setenv("GPG_PRIVATE_KEY", "env-key")
-	got, err := loadGPGKey(keyFile)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if got != "env-key" {
-		t.Errorf("expected env key, got %q", got)
-	}
-}
-
 func TestLoadGPGKey_ReadsFile(t *testing.T) {
 	dir := t.TempDir()
 	keyFile := filepath.Join(dir, "key.asc")
@@ -218,7 +207,6 @@ func TestLoadGPGKey_ReadsFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	t.Setenv("GPG_PRIVATE_KEY", "")
 	got, err := loadGPGKey(keyFile)
 	if err != nil {
 		t.Fatal(err)
@@ -229,7 +217,6 @@ func TestLoadGPGKey_ReadsFile(t *testing.T) {
 }
 
 func TestLoadGPGKey_EmptyReturnsEmpty(t *testing.T) {
-	t.Setenv("GPG_PRIVATE_KEY", "")
 	got, err := loadGPGKey("")
 	if err != nil {
 		t.Fatal(err)
@@ -240,10 +227,79 @@ func TestLoadGPGKey_EmptyReturnsEmpty(t *testing.T) {
 }
 
 func TestLoadGPGKey_MissingFileErrors(t *testing.T) {
-	t.Setenv("GPG_PRIVATE_KEY", "")
 	_, err := loadGPGKey("/nonexistent/key.asc")
 	if err == nil {
 		t.Fatal("expected error for missing file")
+	}
+}
+
+func TestRun_GPGKeyFromOptions(t *testing.T) {
+	root := t.TempDir()
+	output := filepath.Join(root, "_site")
+
+	// Write config with a gpg_key_file that doesn't exist
+	if err := os.WriteFile(filepath.Join(root, "repo.toml"), []byte(`
+[repo]
+name = "Test"
+url  = "https://example.com/repo/"
+[metadata]
+suites = ["stable"]
+[signing]
+gpg_key_file = "/nonexistent/key.asc"
+`), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := os.MkdirAll(filepath.Join(root, "templates"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "templates", "index.html.tmpl"),
+		[]byte("<html>{{.RepoName}}</html>"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	// Options.GPGKey should take precedence over missing config file
+	// Empty key means no signing, so it should succeed without reading the missing file
+	err := Run(Options{
+		RootDir:      root,
+		OutputDir:    output,
+		ConfigPath:   filepath.Join(root, "repo.toml"),
+		TemplatePath: filepath.Join(root, "templates", "index.html.tmpl"),
+		GPGKey:       "", // no key = no signing, but config has invalid path
+	})
+	// This should fail because config has a missing gpg_key_file and Options.GPGKey is empty
+	if err == nil {
+		t.Fatal("expected error for missing GPG key file")
+	}
+
+	// Now provide key via Options — should skip config file entirely
+	err = Run(Options{
+		RootDir:      root,
+		OutputDir:    output,
+		ConfigPath:   filepath.Join(root, "repo.toml"),
+		TemplatePath: filepath.Join(root, "templates", "index.html.tmpl"),
+		GPGKey:       "fake-key-for-test", // will fail signing but proves precedence
+	})
+	// This will fail at signing (invalid key), but should NOT fail at loading
+	if err != nil && strings.Contains(err.Error(), "GPG key file") {
+		t.Errorf("should not try to read config gpg_key_file when Options.GPGKey is set, got: %v", err)
+	}
+}
+
+func TestResolveBuildTime_Override(t *testing.T) {
+	fixed := time.Date(2026, 1, 15, 12, 0, 0, 0, time.UTC)
+	got := ResolveBuildTime(fixed)
+	if !got.Equal(fixed) {
+		t.Errorf("expected override time, got %v", got)
+	}
+}
+
+func TestResolveBuildTime_FallsBackToNow(t *testing.T) {
+	before := time.Now().UTC().Add(-time.Second)
+	got := ResolveBuildTime(time.Time{})
+	after := time.Now().UTC().Add(time.Second)
+	if got.Before(before) || got.After(after) {
+		t.Errorf("expected current time, got %v", got)
 	}
 }
 
@@ -396,7 +452,7 @@ suites = ["stable"]
 }
 
 func TestValidateOutputDir_RejectsSystemPaths(t *testing.T) {
-	for _, path := range []string{"/", "/usr", "/home", "/etc"} {
+	for _, path := range []string{"/", "/usr", "/home", "/etc", "/tmp", "/opt"} {
 		if err := validateOutputDir(path); err == nil {
 			t.Errorf("expected error for system path %q", path)
 		}
@@ -404,7 +460,7 @@ func TestValidateOutputDir_RejectsSystemPaths(t *testing.T) {
 }
 
 func TestValidateOutputDir_AllowsNormalPaths(t *testing.T) {
-	if err := validateOutputDir("/tmp/my-repo-output"); err != nil {
+	if err := validateOutputDir("/var/lib/my-repo-output"); err != nil {
 		t.Errorf("should allow normal path: %v", err)
 	}
 }

@@ -15,18 +15,18 @@ func TestMultiHash(t *testing.T) {
 		t.Fatalf("expected 5 bytes, got %d", n)
 	}
 
-	const wantSHA256 = "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
-	if sums.SHA256 != wantSHA256 {
-		t.Errorf("SHA256 mismatch:\n  got  %s\n  want %s", sums.SHA256, wantSHA256)
+	expected := map[string]string{
+		"MD5":    "5d41402abc4b2a76b9719d911017c592",
+		"SHA1":   "aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d",
+		"SHA256": "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824",
+		"SHA512": "9b71d224bd62f3785d96d46ad3ea3d73319bfbc2890caadae2dff72519673ca72323c3d99ba5c11d7c7acc6e14b8c5da0c4663475c2e5c3adef46f73bcdec043",
 	}
-
-	if sums.MD5 == "" {
-		t.Error("MD5 is empty")
+	got := map[string]string{
+		"MD5": sums.MD5, "SHA1": sums.SHA1, "SHA256": sums.SHA256, "SHA512": sums.SHA512,
 	}
-	if sums.SHA1 == "" {
-		t.Error("SHA1 is empty")
-	}
-	if sums.SHA512 == "" {
-		t.Error("SHA512 is empty")
+	for name, want := range expected {
+		if got[name] != want {
+			t.Errorf("%s mismatch:\n  got  %s\n  want %s", name, got[name], want)
+		}
 	}
 }

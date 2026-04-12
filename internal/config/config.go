@@ -83,6 +83,7 @@ func Load(path string) (*RepoConfig, error) {
 	reservedNames := map[string]bool{
 		"pool": true, "dists": true, "resources": true, "templates": true,
 	}
+	seenSuites := make(map[string]bool, len(cfg.Suites))
 	for _, s := range cfg.Suites {
 		if !validate.Name.MatchString(s) {
 			return nil, fmt.Errorf("invalid suite name %q: must be alphanumeric with .-_ only", s)
@@ -90,6 +91,10 @@ func Load(path string) (*RepoConfig, error) {
 		if reservedNames[s] {
 			return nil, fmt.Errorf("suite name %q is reserved and would conflict with build output", s)
 		}
+		if seenSuites[s] {
+			return nil, fmt.Errorf("duplicate suite name %q", s)
+		}
+		seenSuites[s] = true
 	}
 	for _, c := range cfg.Components {
 		if !validate.Name.MatchString(c) {
