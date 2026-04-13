@@ -36,12 +36,17 @@ func CopyFile(src, dst string) error {
 }
 
 // CopyDir recursively copies src directory contents into dst.
-// Only regular files and directories are copied; other types return an error.
-// Directory permissions are preserved from the source.
+// Only regular files and real directories are copied; symlinks (to files or
+// directories) and other non-regular entries cause an error. This prevents
+// an attacker-controlled pool tree from escaping via a symlinked directory.
 func CopyDir(src, dst string) error {
 	return filepath.WalkDir(src, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
+		}
+
+		if d.Type()&os.ModeSymlink != 0 {
+			return fmt.Errorf("refusing to follow symlink at %s", path)
 		}
 
 		rel, err := filepath.Rel(src, path)

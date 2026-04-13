@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"context"
 	"os"
 	"path/filepath"
 	"strings"
@@ -9,9 +10,9 @@ import (
 )
 
 func TestWriteRelease_BasicFields(t *testing.T) {
+	t.Parallel()
 	dir := t.TempDir()
 
-	// Write a dummy Packages file so there's something to hash
 	if err := os.WriteFile(filepath.Join(dir, "Packages"), []byte("Package: test\n"), 0644); err != nil {
 		t.Fatal(err)
 	}
@@ -26,7 +27,7 @@ func TestWriteRelease_BasicFields(t *testing.T) {
 		Date:          time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC),
 	}
 
-	if err := WriteRelease(params, dir); err != nil {
+	if err := WriteRelease(context.Background(), params, dir); err != nil {
 		t.Fatal(err)
 	}
 
@@ -36,16 +37,17 @@ func TestWriteRelease_BasicFields(t *testing.T) {
 	}
 	content := string(data)
 
-	checks := []string{
+	for _, check := range []string{
 		"Origin: TestOrigin",
 		"Label: TestLabel",
 		"Suite: stable",
 		"Codename: stable",
 		"MD5Sum:",
+		"SHA1:",
 		"SHA256:",
+		"SHA512:",
 		"Packages",
-	}
-	for _, check := range checks {
+	} {
 		if !strings.Contains(content, check) {
 			t.Errorf("Release missing %q", check)
 		}
@@ -53,6 +55,7 @@ func TestWriteRelease_BasicFields(t *testing.T) {
 }
 
 func TestWriteRelease_ExcludesNonIndexFiles(t *testing.T) {
+	t.Parallel()
 	dir := t.TempDir()
 	if err := os.WriteFile(filepath.Join(dir, "Packages"), []byte("test"), 0644); err != nil {
 		t.Fatal(err)
@@ -63,7 +66,7 @@ func TestWriteRelease_ExcludesNonIndexFiles(t *testing.T) {
 	}
 
 	params := ReleaseParams{Suite: "stable", Codename: "stable", Date: time.Now()}
-	if err := WriteRelease(params, dir); err != nil {
+	if err := WriteRelease(context.Background(), params, dir); err != nil {
 		t.Fatal(err)
 	}
 
@@ -71,15 +74,20 @@ func TestWriteRelease_ExcludesNonIndexFiles(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	content := string(data)
-
-	// Should only list "Packages", not "Release"
-	lines := strings.Split(content, "\n")
-	for _, line := range lines {
-		trimmed := strings.TrimSpace(line)
-		if strings.HasSuffix(trimmed, " Release") {
+	for _, line := range strings.Split(string(data), "\n") {
+		if strings.HasSuffix(strings.TrimSpace(line), " Release") {
 			t.Error("Release should not hash itself")
 		}
+	}
+}
+
+func TestWriteRelease_CancelledContext(t *testing.T) {
+	t.Parallel()
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	err := WriteRelease(ctx, ReleaseParams{Suite: "stable", Codename: "stable"}, t.TempDir())
+	if err == nil {
+		t.Fatal("expected error for cancelled context")
 	}
 }
 

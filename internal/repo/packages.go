@@ -3,12 +3,13 @@ package repo
 import (
 	"bytes"
 	"compress/gzip"
+	"context"
 	"fmt"
 	"io"
-	"os"
 	"path/filepath"
 
 	"github.com/PlayDay-iOS/repo/internal/deb"
+	"github.com/PlayDay-iOS/repo/internal/fileutil"
 	"github.com/dsnet/compress/bzip2"
 	"github.com/ulikunitz/xz"
 )
@@ -29,15 +30,19 @@ func writePackages(entries []*deb.PackageEntry, w io.Writer) error {
 }
 
 // WritePackagesAll writes Packages, Packages.gz, Packages.xz, and Packages.bz2
-// into the target directory.
-func WritePackagesAll(entries []*deb.PackageEntry, dir string) error {
+// into the target directory atomically.
+func WritePackagesAll(ctx context.Context, entries []*deb.PackageEntry, dir string) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+
 	var buf bytes.Buffer
 	if err := writePackages(entries, &buf); err != nil {
 		return fmt.Errorf("generating packages: %w", err)
 	}
 	raw := buf.Bytes()
 
-	if err := writeAtomic(filepath.Join(dir, "Packages"), raw, 0644); err != nil {
+	if err := fileutil.WriteAtomicBytes(filepath.Join(dir, "Packages"), 0644, raw); err != nil {
 		return fmt.Errorf("writing Packages: %w", err)
 	}
 
@@ -50,8 +55,9 @@ func WritePackagesAll(entries []*deb.PackageEntry, dir string) error {
 		{".bz2", compressBZ2},
 	}
 	for _, c := range compressors {
-		if err := writeCompressed(filepath.Join(dir, "Packages"+c.ext), raw, c.fn); err != nil {
-			return err
+		path := filepath.Join(dir, "Packages"+c.ext)
+		if err := writeCompressed(path, raw, c.fn); err != nil {
+			return fmt.Errorf("writing %s: %w", filepath.Base(path), err)
 		}
 	}
 
@@ -72,35 +78,16 @@ func compressBZ2(w io.Writer) (io.WriteCloser, error) {
 	return bzip2.NewWriter(w, nil)
 }
 
-func writeCompressed(path string, data []byte, newWriter compressFunc) (err error) {
-	f, err := os.Create(path)
-	if err != nil {
-		return err
-	}
-	closed := false
-	defer func() {
-		if !closed {
-			f.Close()
-		}
+func writeCompressed(path string, data []byte, newWriter compressFunc) error {
+	return fileutil.WriteAtomic(path, 0644, func(w io.Writer) error {
+		cw, err := newWriter(w)
 		if err != nil {
-			os.Remove(path)
+			return err
 		}
-	}()
-
-	cw, err := newWriter(f)
-	if err != nil {
-		return err
-	}
-
-	if _, err = cw.Write(data); err != nil {
-		cw.Close()
-		return err
-	}
-
-	if err = cw.Close(); err != nil {
-		return err
-	}
-
-	closed = true
-	return f.Close()
+		if _, err := cw.Write(data); err != nil {
+			cw.Close()
+			return err
+		}
+		return cw.Close()
+	})
 }

@@ -1,17 +1,23 @@
 package repo
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 
+	"github.com/PlayDay-iOS/repo/internal/fileutil"
 	"github.com/ProtonMail/gopenpgp/v3/crypto"
 )
 
 // SignRelease produces Release.gpg (detached) and InRelease (clearsign)
 // for the Release file in dir. No-op if armoredKey is empty.
-func SignRelease(dir, armoredKey, passphrase string) error {
+func SignRelease(ctx context.Context, dir, armoredKey, passphrase string) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+
 	armoredKey = strings.TrimSpace(armoredKey)
 	if armoredKey == "" {
 		return nil
@@ -39,7 +45,6 @@ func SignRelease(dir, armoredKey, passphrase string) error {
 
 	pgp := crypto.PGP()
 
-	// Detached signature
 	detachedSigner, err := pgp.Sign().SigningKey(key).Detached().New()
 	if err != nil {
 		return fmt.Errorf("creating detached signer: %w", err)
@@ -49,7 +54,6 @@ func SignRelease(dir, armoredKey, passphrase string) error {
 		return fmt.Errorf("detached sign: %w", err)
 	}
 
-	// Clearsign
 	clearSigner, err := pgp.Sign().SigningKey(key).New()
 	if err != nil {
 		return fmt.Errorf("creating clearsigner: %w", err)
@@ -59,27 +63,15 @@ func SignRelease(dir, armoredKey, passphrase string) error {
 		return fmt.Errorf("clearsign: %w", err)
 	}
 
-	// Write both files atomically via temp+rename to avoid partial state
-	releaseGPGTmp := releaseGPG + ".tmp"
-	inReleaseTmp := inRelease + ".tmp"
-
-	if err := os.WriteFile(releaseGPGTmp, sig, 0644); err != nil {
+	if err := fileutil.WriteAtomicBytes(releaseGPG, 0644, sig); err != nil {
 		return fmt.Errorf("writing Release.gpg: %w", err)
 	}
-	if err := os.WriteFile(inReleaseTmp, clearSig, 0644); err != nil {
-		os.Remove(releaseGPGTmp)
+	if err := fileutil.WriteAtomicBytes(inRelease, 0644, clearSig); err != nil {
+		// Roll back the already-written Release.gpg to avoid an inconsistent
+		// signed state where a detached signature exists without a clearsigned
+		// counterpart.
+		os.Remove(releaseGPG)
 		return fmt.Errorf("writing InRelease: %w", err)
-	}
-
-	if err := os.Rename(releaseGPGTmp, releaseGPG); err != nil {
-		os.Remove(releaseGPGTmp)
-		os.Remove(inReleaseTmp)
-		return fmt.Errorf("finalizing Release.gpg: %w", err)
-	}
-	if err := os.Rename(inReleaseTmp, inRelease); err != nil {
-		os.Remove(inReleaseTmp)
-		os.Remove(releaseGPG) // rollback the already-renamed Release.gpg
-		return fmt.Errorf("finalizing InRelease: %w", err)
 	}
 
 	return nil

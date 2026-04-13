@@ -8,32 +8,28 @@ import (
 	"github.com/spf13/viper"
 )
 
+// RepoConfig holds the parsed repository configuration.
 type RepoConfig struct {
 	Name          string
 	URL           string
 	Origin        string
 	Label         string
 	Suites        []string
-	Components    []string
+	Component     string
 	Architectures []string
 	Description   string
-	GPGKeyFile    string
 	OrgName       string
 }
 
+// Load reads and validates the config file at path.
 func Load(path string) (*RepoConfig, error) {
 	v := viper.New()
 	v.SetConfigFile(path)
 
-	// Defaults
 	v.SetDefault("metadata.suites", []string{"stable"})
-	v.SetDefault("metadata.components", []string{"main"})
+	v.SetDefault("metadata.component", "main")
 	v.SetDefault("metadata.architectures", []string{"iphoneos-arm", "iphoneos-arm64", "all"})
 
-	// Environment overrides
-	if err := v.BindEnv("signing.gpg_key_file", "GPG_KEY_FILE"); err != nil {
-		return nil, fmt.Errorf("binding env: %w", err)
-	}
 	if err := v.BindEnv("github.org_name", "ORG_NAME"); err != nil {
 		return nil, fmt.Errorf("binding env: %w", err)
 	}
@@ -48,10 +44,9 @@ func Load(path string) (*RepoConfig, error) {
 		Origin:        v.GetString("metadata.origin"),
 		Label:         v.GetString("metadata.label"),
 		Suites:        v.GetStringSlice("metadata.suites"),
-		Components:    v.GetStringSlice("metadata.components"),
+		Component:     v.GetString("metadata.component"),
 		Architectures: v.GetStringSlice("metadata.architectures"),
 		Description:   v.GetString("metadata.description"),
-		GPGKeyFile:    v.GetString("signing.gpg_key_file"),
 		OrgName:       v.GetString("github.org_name"),
 	}
 
@@ -67,14 +62,16 @@ func Load(path string) (*RepoConfig, error) {
 		return nil, fmt.Errorf("repo.url must use http:// or https:// scheme, got %q", cfg.URL)
 	}
 	cfg.URL = strings.TrimRight(cfg.URL, "/") + "/"
+
 	if len(cfg.Suites) == 0 {
 		return nil, fmt.Errorf("metadata.suites must not be empty")
 	}
-	if len(cfg.Components) == 0 {
-		return nil, fmt.Errorf("metadata.components must not be empty")
+	cfg.Component = strings.TrimSpace(cfg.Component)
+	if cfg.Component == "" {
+		return nil, fmt.Errorf("metadata.component is required")
 	}
-	if len(cfg.Components) != 1 {
-		return nil, fmt.Errorf("metadata.components must contain exactly one component, got %d", len(cfg.Components))
+	if !validate.Name.MatchString(cfg.Component) {
+		return nil, fmt.Errorf("invalid metadata.component %q: must be alphanumeric with .-_ only", cfg.Component)
 	}
 	if len(cfg.Architectures) == 0 {
 		return nil, fmt.Errorf("metadata.architectures must not be empty")
@@ -96,18 +93,18 @@ func Load(path string) (*RepoConfig, error) {
 		}
 		seenSuites[s] = true
 	}
-	for _, c := range cfg.Components {
-		if !validate.Name.MatchString(c) {
-			return nil, fmt.Errorf("invalid component name %q: must be alphanumeric with .-_ only", c)
-		}
-	}
 	for _, a := range cfg.Architectures {
 		if !validate.Name.MatchString(a) {
 			return nil, fmt.Errorf("invalid architecture name %q: must be alphanumeric with .-_ only", a)
 		}
 	}
 
-	// Sanitize string fields that end up in Release stanzas — reject newlines
+	cfg.OrgName = strings.TrimSpace(cfg.OrgName)
+	if cfg.OrgName != "" && !validate.Name.MatchString(cfg.OrgName) {
+		return nil, fmt.Errorf("invalid github.org_name %q: must be alphanumeric with .-_ only", cfg.OrgName)
+	}
+
+	// Reject newlines in free-form string fields that end up in Release stanzas.
 	for name, val := range map[string]*string{
 		"origin": &cfg.Origin, "label": &cfg.Label, "description": &cfg.Description,
 	} {
@@ -119,14 +116,12 @@ func Load(path string) (*RepoConfig, error) {
 	return cfg, nil
 }
 
+// PrimarySuite returns the first configured suite (guaranteed non-empty after Load).
 func (c *RepoConfig) PrimarySuite() string {
 	return c.Suites[0]
 }
 
-func (c *RepoConfig) PrimaryComponent() string {
-	return c.Components[0]
-}
-
+// AllowedArchitectures returns the configured architectures as a lookup set.
 func (c *RepoConfig) AllowedArchitectures() map[string]bool {
 	m := make(map[string]bool, len(c.Architectures))
 	for _, a := range c.Architectures {

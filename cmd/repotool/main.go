@@ -1,10 +1,13 @@
 package main
 
 import (
+	"context"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"runtime/debug"
 	"strconv"
+	"syscall"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -59,23 +62,26 @@ var (
 )
 
 func init() {
-	rootCmd.PersistentFlags().StringVar(&configPath, "config", "", "Path to repo.toml")
+	rootCmd.PersistentFlags().StringVar(&configPath, "config", "", "Path to repo.toml (default: <cwd>/repo.toml)")
 
-	buildCmd.Flags().StringVar(&flagBuildOutput, "output", "", "Output directory (default: <root>/_site)")
-	buildCmd.Flags().StringVar(&flagBuildTemplate, "template", "", "Path to HTML template")
+	buildCmd.Flags().StringVar(&flagBuildOutput, "output", "", "Output directory (default: <cwd>/_site)")
+	buildCmd.Flags().StringVar(&flagBuildTemplate, "template", "", "Path to HTML template (default: <cwd>/templates/index.html.tmpl)")
 
-	importCmd.Flags().StringVar(&flagAllowlist, "allowlist", "", "Path to allowlist file")
-	importCmd.Flags().StringVar(&flagSuite, "suite", "", "Target suite (default from config or TARGET_SUITE env)")
+	importCmd.Flags().StringVar(&flagAllowlist, "allowlist", "", "Path to allowlist file (default: <cwd>/org-import-allowlist.txt)")
+	importCmd.Flags().StringVar(&flagSuite, "suite", "", "Target suite (default: first entry of metadata.suites, or TARGET_SUITE env)")
 	importCmd.Flags().BoolVar(&flagPrereleases, "include-prereleases", false, "Include prerelease assets")
 
-	renderCmd.Flags().StringVar(&flagRenderOutput, "output", "", "Output directory")
-	renderCmd.Flags().StringVar(&flagRenderTmpl, "template", "", "Path to HTML template")
+	renderCmd.Flags().StringVar(&flagRenderOutput, "output", "", "Output directory (default: <cwd>/_site)")
+	renderCmd.Flags().StringVar(&flagRenderTmpl, "template", "", "Path to HTML template (default: <cwd>/templates/index.html.tmpl)")
 
 	rootCmd.AddCommand(buildCmd, importCmd, renderCmd)
 }
 
 func main() {
-	if err := rootCmd.Execute(); err != nil {
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer cancel()
+
+	if err := rootCmd.ExecuteContext(ctx); err != nil {
 		os.Exit(1)
 	}
 }
@@ -117,7 +123,7 @@ func runBuild(cmd *cobra.Command, args []string) error {
 		tmplPath = filepath.Join(root, "templates", "index.html.tmpl")
 	}
 
-	return build.Run(build.Options{
+	return build.Run(cmd.Context(), build.Options{
 		RootDir:       root,
 		OutputDir:     output,
 		ConfigPath:    cfgPath,
@@ -145,9 +151,7 @@ func runImport(cmd *cobra.Command, args []string) error {
 
 	suite := flagSuite
 	if suite == "" {
-		if v := os.Getenv("TARGET_SUITE"); v != "" {
-			suite = v
-		}
+		suite = os.Getenv("TARGET_SUITE")
 	}
 
 	prereleases := flagPrereleases
@@ -159,7 +163,7 @@ func runImport(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	return ghimport.Run(ghimport.Options{
+	return ghimport.Run(cmd.Context(), ghimport.Options{
 		RootDir:            root,
 		ConfigPath:         cfgPath,
 		AllowlistPath:      allowlist,
@@ -194,5 +198,6 @@ func runRender(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	return page.RenderLandingPage(output, cfg, tmplPath, build.ResolveBuildTime(parseBuildTime()))
+	signed := os.Getenv("GPG_PRIVATE_KEY") != ""
+	return page.RenderLandingPage(cmd.Context(), output, cfg, tmplPath, build.ResolveBuildTime(parseBuildTime()), signed)
 }

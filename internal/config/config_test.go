@@ -7,29 +7,37 @@ import (
 	"testing"
 )
 
-func TestLoad_ValidConfig(t *testing.T) {
+// writeConfig writes a repo.toml with the given body and returns its path.
+func writeConfig(t *testing.T, body string) string {
+	t.Helper()
 	dir := t.TempDir()
-	confPath := filepath.Join(dir, "repo.toml")
-	if err := os.WriteFile(confPath, []byte(`
+	path := filepath.Join(dir, "repo.toml")
+	if err := os.WriteFile(path, []byte(body), 0644); err != nil {
+		t.Fatal(err)
+	}
+	return path
+}
+
+func TestLoad_ValidConfig(t *testing.T) {
+	t.Parallel()
+	path := writeConfig(t, `
 [repo]
 name = "Test Repo"
 url  = "https://example.com/repo"
 
 [metadata]
-origin = "TestOrg"
-label  = "TestLabel"
-suites = ["stable", "beta"]
-components = ["main"]
+origin        = "TestOrg"
+label         = "TestLabel"
+suites        = ["stable", "beta"]
+component     = "main"
 architectures = ["iphoneos-arm64", "all"]
-description = "Test repo"
+description   = "Test repo"
 
-[signing]
-gpg_key_file = "/path/to/key.asc"
-`), 0644); err != nil {
-		t.Fatal(err)
-	}
+[github]
+org_name = "TestOrg"
+`)
 
-	cfg, err := Load(confPath)
+	cfg, err := Load(path)
 	if err != nil {
 		t.Fatalf("Load failed: %v", err)
 	}
@@ -43,27 +51,24 @@ gpg_key_file = "/path/to/key.asc"
 	if cfg.PrimarySuite() != "stable" {
 		t.Errorf("PrimarySuite = %q", cfg.PrimarySuite())
 	}
-	if cfg.PrimaryComponent() != "main" {
-		t.Errorf("PrimaryComponent = %q", cfg.PrimaryComponent())
+	if cfg.Component != "main" {
+		t.Errorf("Component = %q", cfg.Component)
 	}
-	if cfg.GPGKeyFile != "/path/to/key.asc" {
-		t.Errorf("GPGKeyFile = %q", cfg.GPGKeyFile)
+	if cfg.OrgName != "TestOrg" {
+		t.Errorf("OrgName = %q", cfg.OrgName)
 	}
 }
 
 func TestLoad_Defaults(t *testing.T) {
-	dir := t.TempDir()
-	confPath := filepath.Join(dir, "repo.toml")
-	if err := os.WriteFile(confPath, []byte(`
+	t.Parallel()
+	path := writeConfig(t, `
 [repo]
 name = "Test"
 url  = "https://example.com/repo/"
 [metadata]
-`), 0644); err != nil {
-		t.Fatal(err)
-	}
+`)
 
-	cfg, err := Load(confPath)
+	cfg, err := Load(path)
 	if err != nil {
 		t.Fatalf("Load failed: %v", err)
 	}
@@ -71,89 +76,89 @@ url  = "https://example.com/repo/"
 	if len(cfg.Suites) != 1 || cfg.Suites[0] != "stable" {
 		t.Errorf("default Suites = %v", cfg.Suites)
 	}
+	if cfg.Component != "main" {
+		t.Errorf("default Component = %q", cfg.Component)
+	}
 	if len(cfg.Architectures) != 3 {
 		t.Errorf("default Architectures = %v", cfg.Architectures)
 	}
 }
 
 func TestLoad_EnvOverride(t *testing.T) {
-	dir := t.TempDir()
-	confPath := filepath.Join(dir, "repo.toml")
-	if err := os.WriteFile(confPath, []byte("[repo]\nname = \"Test\"\nurl = \"https://example.com/repo/\"\n[metadata]\n[signing]\ngpg_key_file = \"from-file\"\n"), 0644); err != nil {
-		t.Fatal(err)
-	}
+	path := writeConfig(t, `
+[repo]
+name = "Test"
+url  = "https://example.com/repo/"
+[metadata]
+`)
 
-	t.Setenv("GPG_KEY_FILE", "/env/key.asc")
-
-	cfg, err := Load(confPath)
+	t.Setenv("ORG_NAME", "EnvOrg")
+	cfg, err := Load(path)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if cfg.GPGKeyFile != "/env/key.asc" {
-		t.Errorf("GPGKeyFile = %q, expected '/env/key.asc'", cfg.GPGKeyFile)
+	if cfg.OrgName != "EnvOrg" {
+		t.Errorf("OrgName = %q, want EnvOrg", cfg.OrgName)
 	}
 }
 
 func TestLoad_EmptyArchitectures(t *testing.T) {
-	dir := t.TempDir()
-	confPath := filepath.Join(dir, "repo.toml")
-	if err := os.WriteFile(confPath, []byte("[repo]\nname = \"Test\"\nurl = \"https://example.com/repo/\"\n[metadata]\narchitectures = []\n"), 0644); err != nil {
-		t.Fatal(err)
-	}
-	_, err := Load(confPath)
-	if err == nil {
+	t.Parallel()
+	path := writeConfig(t, `
+[repo]
+name = "Test"
+url  = "https://example.com/repo/"
+[metadata]
+architectures = []
+`)
+	if _, err := Load(path); err == nil {
 		t.Fatal("expected error for empty architectures")
 	}
 }
 
-func TestLoad_EmptyComponents(t *testing.T) {
-	dir := t.TempDir()
-	confPath := filepath.Join(dir, "repo.toml")
-	if err := os.WriteFile(confPath, []byte("[repo]\nname = \"Test\"\nurl = \"https://example.com/repo/\"\n[metadata]\ncomponents = []\n"), 0644); err != nil {
-		t.Fatal(err)
-	}
-	_, err := Load(confPath)
+func TestLoad_EmptyComponentRejected(t *testing.T) {
+	t.Parallel()
+	path := writeConfig(t, `
+[repo]
+name = "Test"
+url  = "https://example.com/repo/"
+[metadata]
+component = ""
+`)
+	_, err := Load(path)
 	if err == nil {
-		t.Fatal("expected error for empty components")
+		t.Fatal("expected error for empty component")
+	}
+	if !strings.Contains(err.Error(), "component") {
+		t.Errorf("expected component error, got: %v", err)
 	}
 }
 
-func TestLoad_MultipleComponentsRejected(t *testing.T) {
-	dir := t.TempDir()
-	confPath := filepath.Join(dir, "repo.toml")
-	if err := os.WriteFile(confPath, []byte(`
+func TestLoad_InvalidComponentName(t *testing.T) {
+	t.Parallel()
+	path := writeConfig(t, `
 [repo]
 name = "Test"
-url = "https://example.com/repo"
+url  = "https://example.com/repo/"
 [metadata]
-components = ["main", "extras"]
-`), 0644); err != nil {
-		t.Fatal(err)
-	}
-
-	_, err := Load(confPath)
+component = "bad name"
+`)
+	_, err := Load(path)
 	if err == nil {
-		t.Fatal("expected error for multiple components")
-	}
-	if !strings.Contains(err.Error(), "exactly one component") {
-		t.Errorf("expected component count error, got: %v", err)
+		t.Fatal("expected error for invalid component name")
 	}
 }
 
 func TestLoad_DuplicateSuitesRejected(t *testing.T) {
-	dir := t.TempDir()
-	confPath := filepath.Join(dir, "repo.toml")
-	if err := os.WriteFile(confPath, []byte(`
+	t.Parallel()
+	path := writeConfig(t, `
 [repo]
 name = "Test"
-url = "https://example.com/repo"
+url  = "https://example.com/repo"
 [metadata]
 suites = ["stable", "stable"]
-`), 0644); err != nil {
-		t.Fatal(err)
-	}
-
-	_, err := Load(confPath)
+`)
+	_, err := Load(path)
 	if err == nil {
 		t.Fatal("expected error for duplicate suites")
 	}
@@ -163,36 +168,50 @@ suites = ["stable", "stable"]
 }
 
 func TestLoad_MissingNameErrors(t *testing.T) {
-	dir := t.TempDir()
-	confPath := filepath.Join(dir, "repo.toml")
-	if err := os.WriteFile(confPath, []byte("[repo]\nurl = \"https://example.com/repo/\"\n[metadata]\n"), 0644); err != nil {
-		t.Fatal(err)
-	}
-	_, err := Load(confPath)
-	if err == nil {
+	t.Parallel()
+	path := writeConfig(t, `[repo]
+url = "https://example.com/repo/"
+[metadata]
+`)
+	if _, err := Load(path); err == nil {
 		t.Fatal("expected error for missing repo.name")
 	}
 }
 
 func TestLoad_InvalidArchitectureNameErrors(t *testing.T) {
-	dir := t.TempDir()
-	confPath := filepath.Join(dir, "repo.toml")
-	if err := os.WriteFile(confPath, []byte(`
+	t.Parallel()
+	path := writeConfig(t, `
 [repo]
 name = "Test"
 url  = "https://example.com/repo/"
 [metadata]
 architectures = ["../../etc"]
-`), 0644); err != nil {
-		t.Fatal(err)
-	}
-	_, err := Load(confPath)
-	if err == nil {
+`)
+	if _, err := Load(path); err == nil {
 		t.Fatal("expected error for invalid architecture name")
 	}
 }
 
+func TestLoad_InvalidOrgNameErrors(t *testing.T) {
+	t.Parallel()
+	path := writeConfig(t, `
+[repo]
+name = "Test"
+url  = "https://example.com/repo/"
+[github]
+org_name = "../etc"
+`)
+	_, err := Load(path)
+	if err == nil {
+		t.Fatal("expected error for invalid org_name")
+	}
+	if !strings.Contains(err.Error(), "org_name") {
+		t.Errorf("expected org_name error, got: %v", err)
+	}
+}
+
 func TestAllowedArchitectures(t *testing.T) {
+	t.Parallel()
 	cfg := &RepoConfig{
 		Architectures: []string{"iphoneos-arm64", "all"},
 	}

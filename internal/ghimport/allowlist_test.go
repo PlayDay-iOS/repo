@@ -8,6 +8,7 @@ import (
 )
 
 func TestReadAllowlist(t *testing.T) {
+	t.Parallel()
 	dir := t.TempDir()
 	path := filepath.Join(dir, "allowlist.txt")
 	if err := os.WriteFile(path, []byte("# comment\n\nrepo-one\nrepo-two\n"), 0644); err != nil {
@@ -27,6 +28,7 @@ func TestReadAllowlist(t *testing.T) {
 }
 
 func TestReadAllowlist_Empty(t *testing.T) {
+	t.Parallel()
 	dir := t.TempDir()
 	path := filepath.Join(dir, "allowlist.txt")
 	if err := os.WriteFile(path, []byte("# only comments\n\n"), 0644); err != nil {
@@ -43,6 +45,7 @@ func TestReadAllowlist_Empty(t *testing.T) {
 }
 
 func TestReadAllowlist_Missing(t *testing.T) {
+	t.Parallel()
 	_, err := ReadAllowlist(slog.Default(), "/nonexistent/path")
 	if err == nil {
 		t.Fatal("expected error for missing file")

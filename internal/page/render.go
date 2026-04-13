@@ -1,14 +1,17 @@
 package page
 
 import (
+	"context"
 	"fmt"
 	"html"
 	"html/template"
+	"io"
 	"os"
 	"path/filepath"
 	"time"
 
 	"github.com/PlayDay-iOS/repo/internal/config"
+	"github.com/PlayDay-iOS/repo/internal/fileutil"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
@@ -29,17 +32,23 @@ type TemplateData struct {
 	RepoURL     string
 	Suites      []SuiteInfo
 	GeneratedAt string
+	Signed      bool
 }
 
-var titleCaser = cases.Title(language.English)
-
 // TitleCase converts a string to title case using English locale rules.
+//
+// A new Caser is allocated per call because cases.Caser is not safe for
+// concurrent use of its String method (it mutates internal transformer state).
 func TitleCase(s string) string {
-	return titleCaser.String(s)
+	return cases.Title(language.English).String(s)
 }
 
 // RenderLandingPage renders the HTML landing page into outputDir/index.html.
-func RenderLandingPage(outputDir string, cfg *config.RepoConfig, templatePath string, buildTime time.Time) error {
+func RenderLandingPage(ctx context.Context, outputDir string, cfg *config.RepoConfig, templatePath string, buildTime time.Time, signed bool) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+
 	tmplBytes, err := os.ReadFile(templatePath)
 	if err != nil {
 		return fmt.Errorf("reading template %s: %w", templatePath, err)
@@ -70,14 +79,15 @@ func RenderLandingPage(outputDir string, cfg *config.RepoConfig, templatePath st
 		RepoURL:     repoURL,
 		Suites:      suites,
 		GeneratedAt: buildTime.UTC().Format("2006-01-02 15:04 UTC"),
+		Signed:      signed,
 	}
 
 	if err := os.MkdirAll(outputDir, 0755); err != nil {
 		return err
 	}
 
-	return writeFileAtomic(filepath.Join(outputDir, "index.html"), 0644, func(f *os.File) error {
-		return tmpl.Execute(f, data)
+	return fileutil.WriteAtomic(filepath.Join(outputDir, "index.html"), 0644, func(w io.Writer) error {
+		return tmpl.Execute(w, data)
 	})
 }
 
@@ -97,31 +107,5 @@ func WriteSuiteIndexHTML(dir, suite, repoURL string) error {
 </html>
 `, escapedSuite, escapedSuite, escapedURL, escapedRawSuite)
 
-	return writeFileAtomic(filepath.Join(dir, "index.html"), 0644, func(f *os.File) error {
-		_, err := f.WriteString(content)
-		return err
-	})
-}
-
-// writeFileAtomic writes via a temp file in the target directory and renames on success.
-func writeFileAtomic(path string, perm os.FileMode, writeFn func(*os.File) error) (err error) {
-	tmpPath := path + ".tmp"
-	f, err := os.OpenFile(tmpPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, perm)
-	if err != nil {
-		return err
-	}
-	defer func() {
-		if err != nil {
-			os.Remove(tmpPath)
-		}
-	}()
-
-	if err = writeFn(f); err != nil {
-		f.Close()
-		return err
-	}
-	if err = f.Close(); err != nil {
-		return err
-	}
-	return os.Rename(tmpPath, path)
+	return fileutil.WriteAtomicBytes(filepath.Join(dir, "index.html"), 0644, []byte(content))
 }

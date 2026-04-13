@@ -1,12 +1,14 @@
 package repo
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
 
+	"github.com/PlayDay-iOS/repo/internal/fileutil"
 	"github.com/PlayDay-iOS/repo/internal/hashutil"
 )
 
@@ -33,7 +35,11 @@ type fileHash struct {
 
 // WriteRelease generates a Release file for the given directory.
 // It hashes top-level index files only (Packages/Sources/Contents variants).
-func WriteRelease(params ReleaseParams, dir string) error {
+func WriteRelease(ctx context.Context, params ReleaseParams, dir string) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+
 	hashes, err := hashDirectoryFiles(dir)
 	if err != nil {
 		return fmt.Errorf("hashing files in %s: %w", dir, err)
@@ -79,20 +85,7 @@ func WriteRelease(params ReleaseParams, dir string) error {
 		}
 	}
 
-	return writeAtomic(filepath.Join(dir, "Release"), []byte(b.String()), 0644)
-}
-
-// writeAtomic writes data to path via a temp file + rename.
-func writeAtomic(path string, data []byte, perm os.FileMode) error {
-	tmp := path + ".tmp"
-	if err := os.WriteFile(tmp, data, perm); err != nil {
-		return err
-	}
-	if err := os.Rename(tmp, path); err != nil {
-		os.Remove(tmp)
-		return err
-	}
-	return nil
+	return fileutil.WriteAtomicBytes(filepath.Join(dir, "Release"), 0644, []byte(b.String()))
 }
 
 // indexPrefixes lists the file-name prefixes that belong in a Release file.

@@ -2,6 +2,9 @@ package repo
 
 import (
 	"bytes"
+	"context"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -9,6 +12,7 @@ import (
 )
 
 func Test_writePackages_Empty(t *testing.T) {
+	t.Parallel()
 	var buf bytes.Buffer
 	if err := writePackages(nil, &buf); err != nil {
 		t.Fatal(err)
@@ -19,6 +23,7 @@ func Test_writePackages_Empty(t *testing.T) {
 }
 
 func Test_writePackages_SingleEntry(t *testing.T) {
+	t.Parallel()
 	entries := []*deb.PackageEntry{{
 		Control: deb.NewControlData(
 			[]string{"Package", "Version"},
@@ -38,18 +43,23 @@ func Test_writePackages_SingleEntry(t *testing.T) {
 	}
 
 	out := buf.String()
-	if !strings.Contains(out, "Package: com.test") {
-		t.Error("missing Package field")
-	}
-	if !strings.Contains(out, "Filename: pool/stable/main/test.deb") {
-		t.Error("missing Filename field")
-	}
-	if !strings.Contains(out, "Size: 1234") {
-		t.Error("missing Size field")
+	for _, want := range []string{
+		"Package: com.test",
+		"Filename: pool/stable/main/test.deb",
+		"Size: 1234",
+		"MD5sum: abc123",
+		"SHA1: def456",
+		"SHA256: 789ghi",
+		"SHA512: jkl012",
+	} {
+		if !strings.Contains(out, want) {
+			t.Errorf("stanza missing %q", want)
+		}
 	}
 }
 
 func Test_writePackages_MultipleSeparated(t *testing.T) {
+	t.Parallel()
 	entries := []*deb.PackageEntry{
 		{
 			Control: deb.NewControlData(
@@ -72,8 +82,29 @@ func Test_writePackages_MultipleSeparated(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	// Entries separated by blank line
 	if strings.Count(buf.String(), "\n\n") < 1 {
 		t.Error("entries should be separated by blank line")
+	}
+}
+
+func TestWritePackagesAll_CreatesAllFormats(t *testing.T) {
+	t.Parallel()
+	dir := t.TempDir()
+	if err := WritePackagesAll(context.Background(), nil, dir); err != nil {
+		t.Fatal(err)
+	}
+	for _, name := range []string{"Packages", "Packages.gz", "Packages.xz", "Packages.bz2"} {
+		if _, err := os.Stat(filepath.Join(dir, name)); err != nil {
+			t.Errorf("missing %s: %v", name, err)
+		}
+	}
+}
+
+func TestWritePackagesAll_CancelledContext(t *testing.T) {
+	t.Parallel()
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	if err := WritePackagesAll(ctx, nil, t.TempDir()); err == nil {
+		t.Fatal("expected error for cancelled context")
 	}
 }

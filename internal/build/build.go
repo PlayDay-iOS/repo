@@ -1,6 +1,7 @@
 package build
 
 import (
+	"context"
 	"fmt"
 	"log/slog"
 	"os"
@@ -23,7 +24,7 @@ type Options struct {
 	ConfigPath    string
 	TemplatePath  string
 	BuildTime     time.Time
-	GPGKey        string // armored private key (takes precedence over config gpg_key_file)
+	GPGKey        string // armored private key; empty disables signing
 	GPGPassphrase string
 	Logger        *slog.Logger
 }
@@ -38,7 +39,7 @@ func ResolveBuildTime(override time.Time) time.Time {
 }
 
 // Run executes the full repository build.
-func Run(opts Options) error {
+func Run(ctx context.Context, opts Options) error {
 	log := opts.Logger
 	if log == nil {
 		log = slog.Default()
@@ -49,17 +50,9 @@ func Run(opts Options) error {
 		return fmt.Errorf("loading config: %w", err)
 	}
 
-	// Load GPG key: Options.GPGKey takes precedence over config file path
-	armoredKey := opts.GPGKey
-	if armoredKey == "" {
-		var keyErr error
-		armoredKey, keyErr = loadGPGKey(cfg.GPGKeyFile)
-		if keyErr != nil {
-			return fmt.Errorf("loading GPG key: %w", keyErr)
-		}
-	}
+	armoredKey := strings.TrimSpace(opts.GPGKey)
+	signed := armoredKey != ""
 
-	// Clean and create output directory
 	absOut, err := filepath.Abs(opts.OutputDir)
 	if err != nil {
 		return fmt.Errorf("resolving output dir: %w", err)
@@ -88,21 +81,17 @@ func Run(opts Options) error {
 
 	buildTime := ResolveBuildTime(opts.BuildTime)
 
-	// Build each suite
-	component := cfg.PrimaryComponent()
 	allowedArch := cfg.AllowedArchitectures()
 	for _, suite := range cfg.Suites {
-		if err := buildSuite(opts, cfg, suite, component, allowedArch, armoredKey, opts.GPGPassphrase, buildTime); err != nil {
+		if err := buildSuite(ctx, opts, cfg, suite, allowedArch, armoredKey, opts.GPGPassphrase, buildTime); err != nil {
 			return err
 		}
 	}
 
-	// Copy root icon
 	if err := copyRootIcon(opts.RootDir, opts.OutputDir); err != nil {
 		return fmt.Errorf("copying root icon: %w", err)
 	}
 
-	// Copy public key
 	pubKey := filepath.Join(opts.RootDir, "repo-public.key")
 	if _, err := os.Stat(pubKey); err == nil {
 		if err := fileutil.CopyFile(pubKey, filepath.Join(opts.OutputDir, "repo-public.key")); err != nil {
@@ -110,30 +99,32 @@ func Run(opts Options) error {
 		}
 	}
 
-	// Render landing page
-	if err := page.RenderLandingPage(opts.OutputDir, cfg, opts.TemplatePath, buildTime); err != nil {
+	if err := page.RenderLandingPage(ctx, opts.OutputDir, cfg, opts.TemplatePath, buildTime, signed); err != nil {
 		return fmt.Errorf("rendering landing page: %w", err)
 	}
 
-	log.Info("repository built", "output", opts.OutputDir)
+	log.Info("repository built", "output", opts.OutputDir, "signed", signed)
 	return nil
 }
 
-func buildSuite(opts Options, cfg *config.RepoConfig, suite, component string, allowedArch map[string]bool, armoredKey, passphrase string, buildTime time.Time) error {
+func buildSuite(ctx context.Context, opts Options, cfg *config.RepoConfig, suite string, allowedArch map[string]bool, armoredKey, passphrase string, buildTime time.Time) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+
 	suiteDir := filepath.Join(opts.OutputDir, suite)
 	if err := os.MkdirAll(suiteDir, 0755); err != nil {
 		return fmt.Errorf("creating suite dir %s: %w", suite, err)
 	}
 
-	// Scan source pool for this suite
-	poolSuiteDir := filepath.Join(opts.RootDir, "pool", suite, component)
+	poolSuiteDir := filepath.Join(opts.RootDir, "pool", suite, cfg.Component)
 	poolInfo, statErr := os.Stat(poolSuiteDir)
 	if statErr != nil && !os.IsNotExist(statErr) {
 		return fmt.Errorf("checking pool dir %s: %w", poolSuiteDir, statErr)
 	}
 
 	if statErr != nil || !poolInfo.IsDir() {
-		if err := repo.WritePackagesAll(nil, suiteDir); err != nil {
+		if err := repo.WritePackagesAll(ctx, nil, suiteDir); err != nil {
 			return fmt.Errorf("writing empty packages for %s: %w", suite, err)
 		}
 	} else {
@@ -141,12 +132,13 @@ func buildSuite(opts Options, cfg *config.RepoConfig, suite, component string, a
 		if err != nil {
 			return fmt.Errorf("scanning pool for %s: %w", suite, err)
 		}
-		if err := repo.WritePackagesAll(entries, suiteDir); err != nil {
+		if err := repo.WritePackagesAll(ctx, entries, suiteDir); err != nil {
 			return fmt.Errorf("writing packages for %s: %w", suite, err)
 		}
 	}
 
-	// Copy pool into suite dir for client access
+	// Mirror the suite's pool into the suite dir so clients can fetch .debs
+	// via the published suite URL.
 	suitePoolSource := filepath.Join(opts.RootDir, "pool", suite)
 	if _, err := os.Stat(suitePoolSource); err == nil {
 		suitePoolTarget := filepath.Join(suiteDir, "pool", suite)
@@ -165,7 +157,6 @@ func buildSuite(opts Options, cfg *config.RepoConfig, suite, component string, a
 		}
 	}
 
-	// Generate Release
 	suiteSuffix := " (" + page.TitleCase(suite) + ")"
 	withSuffix := func(base string) string {
 		if base == "" {
@@ -183,16 +174,14 @@ func buildSuite(opts Options, cfg *config.RepoConfig, suite, component string, a
 		Description:   withSuffix(cfg.Description),
 		Date:          buildTime,
 	}
-	if err := repo.WriteRelease(releaseParams, suiteDir); err != nil {
+	if err := repo.WriteRelease(ctx, releaseParams, suiteDir); err != nil {
 		return fmt.Errorf("writing release for %s: %w", suite, err)
 	}
 
-	// Sign
-	if err := repo.SignRelease(suiteDir, armoredKey, passphrase); err != nil {
+	if err := repo.SignRelease(ctx, suiteDir, armoredKey, passphrase); err != nil {
 		return fmt.Errorf("signing %s: %w", suite, err)
 	}
 
-	// Suite index page
 	if err := page.WriteSuiteIndexHTML(suiteDir, suite, cfg.URL); err != nil {
 		return fmt.Errorf("writing suite index for %s: %w", suite, err)
 	}
@@ -260,15 +249,4 @@ func validateExistingOutputDir(absPath, marker string) error {
 	}
 
 	return nil
-}
-
-func loadGPGKey(keyFile string) (string, error) {
-	if keyFile != "" {
-		data, err := os.ReadFile(keyFile)
-		if err != nil {
-			return "", fmt.Errorf("reading GPG key file %s: %w", keyFile, err)
-		}
-		return string(data), nil
-	}
-	return "", nil
 }

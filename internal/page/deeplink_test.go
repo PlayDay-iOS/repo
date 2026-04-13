@@ -5,6 +5,7 @@ import (
 )
 
 func TestCydiaDeeplink(t *testing.T) {
+	t.Parallel()
 	got := CydiaDeeplink("https://example.com/repo/stable/")
 	want := "cydia://url/https://cydia.saurik.com/api/share#?source=https%3A%2F%2Fexample.com%2Frepo%2Fstable%2F"
 	if got != want {
@@ -13,6 +14,7 @@ func TestCydiaDeeplink(t *testing.T) {
 }
 
 func TestZebraDeeplink(t *testing.T) {
+	t.Parallel()
 	got := ZebraDeeplink("https://example.com/repo/stable/")
 	want := "zbra://sources/add/https:%2F%2Fexample.com%2Frepo%2Fstable%2F"
 	if got != want {
@@ -21,6 +23,7 @@ func TestZebraDeeplink(t *testing.T) {
 }
 
 func TestSileoDeeplink(t *testing.T) {
+	t.Parallel()
 	got := SileoDeeplink("https://example.com/repo/stable/")
 	want := "sileo://source/https:%2F%2Fexample.com%2Frepo%2Fstable%2F"
 	if got != want {

@@ -11,11 +11,13 @@ import (
 	"github.com/google/go-github/v84/github"
 )
 
+// testLogger returns a discard logger for tests across the ghimport package.
 func testLogger() *slog.Logger {
 	return slog.New(slog.NewTextHandler(io.Discard, nil))
 }
 
 func TestCollectDebAssets_FiltersCorrectly(t *testing.T) {
+	t.Parallel()
 	releases := []*github.RepositoryRelease{
 		{
 			TagName:    github.Ptr("v1.0"),
@@ -44,7 +46,6 @@ func TestCollectDebAssets_FiltersCorrectly(t *testing.T) {
 		},
 	}
 
-	// Without prereleases
 	assets := collectDebAssets(releases, false)
 	if len(assets) != 1 {
 		t.Fatalf("expected 1 asset (no prereleases), got %d", len(assets))
@@ -53,7 +54,6 @@ func TestCollectDebAssets_FiltersCorrectly(t *testing.T) {
 		t.Errorf("expected tweak.deb, got %q", assets[0].name)
 	}
 
-	// With prereleases
 	assets = collectDebAssets(releases, true)
 	if len(assets) != 2 {
 		t.Fatalf("expected 2 assets (with prereleases), got %d", len(assets))
@@ -61,6 +61,7 @@ func TestCollectDebAssets_FiltersCorrectly(t *testing.T) {
 }
 
 func TestCollectDebAssets_SkipsDrafts(t *testing.T) {
+	t.Parallel()
 	releases := []*github.RepositoryRelease{
 		{
 			TagName: github.Ptr("v1.0"),
@@ -70,13 +71,13 @@ func TestCollectDebAssets_SkipsDrafts(t *testing.T) {
 			},
 		},
 	}
-	assets := collectDebAssets(releases, true)
-	if len(assets) != 0 {
-		t.Errorf("drafts should be skipped, got %d assets", len(assets))
+	if got := collectDebAssets(releases, true); len(got) != 0 {
+		t.Errorf("drafts should be skipped, got %d assets", len(got))
 	}
 }
 
 func TestCollectDebAssets_SkipsEmptyURL(t *testing.T) {
+	t.Parallel()
 	releases := []*github.RepositoryRelease{
 		{
 			TagName: github.Ptr("v1.0"),
@@ -86,13 +87,13 @@ func TestCollectDebAssets_SkipsEmptyURL(t *testing.T) {
 			},
 		},
 	}
-	assets := collectDebAssets(releases, false)
-	if len(assets) != 0 {
-		t.Errorf("empty URL should be skipped, got %d assets", len(assets))
+	if got := collectDebAssets(releases, false); len(got) != 0 {
+		t.Errorf("empty URL should be skipped, got %d assets", len(got))
 	}
 }
 
 func TestContainsPathChars(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		input string
 		want  bool
@@ -107,6 +108,7 @@ func TestContainsPathChars(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.input, func(t *testing.T) {
+			t.Parallel()
 			if got := containsPathChars(tc.input); got != tc.want {
 				t.Errorf("containsPathChars(%q) = %v, want %v", tc.input, got, tc.want)
 			}
@@ -115,6 +117,7 @@ func TestContainsPathChars(t *testing.T) {
 }
 
 func TestSanitizeFilename(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		input, want string
 	}{
@@ -125,6 +128,7 @@ func TestSanitizeFilename(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.input, func(t *testing.T) {
+			t.Parallel()
 			got := sanitizeFilename(tc.input)
 			if got != tc.want {
 				t.Errorf("sanitizeFilename(%q) = %q, want %q", tc.input, got, tc.want)
@@ -134,6 +138,7 @@ func TestSanitizeFilename(t *testing.T) {
 }
 
 func TestPlaceFile_FallsBackToCopyOnLinkError(t *testing.T) {
+	t.Parallel()
 	tmpDir := t.TempDir()
 	tmpPath := filepath.Join(tmpDir, "in.deb")
 	destPath := filepath.Join(tmpDir, "out.deb")
@@ -158,6 +163,7 @@ func TestPlaceFile_FallsBackToCopyOnLinkError(t *testing.T) {
 }
 
 func TestPlaceFile_ExistingDifferentContentRejected(t *testing.T) {
+	t.Parallel()
 	tmpDir := t.TempDir()
 	tmpPath := filepath.Join(tmpDir, "in.deb")
 	destPath := filepath.Join(tmpDir, "out.deb")
@@ -168,8 +174,24 @@ func TestPlaceFile_ExistingDifferentContentRejected(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	result := placeFile(testLogger(), tmpPath, destPath, "out.deb", defaultPlacer)
-	if result != assetRejected {
-		t.Fatalf("expected assetRejected, got %v", result)
+	if got := placeFile(testLogger(), tmpPath, destPath, "out.deb", defaultPlacer); got != assetRejected {
+		t.Fatalf("expected assetRejected, got %v", got)
+	}
+}
+
+func TestPlaceFile_ExistingSameContentSkipped(t *testing.T) {
+	t.Parallel()
+	tmpDir := t.TempDir()
+	tmpPath := filepath.Join(tmpDir, "in.deb")
+	destPath := filepath.Join(tmpDir, "out.deb")
+	if err := os.WriteFile(tmpPath, []byte("same"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(destPath, []byte("same"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	if got := placeFile(testLogger(), tmpPath, destPath, "out.deb", defaultPlacer); got != assetSkipped {
+		t.Fatalf("expected assetSkipped, got %v", got)
 	}
 }

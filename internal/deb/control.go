@@ -17,13 +17,18 @@ type ControlData struct {
 	values map[string]string
 }
 
-// NewControlData creates a ControlData from key-value pairs (for testing).
-// The keys slice preserves the canonical field case used in output;
-// values are looked up case-insensitively.
+// NewControlData creates a ControlData from ordered keys and their values
+// keyed by canonical case. Only the provided keys are preserved; any extra
+// entries in values are dropped so the stanza output always matches Order().
 func NewControlData(keys []string, values map[string]string) *ControlData {
-	lowered := make(map[string]string, len(values))
+	lowered := make(map[string]string, len(keys))
+	// Build a case-insensitive view of the input values once.
+	caseFold := make(map[string]string, len(values))
 	for k, v := range values {
-		lowered[strings.ToLower(k)] = v
+		caseFold[strings.ToLower(k)] = v
+	}
+	for _, k := range keys {
+		lowered[strings.ToLower(k)] = caseFold[strings.ToLower(k)]
 	}
 	return &ControlData{order: keys, values: lowered}
 }

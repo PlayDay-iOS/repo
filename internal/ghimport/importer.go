@@ -2,10 +2,7 @@ package ghimport
 
 import (
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
 	"fmt"
-	"io"
 	"log/slog"
 	"net/http"
 	"os"
@@ -17,6 +14,7 @@ import (
 	"github.com/PlayDay-iOS/repo/internal/config"
 	"github.com/PlayDay-iOS/repo/internal/deb"
 	"github.com/PlayDay-iOS/repo/internal/fileutil"
+	"github.com/PlayDay-iOS/repo/internal/hashutil"
 	"github.com/google/go-github/v84/github"
 )
 
@@ -44,7 +42,7 @@ var defaultPlacer = filePlacer{
 }
 
 // Run executes the import process.
-func Run(opts Options) error {
+func Run(ctx context.Context, opts Options) error {
 	log := opts.Logger
 	if log == nil {
 		log = slog.Default()
@@ -56,7 +54,7 @@ func Run(opts Options) error {
 	}
 
 	if cfg.OrgName == "" {
-		return fmt.Errorf("github.org_name is required for import (set in repo.toml or ORG_NAME env)")
+		return fmt.Errorf("repo.org_name is required for import (set in repo.toml or ORG_NAME env)")
 	}
 	if opts.Token == "" {
 		return fmt.Errorf("GitHub API token required for import: set GH_TOKEN or GITHUB_TOKEN (unauthenticated access is rate-limited to 60 req/hr)")
@@ -70,7 +68,7 @@ func Run(opts Options) error {
 		return fmt.Errorf("suite %q not in configured suites: %v", suite, cfg.Suites)
 	}
 
-	destDir := filepath.Join(opts.RootDir, "pool", suite, cfg.PrimaryComponent())
+	destDir := filepath.Join(opts.RootDir, "pool", suite, cfg.Component)
 	if err := os.MkdirAll(destDir, 0755); err != nil {
 		return fmt.Errorf("creating destination dir: %w", err)
 	}
@@ -96,10 +94,10 @@ func Run(opts Options) error {
 	}
 
 	allowedArch := cfg.AllowedArchitectures()
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Minute)
+
+	runCtx, cancel := context.WithTimeout(ctx, 30*time.Minute)
 	defer cancel()
 
-	// Create a temp directory for downloads (cleaned up at end)
 	tmpDir, err := os.MkdirTemp("", "ghimport-*")
 	if err != nil {
 		return fmt.Errorf("creating temp dir: %w", err)
@@ -109,9 +107,12 @@ func Run(opts Options) error {
 	var added, skipped, rejected int
 
 	for _, repoName := range repos {
+		if err := runCtx.Err(); err != nil {
+			return err
+		}
 		log.Info("scanning repo", "org", cfg.OrgName, "repo", repoName)
 
-		releases, err := FetchAllReleases(ctx, log, client, cfg.OrgName, repoName, perPage)
+		releases, err := FetchAllReleases(runCtx, log, client, cfg.OrgName, repoName, perPage)
 		if err != nil {
 			log.Warn("failed to fetch releases, skipping", "repo", repoName, "error", err)
 			skipped++
@@ -126,7 +127,7 @@ func Run(opts Options) error {
 
 		safeRepo := sanitizeFilename(repoName)
 		for _, a := range assets {
-			result := processAsset(log, a, safeRepo, tmpDir, destDir, allowedArch, dlClient, defaultPlacer)
+			result := processAsset(runCtx, log, a, safeRepo, tmpDir, destDir, allowedArch, dlClient, defaultPlacer)
 			switch result {
 			case assetAdded:
 				added++
@@ -150,13 +151,13 @@ const (
 	assetRejected
 )
 
-func processAsset(log *slog.Logger, a debAsset, safeRepo, tmpDir, destDir string, allowedArch map[string]bool, dlClient *http.Client, placer filePlacer) assetResult {
+func processAsset(ctx context.Context, log *slog.Logger, a debAsset, safeRepo, tmpDir, destDir string, allowedArch map[string]bool, dlClient *http.Client, placer filePlacer) assetResult {
 	safeName := sanitizeFilename(a.name)
 	tmpPath := filepath.Join(tmpDir, fmt.Sprintf("%s_%s", safeRepo, safeName))
 	defer os.Remove(tmpPath)
 
 	log.Info("downloading asset", "name", a.name, "tag", a.tagName)
-	if err := DownloadFile(a.downloadURL, tmpPath, dlClient); err != nil {
+	if err := DownloadFile(ctx, a.downloadURL, tmpPath, dlClient); err != nil {
 		log.Warn("failed to download, skipping", "name", a.name, "error", err)
 		return assetSkipped
 	}
@@ -210,12 +211,12 @@ func placeFile(log *slog.Logger, tmpPath, destPath, canonicalName string, placer
 	}
 
 	if os.IsExist(linkErr) {
-		existingHash, err := fileSHA256(destPath)
+		existingHash, err := hashutil.SHA256File(destPath)
 		if err != nil {
 			log.Warn("failed to read existing file, skipping", "name", canonicalName, "error", err)
 			return assetSkipped
 		}
-		incomingHash, err := fileSHA256(tmpPath)
+		incomingHash, err := hashutil.SHA256File(tmpPath)
 		if err != nil {
 			log.Warn("failed to hash incoming file, skipping", "name", canonicalName, "error", err)
 			return assetSkipped
@@ -241,10 +242,11 @@ func placeFile(log *slog.Logger, tmpPath, destPath, canonicalName string, placer
 	return assetAdded
 }
 
+// debAsset identifies a single release asset that is a candidate for import.
 type debAsset struct {
-	name        string
-	downloadURL string
-	tagName     string
+	name        string // asset filename as published on GitHub, e.g. "tweak_1.0_arm64.deb"
+	downloadURL string // HTTPS URL to the asset
+	tagName     string // release tag name, for logging only
 }
 
 func collectDebAssets(releases []*github.RepositoryRelease, includePrereleases bool) []debAsset {
@@ -291,17 +293,4 @@ func sanitizeFilename(name string) string {
 
 func containsPathChars(s string) bool {
 	return strings.ContainsAny(s, "/\\\x00")
-}
-
-func fileSHA256(path string) (string, error) {
-	f, err := os.Open(path)
-	if err != nil {
-		return "", err
-	}
-	defer f.Close()
-	h := sha256.New()
-	if _, err := io.Copy(h, f); err != nil {
-		return "", err
-	}
-	return hex.EncodeToString(h.Sum(nil)), nil
 }

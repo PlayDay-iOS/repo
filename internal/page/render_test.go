@@ -1,8 +1,10 @@
 package page
 
 import (
+	"context"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 	"time"
@@ -10,14 +12,31 @@ import (
 	"github.com/PlayDay-iOS/repo/internal/config"
 )
 
+// repoTemplatePath resolves the on-disk path to the canonical template,
+// regardless of the caller's working directory.
+func repoTemplatePath(t *testing.T) string {
+	t.Helper()
+	_, thisFile, _, ok := runtime.Caller(0)
+	if !ok {
+		t.Fatal("runtime.Caller failed")
+	}
+	// render_test.go lives in internal/page; the template lives in templates/
+	return filepath.Join(filepath.Dir(thisFile), "..", "..", "templates", "index.html.tmpl")
+}
+
 func TestRenderLandingPage(t *testing.T) {
+	t.Parallel()
 	dir := t.TempDir()
 	tmplDir := filepath.Join(dir, "templates")
-	os.MkdirAll(tmplDir, 0755)
+	if err := os.MkdirAll(tmplDir, 0755); err != nil {
+		t.Fatal(err)
+	}
 
 	tmpl := `<html><title>{{.RepoName}}</title><body>{{range .Suites}}<p>deb {{.URL}} ./</p>{{end}}{{range .Suites}}<a href="{{.CydiaURL}}">Cydia</a><a href="{{.ZebraURL}}">Zebra</a><a href="{{.SileoURL}}">Sileo</a>{{end}}</body></html>`
 	tmplPath := filepath.Join(tmplDir, "index.html.tmpl")
-	os.WriteFile(tmplPath, []byte(tmpl), 0644)
+	if err := os.WriteFile(tmplPath, []byte(tmpl), 0644); err != nil {
+		t.Fatal(err)
+	}
 
 	cfg := &config.RepoConfig{
 		Name:   "Test Repo",
@@ -26,7 +45,7 @@ func TestRenderLandingPage(t *testing.T) {
 	}
 
 	outDir := filepath.Join(dir, "out")
-	if err := RenderLandingPage(outDir, cfg, tmplPath, time.Now()); err != nil {
+	if err := RenderLandingPage(context.Background(), outDir, cfg, tmplPath, time.Now(), false); err != nil {
 		t.Fatal(err)
 	}
 
@@ -36,27 +55,22 @@ func TestRenderLandingPage(t *testing.T) {
 	}
 	html := string(data)
 
-	if !strings.Contains(html, "<title>Test Repo</title>") {
-		t.Error("missing repo name in title")
-	}
-	if !strings.Contains(html, "deb https://example.com/repo/stable/ ./") {
-		t.Error("missing stable APT line")
-	}
-	if !strings.Contains(html, "deb https://example.com/repo/beta/ ./") {
-		t.Error("missing beta APT line")
-	}
-	if !strings.Contains(html, "cydia://") {
-		t.Error("missing Cydia deeplink")
-	}
-	if !strings.Contains(html, "zbra://") {
-		t.Error("missing Zebra deeplink")
-	}
-	if !strings.Contains(html, "sileo://") {
-		t.Error("missing Sileo deeplink")
+	for _, want := range []string{
+		"<title>Test Repo</title>",
+		"deb https://example.com/repo/stable/ ./",
+		"deb https://example.com/repo/beta/ ./",
+		"cydia://",
+		"zbra://",
+		"sileo://",
+	} {
+		if !strings.Contains(html, want) {
+			t.Errorf("missing %q in rendered page", want)
+		}
 	}
 }
 
 func TestWriteSuiteIndexHTML(t *testing.T) {
+	t.Parallel()
 	dir := t.TempDir()
 	if err := WriteSuiteIndexHTML(dir, "stable", "https://example.com/repo/"); err != nil {
 		t.Fatal(err)
@@ -66,17 +80,15 @@ func TestWriteSuiteIndexHTML(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	html := string(data)
-
-	if !strings.Contains(html, "deb https://example.com/repo/stable/ ./") {
+	if !strings.Contains(string(data), "deb https://example.com/repo/stable/ ./") {
 		t.Error("missing source line")
 	}
 }
 
-func TestLandingTemplateHasCollapsibleDetailsMenus(t *testing.T) {
+func TestLandingTemplate_RendersKeyMarkers(t *testing.T) {
+	t.Parallel()
 	dir := t.TempDir()
-	// test working dir is the package dir (internal/page); template lives two levels up
-	templatePath := filepath.Join("..", "..", "templates", "index.html.tmpl")
+	templatePath := repoTemplatePath(t)
 
 	cfg := &config.RepoConfig{
 		Name:   "Test Repo",
@@ -85,7 +97,7 @@ func TestLandingTemplateHasCollapsibleDetailsMenus(t *testing.T) {
 	}
 
 	outDir := filepath.Join(dir, "out")
-	if err := RenderLandingPage(outDir, cfg, templatePath, time.Now()); err != nil {
+	if err := RenderLandingPage(context.Background(), outDir, cfg, templatePath, time.Now(), true); err != nil {
 		t.Fatal(err)
 	}
 
@@ -95,7 +107,7 @@ func TestLandingTemplateHasCollapsibleDetailsMenus(t *testing.T) {
 	}
 	html := string(data)
 
-	checks := []string{
+	for _, check := range []string{
 		`id="menu-cydia"`,
 		`<summary>Add to Cydia</summary>`,
 		`id="menu-zebra"`,
@@ -103,11 +115,34 @@ func TestLandingTemplateHasCollapsibleDetailsMenus(t *testing.T) {
 		`id="menu-sileo"`,
 		`<summary>Add to Sileo</summary>`,
 		`Tap sections to expand source options.`,
+		"InRelease", // signed variant should appear when Signed=true
+	} {
+		if !strings.Contains(html, check) {
+			t.Errorf("missing marker %q", check)
+		}
+	}
+}
+
+func TestLandingTemplate_OmitsInReleaseWhenUnsigned(t *testing.T) {
+	t.Parallel()
+	dir := t.TempDir()
+	templatePath := repoTemplatePath(t)
+
+	cfg := &config.RepoConfig{
+		Name:   "Test Repo",
+		URL:    "https://example.com/repo/",
+		Suites: []string{"stable"},
 	}
 
-	for _, check := range checks {
-		if !strings.Contains(html, check) {
-			t.Errorf("missing accordion marker %q", check)
-		}
+	outDir := filepath.Join(dir, "out")
+	if err := RenderLandingPage(context.Background(), outDir, cfg, templatePath, time.Now(), false); err != nil {
+		t.Fatal(err)
+	}
+	data, err := os.ReadFile(filepath.Join(outDir, "index.html"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(data), "InRelease") {
+		t.Error("InRelease should be omitted when signing is disabled")
 	}
 }

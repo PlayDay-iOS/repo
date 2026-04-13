@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"context"
 	"os"
 	"path/filepath"
 	"strings"
@@ -10,10 +11,13 @@ import (
 )
 
 func TestSignRelease_NoopWhenKeyEmpty(t *testing.T) {
+	t.Parallel()
 	dir := t.TempDir()
-	os.WriteFile(filepath.Join(dir, "Release"), []byte("test"), 0644)
+	if err := os.WriteFile(filepath.Join(dir, "Release"), []byte("test"), 0644); err != nil {
+		t.Fatal(err)
+	}
 
-	if err := SignRelease(dir, "", ""); err != nil {
+	if err := SignRelease(context.Background(), dir, "", ""); err != nil {
 		t.Fatalf("expected no-op, got error: %v", err)
 	}
 
@@ -26,19 +30,22 @@ func TestSignRelease_NoopWhenKeyEmpty(t *testing.T) {
 }
 
 func TestSignRelease_ErrorWhenReleaseFileMissing(t *testing.T) {
+	t.Parallel()
 	dir := t.TempDir()
-	err := SignRelease(dir, "-----BEGIN PGP PRIVATE KEY BLOCK-----\nfake\n-----END PGP PRIVATE KEY BLOCK-----", "")
+	err := SignRelease(context.Background(), dir, "-----BEGIN PGP PRIVATE KEY BLOCK-----\nfake\n-----END PGP PRIVATE KEY BLOCK-----", "")
 	if err == nil {
 		t.Fatal("expected error when Release file is missing")
 	}
 }
 
 func TestSignRelease_WithTestKey(t *testing.T) {
+	t.Parallel()
 	dir := t.TempDir()
 	releaseContent := []byte("Suite: stable\nCodename: stable\n")
-	os.WriteFile(filepath.Join(dir, "Release"), releaseContent, 0644)
+	if err := os.WriteFile(filepath.Join(dir, "Release"), releaseContent, 0644); err != nil {
+		t.Fatal(err)
+	}
 
-	// Generate a test key
 	pgp := crypto.PGP()
 	key, err := pgp.KeyGeneration().AddUserId("Test", "test@example.com").New().GenerateKey()
 	if err != nil {
@@ -49,11 +56,10 @@ func TestSignRelease_WithTestKey(t *testing.T) {
 		t.Fatalf("armoring key: %v", err)
 	}
 
-	if err := SignRelease(dir, armored, ""); err != nil {
+	if err := SignRelease(context.Background(), dir, armored, ""); err != nil {
 		t.Fatalf("SignRelease failed: %v", err)
 	}
 
-	// Verify Release.gpg exists and is armored PGP
 	gpgData, err := os.ReadFile(filepath.Join(dir, "Release.gpg"))
 	if err != nil {
 		t.Fatal("Release.gpg should exist")
@@ -62,7 +68,6 @@ func TestSignRelease_WithTestKey(t *testing.T) {
 		t.Error("Release.gpg should contain armored PGP signature")
 	}
 
-	// Verify InRelease exists and contains the original content
 	inReleaseData, err := os.ReadFile(filepath.Join(dir, "InRelease"))
 	if err != nil {
 		t.Fatal("InRelease should exist")

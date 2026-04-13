@@ -8,6 +8,7 @@ import (
 	"encoding/hex"
 	"hash"
 	"io"
+	"os"
 )
 
 // Sums holds hex-encoded hashes computed by MultiHash.
@@ -31,6 +32,20 @@ func MultiHash(r io.Reader) (Sums, int64, error) {
 		SHA256: hexEncode(sha256h),
 		SHA512: hexEncode(sha512h),
 	}, n, nil
+}
+
+// SHA256File returns the hex-encoded SHA256 of the file at path.
+func SHA256File(path string) (string, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+	h := sha256.New()
+	if _, err := io.Copy(h, f); err != nil {
+		return "", err
+	}
+	return hex.EncodeToString(h.Sum(nil)), nil
 }
 
 func hexEncode(h hash.Hash) string {

@@ -1,11 +1,14 @@
 package hashutil
 
 import (
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 )
 
 func TestMultiHash(t *testing.T) {
+	t.Parallel()
 	r := strings.NewReader("hello")
 	sums, n, err := MultiHash(r)
 	if err != nil {
@@ -28,5 +31,29 @@ func TestMultiHash(t *testing.T) {
 		if got[name] != want {
 			t.Errorf("%s mismatch:\n  got  %s\n  want %s", name, got[name], want)
 		}
+	}
+}
+
+func TestSHA256File(t *testing.T) {
+	t.Parallel()
+	dir := t.TempDir()
+	path := filepath.Join(dir, "f.bin")
+	if err := os.WriteFile(path, []byte("hello"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	got, err := SHA256File(path)
+	if err != nil {
+		t.Fatalf("SHA256File: %v", err)
+	}
+	const want = "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+	if got != want {
+		t.Errorf("got %s, want %s", got, want)
+	}
+}
+
+func TestSHA256File_Missing(t *testing.T) {
+	t.Parallel()
+	if _, err := SHA256File("/nonexistent/file"); err == nil {
+		t.Fatal("expected error for missing file")
 	}
 }

@@ -226,11 +226,11 @@
         <p class="label">Useful files</p>
         {{range .Suites}}<p class="code">{{.URL}}Release</p>
         {{end}}
-        {{range .Suites}}<p class="code">{{.URL}}InRelease (when signing is enabled)</p>
-        {{end}}
+        {{if $.Signed}}{{range .Suites}}<p class="code">{{.URL}}InRelease</p>
+        {{end}}{{end}}
         {{range .Suites}}<p class="code">{{.URL}}Packages</p>
         {{end}}
-        <p class="code">{{.RepoURL}}repo-public.key (optional, for trust setup)</p>
+        <p class="code">{{.RepoURL}}repo-public.key</p>
       </section>
 
       <p class="footer">Generated: {{.GeneratedAt}}</p>

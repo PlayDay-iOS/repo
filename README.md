@@ -13,29 +13,33 @@ Built as a single Go binary (`repotool`) with no external tool dependencies.
 
 Notes:
 
-- `repo.name` and `repo.url` are required in `repo.toml`.
-- `metadata.components` currently must contain exactly one entry.
+- `repo.name` and `repo.url` are required in `repo.toml`. `metadata.component` is a single string ("main" by default).
 - Published suite roots use `./` source style (`deb <url>/<suite>/ ./`).
 - Set `SOURCE_DATE_EPOCH` for reproducible builds (Unix timestamp). The build workflow derives this from the latest commit timestamp automatically.
+- Index files are hashed with MD5, SHA1, SHA256, and SHA512 for compatibility with older clients.
+
+## Requirements
+
+- Go 1.26 or newer. The `toolchain` directive in `go.mod` lets older `go` binaries fetch the right toolchain when `GOTOOLCHAIN=auto` (the default).
 
 ## Build and publish
 
 1. Add packages to `pool/<suite>/<component>/`, or use org import.
-2. Build: `go build -o repotool ./cmd/repotool && ./repotool build --output _site --template templates/index.html.tmpl`
+2. Build: `go build -o repotool ./cmd/repotool && ./repotool build`
 3. GitHub Actions deploys `_site/` to GitHub Pages.
 
 Main workflow: `.github/workflows/build-and-deploy.yml`
 
 ## Quick start
 
-1. Set `url` in `repo.toml` to the final Pages URL.
+1. Set `repo.url` in `repo.toml` to the final Pages URL.
 2. Add one `.deb` to `pool/stable/main/`.
 3. Push to `main`.
 4. In repository settings, enable Pages with source set to GitHub Actions.
 
 Expected files after build (rooted at the output directory):
 
-- `.repotool-output` (marker file at the output root)
+- `.repotool-output` — marker file written at the output root. `repotool build` refuses to wipe an existing output directory unless this marker is present, so an accidental `--output ~/important-stuff` is rejected.
 - `CydiaIcon.png` (root)
 - `index.html` (root landing page)
 - Per suite (e.g. `stable/`, `beta/`):
@@ -53,11 +57,18 @@ Source lines:
 ## CLI
 
 ```sh
-repotool build   [--output _site] [--config repo.toml] [--template templates/index.html.tmpl]
-repotool import  [--config repo.toml] [--allowlist org-import-allowlist.txt] [--suite <name>] [--include-prereleases]
-repotool render  [--output _site] [--config repo.toml] [--template templates/index.html.tmpl]
+repotool build  [--output _site] [--config repo.toml] [--template templates/index.html.tmpl]
+repotool import [--config repo.toml] [--allowlist org-import-allowlist.txt] [--suite <name>] [--include-prereleases]
+repotool render [--output _site] [--config repo.toml] [--template templates/index.html.tmpl]
 repotool --version
 ```
+
+Flag defaults are computed from the current working directory:
+
+- `--output` defaults to `<cwd>/_site`
+- `--config` defaults to `<cwd>/repo.toml`
+- `--template` defaults to `<cwd>/templates/index.html.tmpl`
+- `--allowlist` defaults to `<cwd>/org-import-allowlist.txt`
 
 The `--suite` flag on `import` defaults to the first entry of `metadata.suites` in `repo.toml`, or the `TARGET_SUITE` env var when set.
 
@@ -68,16 +79,34 @@ The `--suite` flag on `import` defaults to the first entry of `metadata.suites` 
 | `SOURCE_DATE_EPOCH`         | Pins `Date:` and landing-page timestamp for reproducible builds.          |
 | `GPG_PRIVATE_KEY`           | Armored signing key. Empty = signing skipped (no error).                  |
 | `GPG_PASSPHRASE`            | Passphrase for `GPG_PRIVATE_KEY` when required.                           |
-| `GPG_KEY_FILE`              | Overrides `signing.gpg_key_file` from `repo.toml`.                        |
 | `GH_TOKEN` / `GITHUB_TOKEN` | GitHub API token for `import`; `GH_TOKEN` takes precedence.               |
 | `GITHUB_API_BASE`           | Alternate GitHub API endpoint (e.g. GitHub Enterprise).                   |
 | `ORG_NAME`                  | Overrides `github.org_name` from `repo.toml`.                             |
 | `TARGET_SUITE`              | Default target suite for `import` when `--suite` is not passed.           |
 | `INCLUDE_PRERELEASES`       | `true`/`false`; default for `--include-prereleases` when flag not passed. |
 
+### Configuration schema
+
+```toml
+[repo]
+name = "PlayDay iOS Repo"          # required
+url  = "https://example.com/repo/" # required, http(s) only
+
+[metadata]
+origin        = "PlayDay-iOS"             # optional, written into Release
+label         = "PlayDay-iOS"             # optional, written into Release
+description   = "..."                     # optional, written into Release
+suites        = ["stable", "beta"]        # default: ["stable"]
+component     = "main"                    # default: "main"; single string
+architectures = ["iphoneos-arm64", "all"] # default: arm/arm64/all
+
+[github]
+org_name = "PlayDay-iOS"  # required only for `import`
+```
+
 ## Signing (optional)
 
-`repotool` reads signing data from runtime env vars (`GPG_PRIVATE_KEY`, `GPG_PASSPHRASE`) or from `signing.gpg_key_file` in `repo.toml`. When no key is available, signing is silently skipped (only plain `Release` is written, no `Release.gpg` / `InRelease`).
+`repotool` reads signing data from runtime env vars (`GPG_PRIVATE_KEY`, `GPG_PASSPHRASE`). When no key is provided, signing is silently skipped: only the plain `Release` is written, and no `Release.gpg` / `InRelease` is produced.
 
 To export the public key for client trust setup:
 
@@ -87,10 +116,16 @@ gpg --armor --export <key-id> > repo-public.key
 
 The build copies `repo-public.key` (if present at the repo root) into the output directory.
 
-In GitHub Actions, set these repository secrets (workflow maps them to runtime env vars above):
+In GitHub Actions, set these repository secrets (workflow maps them to the runtime env vars above):
 
 - `APT_GPG_PRIVATE_KEY`
 - `APT_GPG_PASSPHRASE` (if key is protected)
+
+To load a key from a file rather than env var, expand it inline in the shell that invokes `repotool`:
+
+```sh
+GPG_PRIVATE_KEY="$(cat key.asc)" ./repotool build
+```
 
 ## Org import
 
@@ -107,7 +142,7 @@ Required configuration:
 How it works:
 
 1. Add allowed repository names to `org-import-allowlist.txt`.
-2. Run the import workflow manually or wait for schedule.
+2. Run the import workflow manually or wait for the schedule.
 3. Set `target_suite` to the desired suite name when running manually (defaults to `stable`).
 4. Imported packages are validated and committed under `pool/<target_suite>/<component>/`.
 5. The build/deploy workflow publishes updated metadata.

@@ -9,6 +9,7 @@ import (
 )
 
 func TestScanPool_FindsDebs(t *testing.T) {
+	t.Parallel()
 	dir := t.TempDir()
 	poolDir := filepath.Join(dir, "pool", "stable", "main")
 	if err := os.MkdirAll(poolDir, 0755); err != nil {
@@ -45,6 +46,7 @@ func TestScanPool_FindsDebs(t *testing.T) {
 }
 
 func TestScanPool_EmptyDir(t *testing.T) {
+	t.Parallel()
 	dir := t.TempDir()
 	poolDir := filepath.Join(dir, "pool", "stable", "main")
 	if err := os.MkdirAll(poolDir, 0755); err != nil {
@@ -61,6 +63,7 @@ func TestScanPool_EmptyDir(t *testing.T) {
 }
 
 func TestScanPool_IgnoresNonDeb(t *testing.T) {
+	t.Parallel()
 	dir := t.TempDir()
 	poolDir := filepath.Join(dir, "pool")
 	if err := os.MkdirAll(poolDir, 0755); err != nil {
@@ -80,6 +83,7 @@ func TestScanPool_IgnoresNonDeb(t *testing.T) {
 }
 
 func TestScanPool_RejectsDisallowedArchitecture(t *testing.T) {
+	t.Parallel()
 	dir := t.TempDir()
 	poolDir := filepath.Join(dir, "pool", "stable", "main")
 	if err := os.MkdirAll(poolDir, 0755); err != nil {
@@ -97,8 +101,7 @@ func TestScanPool_RejectsDisallowedArchitecture(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	_, err := ScanPool(dir, poolDir, map[string]bool{"iphoneos-arm64": true})
-	if err == nil {
+	if _, err := ScanPool(dir, poolDir, map[string]bool{"iphoneos-arm64": true}); err == nil {
 		t.Fatal("expected error for disallowed architecture")
 	}
 }

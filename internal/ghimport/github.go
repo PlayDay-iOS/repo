@@ -7,10 +7,10 @@ import (
 	"log/slog"
 	"net/http"
 	"net/url"
-	"os"
 	"strings"
 	"time"
 
+	"github.com/PlayDay-iOS/repo/internal/fileutil"
 	"github.com/google/go-github/v84/github"
 )
 
@@ -57,13 +57,13 @@ func FetchAllReleases(ctx context.Context, log *slog.Logger, client *github.Clie
 	return all, nil
 }
 
-// MaxDownloadSize is the maximum allowed download size (500 MB).
+// MaxDownloadSize caps a single asset download (500 MB).
 const MaxDownloadSize = 500 * 1024 * 1024
 
 // DownloadFile downloads a URL to the given path using the provided HTTP client.
 // Only HTTPS URLs are accepted; redirects are restricted to HTTPS.
 // Downloads are capped at MaxDownloadSize bytes.
-func DownloadFile(dlURL, dst string, httpClient *http.Client) (err error) {
+func DownloadFile(ctx context.Context, dlURL, dst string, httpClient *http.Client) error {
 	if !strings.HasPrefix(dlURL, "https://") {
 		return fmt.Errorf("download URL must use HTTPS scheme: %s", dlURL)
 	}
@@ -72,7 +72,7 @@ func DownloadFile(dlURL, dst string, httpClient *http.Client) (err error) {
 		httpClient = &http.Client{Timeout: 60 * time.Second}
 	}
 
-	// Copy client to avoid mutating shared CheckRedirect state
+	// Copy client to avoid mutating shared CheckRedirect state.
 	safeDL := *httpClient
 	origRedirect := safeDL.CheckRedirect
 	safeDL.CheckRedirect = func(req *http.Request, via []*http.Request) error {
@@ -93,7 +93,11 @@ func DownloadFile(dlURL, dst string, httpClient *http.Client) (err error) {
 		return nil
 	}
 
-	resp, err := safeDL.Get(dlURL)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, dlURL, nil)
+	if err != nil {
+		return err
+	}
+	resp, err := safeDL.Do(req)
 	if err != nil {
 		return err
 	}
@@ -103,34 +107,17 @@ func DownloadFile(dlURL, dst string, httpClient *http.Client) (err error) {
 		return fmt.Errorf("download failed: HTTP %d", resp.StatusCode)
 	}
 
-	if resp.ContentLength > MaxDownloadSize {
-		return fmt.Errorf("download too large: %d bytes exceeds %d byte limit", resp.ContentLength, MaxDownloadSize)
-	}
-
-	f, err := os.OpenFile(dst, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
-	if err != nil {
-		return err
-	}
-	closed := false
-	defer func() {
-		if !closed {
-			f.Close()
-		}
+	// LimitReader is the authoritative size guard; a missing or misreported
+	// Content-Length header cannot bypass it.
+	return fileutil.WriteAtomic(dst, 0644, func(w io.Writer) error {
+		limited := io.LimitReader(resp.Body, MaxDownloadSize+1)
+		n, err := io.Copy(w, limited)
 		if err != nil {
-			os.Remove(dst)
+			return err
 		}
-	}()
-
-	limited := io.LimitReader(resp.Body, MaxDownloadSize+1)
-	n, err := io.Copy(f, limited)
-	if err != nil {
-		return err
-	}
-	if n > MaxDownloadSize {
-		err = fmt.Errorf("download exceeded %d byte limit", MaxDownloadSize)
-		return err
-	}
-
-	closed = true
-	return f.Close()
+		if n > MaxDownloadSize {
+			return fmt.Errorf("download exceeded %d byte limit", MaxDownloadSize)
+		}
+		return nil
+	})
 }

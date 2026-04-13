@@ -122,3 +122,20 @@ func TestCopyFileExclusive_FailsIfExists(t *testing.T) {
 		t.Errorf("expected os.IsExist(err) to be true, got error: %v", err)
 	}
 }
+
+func TestCopyDir_RejectsSymlink(t *testing.T) {
+	t.Parallel()
+
+	src := t.TempDir()
+	dst := t.TempDir()
+	target := t.TempDir()
+
+	if err := os.Symlink(target, filepath.Join(src, "link")); err != nil {
+		t.Fatal(err)
+	}
+
+	err := CopyDir(src, dst)
+	if err == nil {
+		t.Fatal("expected error for symlink in source tree")
+	}
+}
