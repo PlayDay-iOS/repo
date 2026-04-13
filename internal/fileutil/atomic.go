@@ -9,7 +9,8 @@ import (
 
 // WriteAtomic writes a file at path by creating a temp file in the same
 // directory, calling writeFn to populate its contents, then renaming it
-// into place. On any error, the temp file is removed.
+// into place. The parent directory is fsynced after the rename so the
+// new dirent survives a crash. On any error, the temp file is removed.
 //
 // The callback receives an io.Writer; callers should not retain it after
 // writeFn returns.
@@ -49,7 +50,7 @@ func WriteAtomic(path string, perm os.FileMode, writeFn func(io.Writer) error) (
 	if err = os.Rename(tmpPath, path); err != nil {
 		return err
 	}
-	return nil
+	return syncDir(dir)
 }
 
 // WriteAtomicBytes is a convenience wrapper for writing a fixed byte slice.
@@ -58,4 +59,19 @@ func WriteAtomicBytes(path string, perm os.FileMode, data []byte) error {
 		_, err := w.Write(data)
 		return err
 	})
+}
+
+// syncDir fsyncs a directory so that a recently-created or renamed dirent
+// is durable across a crash.
+func syncDir(dir string) error {
+	d, err := os.Open(dir)
+	if err != nil {
+		return err
+	}
+	syncErr := d.Sync()
+	closeErr := d.Close()
+	if syncErr != nil {
+		return syncErr
+	}
+	return closeErr
 }

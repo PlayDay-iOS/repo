@@ -4,7 +4,6 @@ import (
 	"context"
 	"os"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"testing"
 	"time"
@@ -12,19 +11,7 @@ import (
 	"github.com/PlayDay-iOS/repo/internal/config"
 )
 
-// repoTemplatePath resolves the on-disk path to the canonical template,
-// regardless of the caller's working directory.
-func repoTemplatePath(t *testing.T) string {
-	t.Helper()
-	_, thisFile, _, ok := runtime.Caller(0)
-	if !ok {
-		t.Fatal("runtime.Caller failed")
-	}
-	// render_test.go lives in internal/page; the template lives in templates/
-	return filepath.Join(filepath.Dir(thisFile), "..", "..", "templates", "index.html.tmpl")
-}
-
-func TestRenderLandingPage(t *testing.T) {
+func TestRenderLandingPage_FileTemplate(t *testing.T) {
 	t.Parallel()
 	dir := t.TempDir()
 	tmplDir := filepath.Join(dir, "templates")
@@ -85,10 +72,9 @@ func TestWriteSuiteIndexHTML(t *testing.T) {
 	}
 }
 
-func TestLandingTemplate_RendersKeyMarkers(t *testing.T) {
+func TestDefaultTemplate_RendersKeyMarkers(t *testing.T) {
 	t.Parallel()
 	dir := t.TempDir()
-	templatePath := repoTemplatePath(t)
 
 	cfg := &config.RepoConfig{
 		Name:   "Test Repo",
@@ -97,7 +83,7 @@ func TestLandingTemplate_RendersKeyMarkers(t *testing.T) {
 	}
 
 	outDir := filepath.Join(dir, "out")
-	if err := RenderLandingPage(context.Background(), outDir, cfg, templatePath, time.Now(), true, true); err != nil {
+	if err := RenderLandingPage(context.Background(), outDir, cfg, "", time.Now(), true, true); err != nil {
 		t.Fatal(err)
 	}
 
@@ -115,7 +101,7 @@ func TestLandingTemplate_RendersKeyMarkers(t *testing.T) {
 		`id="menu-sileo"`,
 		`<summary>Add to Sileo</summary>`,
 		`Tap sections to expand source options.`,
-		"InRelease",      // signed variant should appear when Signed=true
+		"InRelease",       // signed variant should appear when Signed=true
 		"repo-public.key", // public-key line should appear when HasPublicKey=true
 	} {
 		if !strings.Contains(html, check) {
@@ -124,10 +110,9 @@ func TestLandingTemplate_RendersKeyMarkers(t *testing.T) {
 	}
 }
 
-func TestLandingTemplate_OmitsInReleaseWhenUnsigned(t *testing.T) {
+func TestDefaultTemplate_OmitsInReleaseWhenUnsigned(t *testing.T) {
 	t.Parallel()
 	dir := t.TempDir()
-	templatePath := repoTemplatePath(t)
 
 	cfg := &config.RepoConfig{
 		Name:   "Test Repo",
@@ -136,7 +121,7 @@ func TestLandingTemplate_OmitsInReleaseWhenUnsigned(t *testing.T) {
 	}
 
 	outDir := filepath.Join(dir, "out")
-	if err := RenderLandingPage(context.Background(), outDir, cfg, templatePath, time.Now(), false, false); err != nil {
+	if err := RenderLandingPage(context.Background(), outDir, cfg, "", time.Now(), false, false); err != nil {
 		t.Fatal(err)
 	}
 	data, err := os.ReadFile(filepath.Join(outDir, "index.html"))

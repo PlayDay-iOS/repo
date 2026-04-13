@@ -37,14 +37,6 @@ suites = ["`+suite+`"]
 		t.Fatal(err)
 	}
 
-	if err := os.MkdirAll(filepath.Join(root, "templates"), 0755); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(filepath.Join(root, "templates", "index.html.tmpl"),
-		[]byte("<html><title>{{.RepoName}}</title></html>"), 0644); err != nil {
-		t.Fatal(err)
-	}
-
 	if err := os.MkdirAll(filepath.Join(root, "resources"), 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -53,10 +45,10 @@ suites = ["`+suite+`"]
 	}
 
 	return root, Options{
-		RootDir:      root,
-		OutputDir:    filepath.Join(root, "_site"),
-		ConfigPath:   filepath.Join(root, "repo.toml"),
-		TemplatePath: filepath.Join(root, "templates", "index.html.tmpl"),
+		RootDir:    root,
+		OutputDir:  filepath.Join(root, "_site"),
+		ConfigPath: filepath.Join(root, "repo.toml"),
+		// TemplatePath is intentionally empty: build uses the embedded default.
 	}
 }
 

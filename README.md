@@ -8,7 +8,7 @@ Built as a single Go binary (`repotool`) with no external tool dependencies.
 
 - `pool/<suite>/<component>/`: source `.deb` files per suite. `.gitkeep` placeholders keep empty directories tracked in git; the build mirrors only validated `.deb` files into the published output, so placeholders never leak.
 - `repo.toml`: repository configuration (TOML)
-- `templates/index.html.tmpl`: landing page template
+- `internal/page/templates/index.html.tmpl`: landing page template, embedded into `repotool` at build time. Override with `--template <path>`.
 - `resources/CydiaIcon.png`: source icon file (Made by [Evehly](https://www.deviantart.com/evehly/art/The-Last-Pringle-852158299))
 
 Notes:
@@ -47,7 +47,7 @@ Expected files after build (rooted at the output directory):
   - `Release`, `Release.gpg`, `InRelease` (signed variants only when a key is supplied)
   - `CydiaIcon.png`
   - `index.html`
-  - `pool/<suite>/<component>/*.deb` (mirror of validated packages; absent when the suite has none, e.g. `stable/pool/stable/main/com.example.pkg_1.0_arm64.deb`)
+  - `pool/<suite>/<component>/*.deb` (mirror of validated packages, keeping the filenames from the source pool; absent when the suite has none)
 - `repo-public.key` (root, only if a `repo-public.key` file exists at the repo root; the landing page links to it only when this file is present)
 
 Source lines:
@@ -58,17 +58,17 @@ Source lines:
 ## CLI
 
 ```sh
-repotool build  [--output _site] [--config repo.toml] [--template templates/index.html.tmpl]
+repotool build  [--output _site] [--config repo.toml] [--template <path>]
 repotool import [--config repo.toml] [--allowlist org-import-allowlist.txt] [--suite <name>] [--include-prereleases] [--timeout 30m]
-repotool render [--output _site] [--config repo.toml] [--template templates/index.html.tmpl]
+repotool render [--output _site] [--config repo.toml] [--template <path>]
 repotool --version
 ```
 
-Flag defaults are computed from the current working directory:
+Flag defaults:
 
 - `--output` defaults to `<cwd>/_site`
 - `--config` defaults to `<cwd>/repo.toml`
-- `--template` defaults to `<cwd>/templates/index.html.tmpl`
+- `--template` is empty by default — `repotool` renders the embedded template. Pass a file path to override.
 - `--allowlist` defaults to `<cwd>/org-import-allowlist.txt`
 
 The `--suite` flag on `import` defaults to the first entry of `metadata.suites` in `repo.toml`, or the `TARGET_SUITE` env var when set.
@@ -85,7 +85,7 @@ The `--suite` flag on `import` defaults to the first entry of `metadata.suites` 
 | `ORG_NAME`                  | Overrides `github.org_name` from `repo.toml`.                             |
 | `TARGET_SUITE`              | Default target suite for `import` when `--suite` is not passed.           |
 | `INCLUDE_PRERELEASES`       | `true`/`false`; default for `--include-prereleases` when flag not passed. |
-| `IMPORT_TIMEOUT`            | Go duration (e.g. `30m`, `2h`); default for `--timeout` on `import`.       |
+| `IMPORT_TIMEOUT`            | Go duration (e.g. `30m`, `2h`); default for `--timeout` on `import`.      |
 
 ### Configuration schema
 

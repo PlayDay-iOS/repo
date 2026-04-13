@@ -2,6 +2,7 @@ package page
 
 import (
 	"context"
+	_ "embed"
 	"fmt"
 	"html/template"
 	"io"
@@ -14,6 +15,9 @@ import (
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
+
+//go:embed templates/index.html.tmpl
+var defaultLandingTemplate string
 
 const suiteIndexTemplate = `<!doctype html>
 <html lang="en">
@@ -57,18 +61,23 @@ func TitleCase(s string) string {
 }
 
 // RenderLandingPage renders the HTML landing page into outputDir/index.html.
+// templatePath is optional: when empty, the embedded default template is used.
 // hasPublicKey controls whether the repo-public.key download line is shown.
 func RenderLandingPage(ctx context.Context, outputDir string, cfg *config.RepoConfig, templatePath string, buildTime time.Time, signed, hasPublicKey bool) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
 
-	tmplBytes, err := os.ReadFile(templatePath)
-	if err != nil {
-		return fmt.Errorf("reading template %s: %w", templatePath, err)
+	tmplSrc := defaultLandingTemplate
+	if templatePath != "" {
+		b, err := os.ReadFile(templatePath)
+		if err != nil {
+			return fmt.Errorf("reading template %s: %w", templatePath, err)
+		}
+		tmplSrc = string(b)
 	}
 
-	tmpl, err := template.New("index").Parse(string(tmplBytes))
+	tmpl, err := template.New("index").Parse(tmplSrc)
 	if err != nil {
 		return fmt.Errorf("parsing template: %w", err)
 	}

@@ -28,10 +28,9 @@ type Options struct {
 	AllowlistPath      string
 	Suite              string
 	IncludePrereleases bool
-	Token              string // GitHub API token (GH_TOKEN or GITHUB_TOKEN)
-	APIBase            string // GitHub API base URL (default: https://api.github.com)
+	Token              string        // GitHub API token (GH_TOKEN or GITHUB_TOKEN)
+	APIBase            string        // GitHub API base URL (default: https://api.github.com)
 	Timeout            time.Duration // upper bound for the import run; zero = DefaultTimeout
-	Logger             *slog.Logger
 }
 
 // filePlacer holds the functions used for placing files into the pool.
@@ -47,10 +46,7 @@ var defaultPlacer = filePlacer{
 
 // Run executes the import process.
 func Run(ctx context.Context, opts Options) error {
-	log := opts.Logger
-	if log == nil {
-		log = slog.Default()
-	}
+	log := slog.Default()
 
 	cfg, err := config.Load(opts.ConfigPath)
 	if err != nil {
@@ -272,7 +268,10 @@ func collectDebAssets(releases []*github.RepositoryRelease, includePrereleases b
 		for _, a := range r.Assets {
 			name := a.GetName()
 			dlURL := a.GetBrowserDownloadURL()
-			if !strings.HasSuffix(strings.ToLower(name), ".deb") || dlURL == "" {
+			if !strings.HasSuffix(strings.ToLower(name), ".deb") {
+				continue
+			}
+			if !strings.HasPrefix(dlURL, "https://") {
 				continue
 			}
 			assets = append(assets, debAsset{

@@ -14,9 +14,10 @@ func TestCopyFile(t *testing.T) {
 	dstPath := filepath.Join(dir, "dst.txt")
 
 	content := []byte("hello, copy test")
-	perm := os.FileMode(0750)
 
-	if err := os.WriteFile(srcPath, content, perm); err != nil {
+	// Source perm is intentionally unusual to verify CopyFile does not
+	// inherit it: published artifacts are always written 0644.
+	if err := os.WriteFile(srcPath, content, 0750); err != nil {
 		t.Fatal(err)
 	}
 
@@ -36,8 +37,8 @@ func TestCopyFile(t *testing.T) {
 	if err != nil {
 		t.Fatalf("stat dst: %v", err)
 	}
-	if info.Mode().Perm() != perm {
-		t.Errorf("permission mismatch: got %v, want %v", info.Mode().Perm(), perm)
+	if info.Mode().Perm() != 0644 {
+		t.Errorf("permission mismatch: got %v, want 0644", info.Mode().Perm())
 	}
 }
 

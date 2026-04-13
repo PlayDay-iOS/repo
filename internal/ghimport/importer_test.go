@@ -76,19 +76,21 @@ func TestCollectDebAssets_SkipsDrafts(t *testing.T) {
 	}
 }
 
-func TestCollectDebAssets_SkipsEmptyURL(t *testing.T) {
+func TestCollectDebAssets_SkipsNonHTTPS(t *testing.T) {
 	t.Parallel()
 	releases := []*github.RepositoryRelease{
 		{
 			TagName: github.Ptr("v1.0"),
 			Draft:   github.Ptr(false),
 			Assets: []*github.ReleaseAsset{
-				{Name: github.Ptr("pkg.deb"), BrowserDownloadURL: github.Ptr("")},
+				{Name: github.Ptr("empty.deb"), BrowserDownloadURL: github.Ptr("")},
+				{Name: github.Ptr("plain.deb"), BrowserDownloadURL: github.Ptr("http://example.com/plain.deb")},
+				{Name: github.Ptr("ftp.deb"), BrowserDownloadURL: github.Ptr("ftp://example.com/ftp.deb")},
 			},
 		},
 	}
 	if got := collectDebAssets(releases, false); len(got) != 0 {
-		t.Errorf("empty URL should be skipped, got %d assets", len(got))
+		t.Errorf("non-HTTPS URLs should be skipped, got %d assets", len(got))
 	}
 }
 

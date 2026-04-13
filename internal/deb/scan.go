@@ -75,7 +75,7 @@ func ScanPool(ctx context.Context, rootDir, poolDir string, allowedArchitectures
 			return nil
 		}
 
-		entry, err := scanDebFile(path, d.Name(), cleanRoot, rootDir, allowedArchitectures)
+		entry, err := scanDebFile(path, d.Name(), cleanRoot, allowedArchitectures)
 		if err != nil {
 			return err
 		}
@@ -94,10 +94,8 @@ func ScanPool(ctx context.Context, rootDir, poolDir string, allowedArchitectures
 }
 
 // scanDebFile hashes, parses, and validates a single .deb file.
-// The file handle is scoped to this function to keep the fd lifetime
-// explicit: the ReaderAt passed to ExtractControlFromReader is only used
-// within this frame, so the deferred Close cannot race with later use.
-func scanDebFile(path, name, cleanRoot, rootDir string, allowedArchitectures map[string]bool) (*PackageEntry, error) {
+// rootDir must already be cleaned by the caller.
+func scanDebFile(path, name, rootDir string, allowedArchitectures map[string]bool) (*PackageEntry, error) {
 	f, err := os.Open(path)
 	if err != nil {
 		return nil, fmt.Errorf("opening %s: %w", path, err)
@@ -126,8 +124,8 @@ func scanDebFile(path, name, cleanRoot, rootDir string, allowedArchitectures map
 	if err != nil {
 		return nil, fmt.Errorf("computing relative path for %s: %w", path, err)
 	}
-	cleanRel := filepath.Clean(filepath.Join(cleanRoot, relPath))
-	if !strings.HasPrefix(cleanRel, cleanRoot+string(os.PathSeparator)) {
+	cleanRel := filepath.Clean(filepath.Join(rootDir, relPath))
+	if !strings.HasPrefix(cleanRel, rootDir+string(os.PathSeparator)) {
 		return nil, fmt.Errorf("file %s escapes root directory", path)
 	}
 

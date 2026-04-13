@@ -65,7 +65,7 @@ jobs:
       - name: Commit imported packages
         id: commit
         run: |
-          git add 'pool/**/*.deb'
+          git add -- pool/
           if git diff --cached --quiet -- pool; then
             echo "No package changes to commit."
             echo "pushed=false" >> "$GITHUB_OUTPUT"

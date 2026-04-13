@@ -68,10 +68,8 @@ func SignRelease(ctx context.Context, dir, armoredKey, passphrase string) error 
 		return fmt.Errorf("writing Release.gpg: %w", err)
 	}
 	if err := fileutil.WriteAtomicBytes(inRelease, 0644, clearSig); err != nil {
-		// Roll back the already-written Release.gpg to avoid an inconsistent
-		// signed state where a detached signature exists without a clearsigned
-		// counterpart. A concurrent reader could briefly observe Release.gpg
-		// without InRelease; APT handles this by retrying.
+		// Roll back the already-written Release.gpg so the suite never has a
+		// detached signature without its clearsigned counterpart.
 		if rmErr := os.Remove(releaseGPG); rmErr != nil && !os.IsNotExist(rmErr) {
 			slog.Warn("failed to remove Release.gpg after InRelease write failure", "path", releaseGPG, "error", rmErr)
 		}

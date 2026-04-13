@@ -66,7 +66,7 @@ func init() {
 
 	for _, c := range []*cobra.Command{buildCmd, renderCmd} {
 		c.Flags().StringVar(&flagOutput, "output", "", "Output directory (default: <cwd>/_site)")
-		c.Flags().StringVar(&flagTemplate, "template", "", "Path to HTML template (default: <cwd>/templates/index.html.tmpl)")
+		c.Flags().StringVar(&flagTemplate, "template", "", "Path to HTML template override (default: built-in)")
 	}
 
 	importCmd.Flags().StringVar(&flagAllowlist, "allowlist", "", "Path to allowlist file (default: <cwd>/org-import-allowlist.txt)")
@@ -108,10 +108,6 @@ func runBuild(cmd *cobra.Command, args []string) error {
 	if cfgPath == "" {
 		cfgPath = filepath.Join(root, "repo.toml")
 	}
-	tmplPath := flagTemplate
-	if tmplPath == "" {
-		tmplPath = filepath.Join(root, "templates", "index.html.tmpl")
-	}
 
 	buildTime, err := build.BuildTimeFromEnv()
 	if err != nil {
@@ -122,7 +118,7 @@ func runBuild(cmd *cobra.Command, args []string) error {
 		RootDir:       root,
 		OutputDir:     output,
 		ConfigPath:    cfgPath,
-		TemplatePath:  tmplPath,
+		TemplatePath:  flagTemplate,
 		BuildTime:     buildTime,
 		GPGKey:        os.Getenv("GPG_PRIVATE_KEY"),
 		GPGPassphrase: os.Getenv("GPG_PASSPHRASE"),
@@ -195,10 +191,6 @@ func runRender(cmd *cobra.Command, args []string) error {
 	if cfgPath == "" {
 		cfgPath = filepath.Join(root, "repo.toml")
 	}
-	tmplPath := flagTemplate
-	if tmplPath == "" {
-		tmplPath = filepath.Join(root, "templates", "index.html.tmpl")
-	}
 
 	cfg, err := config.Load(cfgPath)
 	if err != nil {
@@ -215,5 +207,5 @@ func runRender(cmd *cobra.Command, args []string) error {
 	if _, err := os.Stat(filepath.Join(root, "repo-public.key")); err == nil {
 		hasPublicKey = true
 	}
-	return page.RenderLandingPage(cmd.Context(), output, cfg, tmplPath, buildTime, signed, hasPublicKey)
+	return page.RenderLandingPage(cmd.Context(), output, cfg, flagTemplate, buildTime, signed, hasPublicKey)
 }

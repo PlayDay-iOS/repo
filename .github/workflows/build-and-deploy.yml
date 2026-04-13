@@ -12,7 +12,6 @@ on:
       - "go.mod"
       - "go.sum"
       - "resources/**"
-      - "templates/**"
       - "repo-public.key"
       - ".github/workflows/build-and-deploy.yml"
   workflow_dispatch:

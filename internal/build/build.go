@@ -27,7 +27,6 @@ type Options struct {
 	BuildTime     time.Time
 	GPGKey        string // armored private key; empty disables signing
 	GPGPassphrase string
-	Logger        *slog.Logger
 }
 
 // BuildTimeFromEnv resolves the build timestamp from SOURCE_DATE_EPOCH for
@@ -47,18 +46,13 @@ func BuildTimeFromEnv() (time.Time, error) {
 
 // Run executes the full repository build.
 func Run(ctx context.Context, opts Options) error {
-	log := opts.Logger
-	if log == nil {
-		log = slog.Default()
-	}
-
 	cfg, err := config.Load(opts.ConfigPath)
 	if err != nil {
 		return fmt.Errorf("loading config: %w", err)
 	}
 
-	armoredKey := strings.TrimSpace(opts.GPGKey)
-	signed := armoredKey != ""
+	opts.GPGKey = strings.TrimSpace(opts.GPGKey)
+	signed := opts.GPGKey != ""
 
 	absOut, err := filepath.Abs(opts.OutputDir)
 	if err != nil {
@@ -86,14 +80,13 @@ func Run(ctx context.Context, opts Options) error {
 		return fmt.Errorf("writing output marker: %w", err)
 	}
 
-	buildTime := opts.BuildTime
-	if buildTime.IsZero() {
-		buildTime = time.Now().UTC()
+	if opts.BuildTime.IsZero() {
+		opts.BuildTime = time.Now().UTC()
 	}
 
 	allowedArch := cfg.AllowedArchitectures()
 	for _, suite := range cfg.Suites {
-		if err := buildSuite(ctx, opts, cfg, suite, allowedArch, armoredKey, opts.GPGPassphrase, buildTime); err != nil {
+		if err := buildSuite(ctx, opts, cfg, suite, allowedArch); err != nil {
 			return err
 		}
 	}
@@ -111,15 +104,15 @@ func Run(ctx context.Context, opts Options) error {
 		hasPublicKey = true
 	}
 
-	if err := page.RenderLandingPage(ctx, opts.OutputDir, cfg, opts.TemplatePath, buildTime, signed, hasPublicKey); err != nil {
+	if err := page.RenderLandingPage(ctx, opts.OutputDir, cfg, opts.TemplatePath, opts.BuildTime, signed, hasPublicKey); err != nil {
 		return fmt.Errorf("rendering landing page: %w", err)
 	}
 
-	log.Info("repository built", "output", opts.OutputDir, "signed", signed)
+	slog.Info("repository built", "output", opts.OutputDir, "signed", signed)
 	return nil
 }
 
-func buildSuite(ctx context.Context, opts Options, cfg *config.RepoConfig, suite string, allowedArch map[string]bool, armoredKey, passphrase string, buildTime time.Time) error {
+func buildSuite(ctx context.Context, opts Options, cfg *config.RepoConfig, suite string, allowedArch map[string]bool) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
@@ -188,13 +181,13 @@ func buildSuite(ctx context.Context, opts Options, cfg *config.RepoConfig, suite
 		Architectures: strings.Join(cfg.Architectures, " "),
 		Components:    ".",
 		Description:   withSuffix(cfg.Description),
-		Date:          buildTime,
+		Date:          opts.BuildTime,
 	}
 	if err := repo.WriteRelease(ctx, releaseParams, suiteDir); err != nil {
 		return fmt.Errorf("writing release for %s: %w", suite, err)
 	}
 
-	if err := repo.SignRelease(ctx, suiteDir, armoredKey, passphrase); err != nil {
+	if err := repo.SignRelease(ctx, suiteDir, opts.GPGKey, opts.GPGPassphrase); err != nil {
 		return fmt.Errorf("signing %s: %w", suite, err)
 	}
 
