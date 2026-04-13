@@ -31,6 +31,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: import-packages
@@ -62,10 +63,12 @@ jobs:
         run: ./repotool import
 
       - name: Commit imported packages
+        id: commit
         run: |
           git add 'pool/**/*.deb'
           if git diff --cached --quiet -- pool; then
             echo "No package changes to commit."
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -84,3 +87,10 @@ jobs:
             echo "All push attempts failed"
             exit 1
           fi
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger build workflow
+        if: steps.commit.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run build-and-deploy.yml --ref main
