@@ -82,6 +82,11 @@ func DownloadFile(dlURL, dst string, httpClient *http.Client) (err error) {
 		if req.URL.Scheme != "https" {
 			return fmt.Errorf("refusing non-HTTPS redirect to %s", req.URL.Host)
 		}
+		// Drop auth credentials when redirecting to a different host to
+		// prevent leaking API tokens to unrelated servers.
+		if len(via) > 0 && req.URL.Host != via[0].URL.Host {
+			req.Header.Del("Authorization")
+		}
 		if origRedirect != nil {
 			return origRedirect(req, via)
 		}

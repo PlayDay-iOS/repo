@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/PlayDay-iOS/repo/internal/hashutil"
@@ -34,21 +35,24 @@ var generatedFields = map[string]bool{
 // Stanza returns the RFC822-formatted Packages stanza for this entry.
 func (e *PackageEntry) Stanza() string {
 	var b strings.Builder
+	writeField := func(key, val string) {
+		b.WriteString(key)
+		b.WriteString(": ")
+		b.WriteString(val)
+		b.WriteByte('\n')
+	}
 	for _, key := range e.Control.Order() {
 		if generatedFields[strings.ToLower(key)] {
 			continue
 		}
-		b.WriteString(key)
-		b.WriteString(": ")
-		b.WriteString(e.Control.Get(key))
-		b.WriteByte('\n')
+		writeField(key, e.Control.Get(key))
 	}
-	fmt.Fprintf(&b, "Filename: %s\n", e.Filename)
-	fmt.Fprintf(&b, "Size: %d\n", e.Size)
-	fmt.Fprintf(&b, "MD5sum: %s\n", e.MD5)
-	fmt.Fprintf(&b, "SHA1: %s\n", e.SHA1)
-	fmt.Fprintf(&b, "SHA256: %s\n", e.SHA256)
-	fmt.Fprintf(&b, "SHA512: %s\n", e.SHA512)
+	writeField("Filename", e.Filename)
+	writeField("Size", strconv.FormatInt(e.Size, 10))
+	writeField("MD5sum", e.MD5)
+	writeField("SHA1", e.SHA1)
+	writeField("SHA256", e.SHA256)
+	writeField("SHA512", e.SHA512)
 	return b.String()
 }
 

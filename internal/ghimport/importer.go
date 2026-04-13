@@ -55,6 +55,13 @@ func Run(opts Options) error {
 		return fmt.Errorf("loading config: %w", err)
 	}
 
+	if cfg.OrgName == "" {
+		return fmt.Errorf("github.org_name is required for import (set in repo.toml or ORG_NAME env)")
+	}
+	if opts.Token == "" {
+		return fmt.Errorf("GitHub API token required for import: set GH_TOKEN or GITHUB_TOKEN (unauthenticated access is rate-limited to 60 req/hr)")
+	}
+
 	suite := opts.Suite
 	if suite == "" {
 		suite = cfg.PrimarySuite()
@@ -77,13 +84,8 @@ func Run(opts Options) error {
 		return nil
 	}
 
-	apiBase := opts.APIBase
-	if apiBase == "" {
-		apiBase = "https://api.github.com"
-	}
 	perPage := 100
-
-	client, err := NewGitHubClient(opts.Token, apiBase)
+	client, err := NewGitHubClient(opts.Token, opts.APIBase)
 	if err != nil {
 		return fmt.Errorf("creating GitHub client: %w", err)
 	}

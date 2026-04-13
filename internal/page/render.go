@@ -9,7 +9,8 @@ import (
 	"time"
 
 	"github.com/PlayDay-iOS/repo/internal/config"
-	"github.com/PlayDay-iOS/repo/internal/textutil"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 // SuiteInfo holds per-suite data for the landing page template.
@@ -30,9 +31,11 @@ type TemplateData struct {
 	GeneratedAt string
 }
 
+var titleCaser = cases.Title(language.English)
+
 // TitleCase converts a string to title case using English locale rules.
 func TitleCase(s string) string {
-	return textutil.TitleCase(s)
+	return titleCaser.String(s)
 }
 
 // RenderLandingPage renders the HTML landing page into outputDir/index.html.
@@ -73,27 +76,9 @@ func RenderLandingPage(outputDir string, cfg *config.RepoConfig, templatePath st
 		return err
 	}
 
-	outPath := filepath.Join(outputDir, "index.html")
-	tmpPath := outPath + ".tmp"
-	f, err := os.Create(tmpPath)
-	if err != nil {
-		return err
-	}
-
-	if err := tmpl.Execute(f, data); err != nil {
-		f.Close()
-		os.Remove(tmpPath)
-		return err
-	}
-	if err := f.Close(); err != nil {
-		os.Remove(tmpPath)
-		return err
-	}
-	if err := os.Rename(tmpPath, outPath); err != nil {
-		os.Remove(tmpPath)
-		return err
-	}
-	return nil
+	return writeFileAtomic(filepath.Join(outputDir, "index.html"), 0644, func(f *os.File) error {
+		return tmpl.Execute(f, data)
+	})
 }
 
 // WriteSuiteIndexHTML writes a simple info page for a suite directory.
@@ -112,5 +97,31 @@ func WriteSuiteIndexHTML(dir, suite, repoURL string) error {
 </html>
 `, escapedSuite, escapedSuite, escapedURL, escapedRawSuite)
 
-	return os.WriteFile(filepath.Join(dir, "index.html"), []byte(content), 0644)
+	return writeFileAtomic(filepath.Join(dir, "index.html"), 0644, func(f *os.File) error {
+		_, err := f.WriteString(content)
+		return err
+	})
+}
+
+// writeFileAtomic writes via a temp file in the target directory and renames on success.
+func writeFileAtomic(path string, perm os.FileMode, writeFn func(*os.File) error) (err error) {
+	tmpPath := path + ".tmp"
+	f, err := os.OpenFile(tmpPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, perm)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if err != nil {
+			os.Remove(tmpPath)
+		}
+	}()
+
+	if err = writeFn(f); err != nil {
+		f.Close()
+		return err
+	}
+	if err = f.Close(); err != nil {
+		return err
+	}
+	return os.Rename(tmpPath, path)
 }

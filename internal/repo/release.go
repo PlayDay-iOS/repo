@@ -49,7 +49,7 @@ func WriteRelease(params ReleaseParams, dir string) error {
 	}
 	fmt.Fprintf(&b, "Suite: %s\n", params.Suite)
 	fmt.Fprintf(&b, "Codename: %s\n", params.Codename)
-	fmt.Fprintf(&b, "Date: %s\n", params.Date.UTC().Format("Mon, 02 Jan 2006 15:04:05 +0000"))
+	fmt.Fprintf(&b, "Date: %s\n", params.Date.UTC().Format("Mon, 02 Jan 2006 15:04:05 UTC"))
 	if params.Architectures != "" {
 		fmt.Fprintf(&b, "Architectures: %s\n", params.Architectures)
 	}
@@ -79,7 +79,20 @@ func WriteRelease(params ReleaseParams, dir string) error {
 		}
 	}
 
-	return os.WriteFile(filepath.Join(dir, "Release"), []byte(b.String()), 0644)
+	return writeAtomic(filepath.Join(dir, "Release"), []byte(b.String()), 0644)
+}
+
+// writeAtomic writes data to path via a temp file + rename.
+func writeAtomic(path string, data []byte, perm os.FileMode) error {
+	tmp := path + ".tmp"
+	if err := os.WriteFile(tmp, data, perm); err != nil {
+		return err
+	}
+	if err := os.Rename(tmp, path); err != nil {
+		os.Remove(tmp)
+		return err
+	}
+	return nil
 }
 
 // indexPrefixes lists the file-name prefixes that belong in a Release file.

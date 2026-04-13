@@ -48,7 +48,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6
         with:
-          go-version: "1.25"
+          go-version: "1.26"
           cache: true
 
       - name: Build repotool
@@ -57,7 +57,6 @@ jobs:
       - name: Import allow-listed packages
         env:
           GH_TOKEN: ${{ secrets.ORG_REPO_READ_TOKEN }}
-          GITHUB_TOKEN: ${{ github.token }}
           TARGET_SUITE: ${{ inputs.target_suite || 'stable' }}
           INCLUDE_PRERELEASES: ${{ inputs.include_prereleases || 'false' }}
         run: ./repotool import
@@ -79,7 +78,7 @@ jobs:
           for i in 1 2 3; do
             git pull --rebase origin main && git push && pushed=true && break
             echo "Push attempt $i failed, retrying..."
-            sleep 5
+            sleep $(( (RANDOM % 5) + 3 ))
           done
           if [ "$pushed" != "true" ]; then
             echo "All push attempts failed"

@@ -14,7 +14,6 @@ import (
 	"github.com/PlayDay-iOS/repo/internal/fileutil"
 	"github.com/PlayDay-iOS/repo/internal/page"
 	"github.com/PlayDay-iOS/repo/internal/repo"
-	"github.com/PlayDay-iOS/repo/internal/textutil"
 )
 
 // Options configures the build.
@@ -167,7 +166,7 @@ func buildSuite(opts Options, cfg *config.RepoConfig, suite, component string, a
 	}
 
 	// Generate Release
-	suiteSuffix := " (" + textutil.TitleCase(suite) + ")"
+	suiteSuffix := " (" + page.TitleCase(suite) + ")"
 	withSuffix := func(base string) string {
 		if base == "" {
 			return ""
@@ -215,10 +214,14 @@ func validateOutputDir(absPath string) error {
 		return fmt.Errorf("refusing to use filesystem root as output dir: %s", absPath)
 	}
 	blocked := []string{
+		// Linux
 		"/bin", "/sbin", "/usr", "/lib", "/lib64",
 		"/etc", "/var", "/root", "/home",
 		"/boot", "/dev", "/proc", "/sys", "/run",
 		"/tmp", "/opt", "/srv", "/mnt", "/media", "/snap",
+		// macOS
+		"/System", "/Library", "/Applications", "/Users",
+		"/Volumes", "/private", "/cores", "/Network",
 	}
 	if slices.Contains(blocked, absPath) {
 		return fmt.Errorf("refusing to use system directory as output dir: %s", absPath)

@@ -5,37 +5,37 @@ import (
 	"io"
 	"strings"
 
-	"pault.ag/go/debian/control"
 	deblib "pault.ag/go/debian/deb"
 )
 
 // ControlData wraps a parsed control file from a .deb package.
+// Keys in the internal values map are always lowercase for
+// deterministic case-insensitive lookup. Order preserves the
+// original case for RFC 822 output.
 type ControlData struct {
-	paragraph control.Paragraph
+	order  []string
+	values map[string]string
 }
 
 // NewControlData creates a ControlData from key-value pairs (for testing).
+// The keys slice preserves the canonical field case used in output;
+// values are looked up case-insensitively.
 func NewControlData(keys []string, values map[string]string) *ControlData {
-	return &ControlData{paragraph: control.Paragraph{Order: keys, Values: values}}
+	lowered := make(map[string]string, len(values))
+	for k, v := range values {
+		lowered[strings.ToLower(k)] = v
+	}
+	return &ControlData{order: keys, values: lowered}
 }
 
 // Get returns the value for the given key (case-insensitive), or "".
 func (c *ControlData) Get(key string) string {
-	if v, ok := c.paragraph.Values[key]; ok {
-		return v
-	}
-	lower := strings.ToLower(key)
-	for k, v := range c.paragraph.Values {
-		if strings.ToLower(k) == lower {
-			return v
-		}
-	}
-	return ""
+	return c.values[strings.ToLower(key)]
 }
 
-// Order returns the field names in their original order.
+// Order returns the field names in their original order and case.
 func (c *ControlData) Order() []string {
-	return c.paragraph.Order
+	return c.order
 }
 
 // ExtractControlFromReader reads a .deb (ar archive) from an io.ReaderAt and parses the control file.
@@ -51,5 +51,10 @@ func ExtractControlFromReader(r io.ReaderAt, name string) (*ControlData, error) 
 		return nil, fmt.Errorf("control file has no fields")
 	}
 
-	return &ControlData{paragraph: para}, nil
+	values := make(map[string]string, len(para.Values))
+	for k, v := range para.Values {
+		values[strings.ToLower(k)] = v
+	}
+
+	return &ControlData{order: para.Order, values: values}, nil
 }

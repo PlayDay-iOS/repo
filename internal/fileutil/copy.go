@@ -37,6 +37,7 @@ func CopyFile(src, dst string) error {
 
 // CopyDir recursively copies src directory contents into dst.
 // Only regular files and directories are copied; other types return an error.
+// Directory permissions are preserved from the source.
 func CopyDir(src, dst string) error {
 	return filepath.WalkDir(src, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
@@ -50,7 +51,11 @@ func CopyDir(src, dst string) error {
 		target := filepath.Join(dst, rel)
 
 		if d.IsDir() {
-			return os.MkdirAll(target, 0755)
+			info, err := d.Info()
+			if err != nil {
+				return err
+			}
+			return os.MkdirAll(target, info.Mode().Perm())
 		}
 
 		if !d.Type().IsRegular() {

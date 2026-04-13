@@ -37,7 +37,7 @@ func WritePackagesAll(entries []*deb.PackageEntry, dir string) error {
 	}
 	raw := buf.Bytes()
 
-	if err := os.WriteFile(filepath.Join(dir, "Packages"), raw, 0644); err != nil {
+	if err := writeAtomic(filepath.Join(dir, "Packages"), raw, 0644); err != nil {
 		return fmt.Errorf("writing Packages: %w", err)
 	}
 

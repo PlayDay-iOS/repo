@@ -3,24 +3,12 @@ package page
 import (
 	"os"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"testing"
 	"time"
 
 	"github.com/PlayDay-iOS/repo/internal/config"
 )
-
-// projectRoot returns the repository root by navigating up from this test file.
-func projectRoot(t *testing.T) string {
-	t.Helper()
-	_, thisFile, _, ok := runtime.Caller(0)
-	if !ok {
-		t.Fatal("runtime.Caller failed")
-	}
-	// thisFile is internal/page/render_test.go → go up 3 levels
-	return filepath.Join(filepath.Dir(thisFile), "..", "..")
-}
 
 func TestRenderLandingPage(t *testing.T) {
 	dir := t.TempDir()
@@ -87,7 +75,8 @@ func TestWriteSuiteIndexHTML(t *testing.T) {
 
 func TestLandingTemplateHasCollapsibleDetailsMenus(t *testing.T) {
 	dir := t.TempDir()
-	templatePath := filepath.Join(projectRoot(t), "templates", "index.html.tmpl")
+	// test working dir is the package dir (internal/page); template lives two levels up
+	templatePath := filepath.Join("..", "..", "templates", "index.html.tmpl")
 
 	cfg := &config.RepoConfig{
 		Name:   "Test Repo",

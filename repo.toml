@@ -11,7 +11,11 @@ architectures = ["iphoneos-arm", "iphoneos-arm64", "all"]
 description   = "APT repository for iOS packages published by PlayDay."
 
 [github]
+# org_name is required for `repotool import`. Overridable via ORG_NAME env.
 org_name = "PlayDay-iOS"
 
 [signing]
-# gpg_key_file = ""  # env GPG_KEY_FILE overrides
+# Optional path to an armored GPG private key.
+# Overridable via GPG_KEY_FILE env. GPG_PRIVATE_KEY env takes precedence over
+# both and may be left empty to skip signing entirely.
+# gpg_key_file = ""
