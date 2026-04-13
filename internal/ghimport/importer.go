@@ -106,7 +106,10 @@ func Run(ctx context.Context, opts Options) error {
 	runCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
-	tmpDir, err := os.MkdirTemp("", "ghimport-*")
+	// Create the temp directory inside RootDir so it lives on the same
+	// filesystem as the pool. os.Link (used by placeFile) returns EXDEV
+	// across filesystems, so a /tmp location would always fall back to copy.
+	tmpDir, err := os.MkdirTemp(opts.RootDir, ".ghimport-tmp-*")
 	if err != nil {
 		return fmt.Errorf("creating temp dir: %w", err)
 	}

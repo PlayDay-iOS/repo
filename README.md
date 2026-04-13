@@ -6,21 +6,21 @@ Built as a single Go binary (`repotool`) with no external tool dependencies.
 
 ## Repository layout
 
-- `pool/<suite>/<component>/`: source `.deb` files per suite. `.gitkeep` placeholders live under `pool/` only to keep empty directories tracked in git; the build creates pool subdirectories on demand and skips hidden files when mirroring into the published output.
+- `pool/<suite>/<component>/`: source `.deb` files per suite. `.gitkeep` placeholders keep empty directories tracked in git; the build mirrors only validated `.deb` files into the published output, so placeholders never leak.
 - `repo.toml`: repository configuration (TOML)
 - `templates/index.html.tmpl`: landing page template
 - `resources/CydiaIcon.png`: source icon file (Made by [Evehly](https://www.deviantart.com/evehly/art/The-Last-Pringle-852158299))
 
 Notes:
 
-- `repo.name` and `repo.url` are required in `repo.toml`. `metadata.component` is a single string ("main" by default).
+- `repo.name` and `repo.url` are required in `repo.toml`. `repo.url` must use `https://`. `metadata.component` is a single string ("main" by default).
 - Published suite roots use `./` source style (`deb <url>/<suite>/ ./`).
 - Set `SOURCE_DATE_EPOCH` for reproducible builds (Unix timestamp). The build workflow derives this from the latest commit timestamp automatically. A non-empty but unparseable value is rejected.
 - Index files are hashed with MD5, SHA1, SHA256, and SHA512 for compatibility with older clients.
 
 ## Requirements
 
-- Go 1.26 or newer. The `toolchain` directive in `go.mod` lets older `go` binaries fetch the right toolchain when `GOTOOLCHAIN=auto` (the default).
+- Go 1.26 or newer. The `go 1.26.0` directive in `go.mod` triggers automatic toolchain download when `GOTOOLCHAIN=auto` (the default since Go 1.21).
 
 ## Build and publish
 
@@ -47,7 +47,7 @@ Expected files after build (rooted at the output directory):
   - `Release`, `Release.gpg`, `InRelease` (signed variants only when a key is supplied)
   - `CydiaIcon.png`
   - `index.html`
-  - `<suite>/pool/<suite>/<component>/*.deb` (mirror, if packages exist)
+  - `pool/<suite>/<component>/*.deb` (mirror of validated packages; absent when the suite has none, e.g. `stable/pool/stable/main/com.example.pkg_1.0_arm64.deb`)
 - `repo-public.key` (root, only if a `repo-public.key` file exists at the repo root; the landing page links to it only when this file is present)
 
 Source lines:
@@ -92,7 +92,7 @@ The `--suite` flag on `import` defaults to the first entry of `metadata.suites` 
 ```toml
 [repo]
 name = "PlayDay iOS Repo"          # required
-url  = "https://example.com/repo/" # required, http(s) only
+url  = "https://example.com/repo/" # required, https:// only
 
 [metadata]
 origin        = "PlayDay-iOS"             # optional, written into Release
@@ -146,8 +146,8 @@ How it works:
 1. Add allowed repository names to `org-import-allowlist.txt`.
 2. Run the import workflow manually or wait for the schedule.
 3. Set `target_suite` to the desired suite name when running manually (defaults to `stable`).
-4. Imported packages are validated and committed under `pool/<target_suite>/<component>/`.
-5. The build/deploy workflow publishes updated metadata.
+4. Imported packages are validated and placed into `pool/<target_suite>/<component>/`.
+5. The import workflow commits new packages and triggers the build/deploy workflow, which publishes updated metadata.
 
 Validation checks:
 

@@ -3,6 +3,7 @@ package repo
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"os"
 	"path/filepath"
 	"strings"
@@ -69,8 +70,11 @@ func SignRelease(ctx context.Context, dir, armoredKey, passphrase string) error 
 	if err := fileutil.WriteAtomicBytes(inRelease, 0644, clearSig); err != nil {
 		// Roll back the already-written Release.gpg to avoid an inconsistent
 		// signed state where a detached signature exists without a clearsigned
-		// counterpart.
-		os.Remove(releaseGPG)
+		// counterpart. A concurrent reader could briefly observe Release.gpg
+		// without InRelease; APT handles this by retrying.
+		if rmErr := os.Remove(releaseGPG); rmErr != nil && !os.IsNotExist(rmErr) {
+			slog.Warn("failed to remove Release.gpg after InRelease write failure", "path", releaseGPG, "error", rmErr)
+		}
 		return fmt.Errorf("writing InRelease: %w", err)
 	}
 

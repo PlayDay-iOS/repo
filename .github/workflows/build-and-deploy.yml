@@ -40,7 +40,7 @@ jobs:
           cache: true
 
       - name: Build repotool
-        run: go build -o repotool ./cmd/repotool
+        run: go build -trimpath -o repotool ./cmd/repotool
 
       - name: Run tests
         run: go test -race ./...

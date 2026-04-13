@@ -1,6 +1,7 @@
 package deb
 
 import (
+	"context"
 	"os"
 	"path/filepath"
 	"testing"
@@ -27,7 +28,7 @@ func TestScanPool_FindsDebs(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	entries, err := ScanPool(dir, poolDir, map[string]bool{"iphoneos-arm64": true})
+	entries, err := ScanPool(context.Background(), dir, poolDir, map[string]bool{"iphoneos-arm64": true})
 	if err != nil {
 		t.Fatalf("ScanPool failed: %v", err)
 	}
@@ -53,7 +54,7 @@ func TestScanPool_EmptyDir(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	entries, err := ScanPool(dir, poolDir, map[string]bool{"iphoneos-arm64": true})
+	entries, err := ScanPool(context.Background(), dir, poolDir, map[string]bool{"iphoneos-arm64": true})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -73,7 +74,7 @@ func TestScanPool_IgnoresNonDeb(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	entries, err := ScanPool(dir, poolDir, map[string]bool{"iphoneos-arm64": true})
+	entries, err := ScanPool(context.Background(), dir, poolDir, map[string]bool{"iphoneos-arm64": true})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -101,7 +102,7 @@ func TestScanPool_RejectsDisallowedArchitecture(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if _, err := ScanPool(dir, poolDir, map[string]bool{"iphoneos-arm64": true}); err == nil {
+	if _, err := ScanPool(context.Background(), dir, poolDir, map[string]bool{"iphoneos-arm64": true}); err == nil {
 		t.Fatal("expected error for disallowed architecture")
 	}
 }

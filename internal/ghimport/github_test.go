@@ -160,7 +160,7 @@ func TestDownloadFile_RejectsNonHTTPSRedirect(t *testing.T) {
 func TestDownloadFile_RejectsHTTP(t *testing.T) {
 	t.Parallel()
 	dst := filepath.Join(t.TempDir(), "out.bin")
-	err := DownloadFile(context.Background(), "http://example.com/test.deb", dst, nil)
+	err := DownloadFile(context.Background(), "http://example.com/test.deb", dst, &http.Client{})
 	if err == nil {
 		t.Fatal("expected error for HTTP URL")
 	}

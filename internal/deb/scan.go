@@ -1,6 +1,7 @@
 package deb
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"io/fs"
@@ -58,7 +59,7 @@ func (e *PackageEntry) Stanza() string {
 
 // ScanPool walks poolDir for .deb files. Filenames in returned entries
 // are relative to rootDir (suitable for use in Packages files).
-func ScanPool(rootDir, poolDir string, allowedArchitectures map[string]bool) ([]*PackageEntry, error) {
+func ScanPool(ctx context.Context, rootDir, poolDir string, allowedArchitectures map[string]bool) ([]*PackageEntry, error) {
 	var entries []*PackageEntry
 
 	cleanRoot := filepath.Clean(rootDir)
@@ -67,56 +68,18 @@ func ScanPool(rootDir, poolDir string, allowedArchitectures map[string]bool) ([]
 		if err != nil {
 			return err
 		}
+		if err := ctx.Err(); err != nil {
+			return err
+		}
 		if d.IsDir() || !d.Type().IsRegular() || !strings.HasSuffix(strings.ToLower(d.Name()), ".deb") {
 			return nil
 		}
 
-		// Stream hashes to avoid loading entire .deb into memory
-		f, err := os.Open(path)
+		entry, err := scanDebFile(path, d.Name(), cleanRoot, rootDir, allowedArchitectures)
 		if err != nil {
-			return fmt.Errorf("opening %s: %w", path, err)
+			return err
 		}
-		defer f.Close()
-
-		sums, size, err := hashutil.MultiHash(f)
-		if err != nil {
-			return fmt.Errorf("hashing %s: %w", path, err)
-		}
-
-		// Seek back to start for control extraction
-		if _, err := f.Seek(0, io.SeekStart); err != nil {
-			return fmt.Errorf("seeking %s: %w", path, err)
-		}
-
-		control, err := ExtractControlFromReader(f, d.Name())
-		if err != nil {
-			return fmt.Errorf("extracting control from %s: %w", path, err)
-		}
-
-		if err := ValidateControl(control, allowedArchitectures); err != nil {
-			return fmt.Errorf("%s: %w", path, err)
-		}
-
-		relPath, err := filepath.Rel(rootDir, path)
-		if err != nil {
-			return fmt.Errorf("computing relative path for %s: %w", path, err)
-		}
-		cleanRel := filepath.Clean(filepath.Join(cleanRoot, relPath))
-		if !strings.HasPrefix(cleanRel, cleanRoot+string(os.PathSeparator)) {
-			return fmt.Errorf("file %s escapes root directory", path)
-		}
-
-		entries = append(entries, &PackageEntry{
-			Control:  control,
-			Path:     path,
-			Filename: filepath.ToSlash(relPath),
-			Size:     size,
-			MD5:      sums.MD5,
-			SHA1:     sums.SHA1,
-			SHA256:   sums.SHA256,
-			SHA512:   sums.SHA512,
-		})
-
+		entries = append(entries, entry)
 		return nil
 	})
 	if err != nil {
@@ -128,4 +91,54 @@ func ScanPool(rootDir, poolDir string, allowedArchitectures map[string]bool) ([]
 	})
 
 	return entries, nil
+}
+
+// scanDebFile hashes, parses, and validates a single .deb file.
+// The file handle is scoped to this function to keep the fd lifetime
+// explicit: the ReaderAt passed to ExtractControlFromReader is only used
+// within this frame, so the deferred Close cannot race with later use.
+func scanDebFile(path, name, cleanRoot, rootDir string, allowedArchitectures map[string]bool) (*PackageEntry, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, fmt.Errorf("opening %s: %w", path, err)
+	}
+	defer f.Close()
+
+	sums, size, err := hashutil.MultiHash(f)
+	if err != nil {
+		return nil, fmt.Errorf("hashing %s: %w", path, err)
+	}
+
+	if _, err := f.Seek(0, io.SeekStart); err != nil {
+		return nil, fmt.Errorf("seeking %s: %w", path, err)
+	}
+
+	control, err := ExtractControlFromReader(f, name)
+	if err != nil {
+		return nil, fmt.Errorf("extracting control from %s: %w", path, err)
+	}
+
+	if err := ValidateControl(control, allowedArchitectures); err != nil {
+		return nil, fmt.Errorf("%s: %w", path, err)
+	}
+
+	relPath, err := filepath.Rel(rootDir, path)
+	if err != nil {
+		return nil, fmt.Errorf("computing relative path for %s: %w", path, err)
+	}
+	cleanRel := filepath.Clean(filepath.Join(cleanRoot, relPath))
+	if !strings.HasPrefix(cleanRel, cleanRoot+string(os.PathSeparator)) {
+		return nil, fmt.Errorf("file %s escapes root directory", path)
+	}
+
+	return &PackageEntry{
+		Control:  control,
+		Path:     path,
+		Filename: filepath.ToSlash(relPath),
+		Size:     size,
+		MD5:      sums.MD5,
+		SHA1:     sums.SHA1,
+		SHA256:   sums.SHA256,
+		SHA512:   sums.SHA512,
+	}, nil
 }

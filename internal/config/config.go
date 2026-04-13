@@ -58,8 +58,8 @@ func Load(path string) (*RepoConfig, error) {
 	if cfg.URL == "" {
 		return nil, fmt.Errorf("repo.url: required")
 	}
-	if !strings.HasPrefix(cfg.URL, "https://") && !strings.HasPrefix(cfg.URL, "http://") {
-		return nil, fmt.Errorf("repo.url: must use http:// or https:// scheme, got %q", cfg.URL)
+	if !strings.HasPrefix(cfg.URL, "https://") {
+		return nil, fmt.Errorf("repo.url: must use https:// scheme, got %q", cfg.URL)
 	}
 	cfg.URL = strings.TrimRight(cfg.URL, "/") + "/"
 

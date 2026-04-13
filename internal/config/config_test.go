@@ -192,6 +192,23 @@ architectures = ["../../etc"]
 	}
 }
 
+func TestLoad_RejectsHTTPURL(t *testing.T) {
+	t.Parallel()
+	path := writeConfig(t, `
+[repo]
+name = "Test"
+url  = "http://example.com/repo/"
+[metadata]
+`)
+	_, err := Load(path)
+	if err == nil {
+		t.Fatal("expected error for http:// URL")
+	}
+	if !strings.Contains(err.Error(), "https://") {
+		t.Errorf("expected https scheme error, got: %v", err)
+	}
+}
+
 func TestLoad_InvalidOrgNameErrors(t *testing.T) {
 	t.Parallel()
 	path := writeConfig(t, `

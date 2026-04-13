@@ -1,12 +1,8 @@
 package fileutil
 
 import (
-	"fmt"
 	"io"
-	"io/fs"
 	"os"
-	"path/filepath"
-	"strings"
 )
 
 // CopyFile copies src to dst, creating or truncating dst.
@@ -34,51 +30,6 @@ func CopyFile(src, dst string) error {
 		return copyErr
 	}
 	return closeErr
-}
-
-// CopyDir recursively copies src directory contents into dst.
-// Only regular files and real directories are copied; symlinks (to files or
-// directories) and other non-regular entries cause an error. This prevents
-// an attacker-controlled pool tree from escaping via a symlinked directory.
-// Hidden entries (names beginning with ".") are skipped so that VCS
-// placeholders such as .gitkeep do not leak into published output.
-func CopyDir(src, dst string) error {
-	return filepath.WalkDir(src, func(path string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-
-		if path != src && strings.HasPrefix(d.Name(), ".") {
-			if d.IsDir() {
-				return filepath.SkipDir
-			}
-			return nil
-		}
-
-		if d.Type()&os.ModeSymlink != 0 {
-			return fmt.Errorf("refusing to follow symlink at %s", path)
-		}
-
-		rel, err := filepath.Rel(src, path)
-		if err != nil {
-			return err
-		}
-		target := filepath.Join(dst, rel)
-
-		if d.IsDir() {
-			info, err := d.Info()
-			if err != nil {
-				return err
-			}
-			return os.MkdirAll(target, info.Mode().Perm())
-		}
-
-		if !d.Type().IsRegular() {
-			return fmt.Errorf("unsupported file type at %s", path)
-		}
-
-		return CopyFile(path, target)
-	})
 }
 
 // CopyFileExclusive copies src to dst, failing if dst already exists (O_EXCL).

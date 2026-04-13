@@ -53,29 +53,26 @@ var renderCmd = &cobra.Command{
 }
 
 var (
-	flagBuildOutput   string
-	flagBuildTemplate string
+	flagOutput        string
+	flagTemplate      string
 	flagAllowlist     string
 	flagSuite         string
 	flagPrereleases   bool
 	flagImportTimeout time.Duration
-	flagRenderOutput  string
-	flagRenderTmpl    string
 )
 
 func init() {
 	rootCmd.PersistentFlags().StringVar(&configPath, "config", "", "Path to repo.toml (default: <cwd>/repo.toml)")
 
-	buildCmd.Flags().StringVar(&flagBuildOutput, "output", "", "Output directory (default: <cwd>/_site)")
-	buildCmd.Flags().StringVar(&flagBuildTemplate, "template", "", "Path to HTML template (default: <cwd>/templates/index.html.tmpl)")
+	for _, c := range []*cobra.Command{buildCmd, renderCmd} {
+		c.Flags().StringVar(&flagOutput, "output", "", "Output directory (default: <cwd>/_site)")
+		c.Flags().StringVar(&flagTemplate, "template", "", "Path to HTML template (default: <cwd>/templates/index.html.tmpl)")
+	}
 
 	importCmd.Flags().StringVar(&flagAllowlist, "allowlist", "", "Path to allowlist file (default: <cwd>/org-import-allowlist.txt)")
 	importCmd.Flags().StringVar(&flagSuite, "suite", "", "Target suite (default: first entry of metadata.suites, or TARGET_SUITE env)")
 	importCmd.Flags().BoolVar(&flagPrereleases, "include-prereleases", false, "Include prerelease assets")
 	importCmd.Flags().DurationVar(&flagImportTimeout, "timeout", 0, "Upper bound for the import run (e.g. 30m, 2h); 0 = use built-in default")
-
-	renderCmd.Flags().StringVar(&flagRenderOutput, "output", "", "Output directory (default: <cwd>/_site)")
-	renderCmd.Flags().StringVar(&flagRenderTmpl, "template", "", "Path to HTML template (default: <cwd>/templates/index.html.tmpl)")
 
 	rootCmd.AddCommand(buildCmd, importCmd, renderCmd)
 }
@@ -103,7 +100,7 @@ func runBuild(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	output := flagBuildOutput
+	output := flagOutput
 	if output == "" {
 		output = filepath.Join(root, "_site")
 	}
@@ -111,7 +108,7 @@ func runBuild(cmd *cobra.Command, args []string) error {
 	if cfgPath == "" {
 		cfgPath = filepath.Join(root, "repo.toml")
 	}
-	tmplPath := flagBuildTemplate
+	tmplPath := flagTemplate
 	if tmplPath == "" {
 		tmplPath = filepath.Join(root, "templates", "index.html.tmpl")
 	}
@@ -190,7 +187,7 @@ func runRender(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	output := flagRenderOutput
+	output := flagOutput
 	if output == "" {
 		output = filepath.Join(root, "_site")
 	}
@@ -198,7 +195,7 @@ func runRender(cmd *cobra.Command, args []string) error {
 	if cfgPath == "" {
 		cfgPath = filepath.Join(root, "repo.toml")
 	}
-	tmplPath := flagRenderTmpl
+	tmplPath := flagTemplate
 	if tmplPath == "" {
 		tmplPath = filepath.Join(root, "templates", "index.html.tmpl")
 	}

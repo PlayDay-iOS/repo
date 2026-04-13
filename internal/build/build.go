@@ -135,30 +135,34 @@ func buildSuite(ctx context.Context, opts Options, cfg *config.RepoConfig, suite
 		return fmt.Errorf("checking pool dir %s: %w", poolSuiteDir, statErr)
 	}
 
-	if statErr != nil || !poolInfo.IsDir() {
-		if err := repo.WritePackagesAll(ctx, nil, suiteDir); err != nil {
-			return fmt.Errorf("writing empty packages for %s: %w", suite, err)
-		}
-	} else {
-		entries, err := deb.ScanPool(opts.RootDir, poolSuiteDir, allowedArch)
+	var entries []*deb.PackageEntry
+	if statErr == nil && poolInfo.IsDir() {
+		scanned, err := deb.ScanPool(ctx, opts.RootDir, poolSuiteDir, allowedArch)
 		if err != nil {
 			return fmt.Errorf("scanning pool for %s: %w", suite, err)
 		}
-		if err := repo.WritePackagesAll(ctx, entries, suiteDir); err != nil {
-			return fmt.Errorf("writing packages for %s: %w", suite, err)
-		}
+		entries = scanned
 	}
 
-	// Mirror the suite's pool into the suite dir so clients can fetch .debs
-	// via the published suite URL.
-	suitePoolSource := filepath.Join(opts.RootDir, "pool", suite)
-	if _, err := os.Stat(suitePoolSource); err == nil {
-		suitePoolTarget := filepath.Join(suiteDir, "pool", suite)
-		if err := os.MkdirAll(suitePoolTarget, 0755); err != nil {
-			return fmt.Errorf("creating pool dir for %s: %w", suite, err)
+	if err := repo.WritePackagesAll(ctx, entries, suiteDir); err != nil {
+		return fmt.Errorf("writing packages for %s: %w", suite, err)
+	}
+
+	// Mirror only the validated .deb files into the suite dir so clients can
+	// fetch them via the published suite URL. Copying just the entries (rather
+	// than the whole pool tree) prevents arbitrary non-.deb files and empty
+	// placeholder directories from leaking into the published output.
+	for _, e := range entries {
+		relToRoot, err := filepath.Rel(opts.RootDir, e.Path)
+		if err != nil {
+			return fmt.Errorf("computing mirror path for %s: %w", e.Path, err)
 		}
-		if err := fileutil.CopyDir(suitePoolSource, suitePoolTarget); err != nil {
-			return fmt.Errorf("copying pool for %s: %w", suite, err)
+		target := filepath.Join(suiteDir, relToRoot)
+		if err := os.MkdirAll(filepath.Dir(target), 0755); err != nil {
+			return fmt.Errorf("creating mirror dir for %s: %w", e.Path, err)
+		}
+		if err := fileutil.CopyFile(e.Path, target); err != nil {
+			return fmt.Errorf("mirroring %s: %w", e.Path, err)
 		}
 	}
 

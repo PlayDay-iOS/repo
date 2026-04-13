@@ -3,7 +3,6 @@ package page
 import (
 	"context"
 	"fmt"
-	"html"
 	"html/template"
 	"io"
 	"os"
@@ -15,6 +14,19 @@ import (
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
+
+const suiteIndexTemplate = `<!doctype html>
+<html lang="en">
+  <head><meta charset="utf-8"><title>{{.Label}} Source</title></head>
+  <body>
+    <h1>{{.Label}} Source</h1>
+    <p>Use this source line:</p>
+    <pre>deb {{.RepoURL}}{{.Suite}}/ ./</pre>
+  </body>
+</html>
+`
+
+var suiteIndexTmpl = template.Must(template.New("suite-index").Parse(suiteIndexTemplate))
 
 // SuiteInfo holds per-suite data for the landing page template.
 type SuiteInfo struct {
@@ -96,19 +108,16 @@ func RenderLandingPage(ctx context.Context, outputDir string, cfg *config.RepoCo
 
 // WriteSuiteIndexHTML writes a simple info page for a suite directory.
 func WriteSuiteIndexHTML(dir, suite, repoURL string) error {
-	escapedSuite := html.EscapeString(TitleCase(suite))
-	escapedURL := html.EscapeString(repoURL)
-	escapedRawSuite := html.EscapeString(suite)
-	content := fmt.Sprintf(`<!doctype html>
-<html lang="en">
-  <head><meta charset="utf-8"><title>%s Source</title></head>
-  <body>
-    <h1>%s Source</h1>
-    <p>Use this source line:</p>
-    <pre>deb %s%s/ ./</pre>
-  </body>
-</html>
-`, escapedSuite, escapedSuite, escapedURL, escapedRawSuite)
-
-	return fileutil.WriteAtomicBytes(filepath.Join(dir, "index.html"), 0644, []byte(content))
+	data := struct {
+		Label   string
+		Suite   string
+		RepoURL string
+	}{
+		Label:   TitleCase(suite),
+		Suite:   suite,
+		RepoURL: repoURL,
+	}
+	return fileutil.WriteAtomic(filepath.Join(dir, "index.html"), 0644, func(w io.Writer) error {
+		return suiteIndexTmpl.Execute(w, data)
+	})
 }

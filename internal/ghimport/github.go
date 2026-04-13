@@ -62,14 +62,10 @@ const MaxDownloadSize = 500 * 1024 * 1024
 
 // DownloadFile downloads a URL to the given path using the provided HTTP client.
 // Only HTTPS URLs are accepted; redirects are restricted to HTTPS.
-// Downloads are capped at MaxDownloadSize bytes.
+// Downloads are capped at MaxDownloadSize bytes. httpClient must be non-nil.
 func DownloadFile(ctx context.Context, dlURL, dst string, httpClient *http.Client) error {
 	if !strings.HasPrefix(dlURL, "https://") {
 		return fmt.Errorf("download URL must use HTTPS scheme: %s", dlURL)
-	}
-
-	if httpClient == nil {
-		httpClient = &http.Client{Timeout: 60 * time.Second}
 	}
 
 	// Copy client to avoid mutating shared CheckRedirect state.
