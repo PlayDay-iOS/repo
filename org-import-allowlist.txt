@@ -6,4 +6,4 @@
 
 LowerInstall
 stash-unified
-wifi-fix-old-iOS
+LegacyWiFiFix
