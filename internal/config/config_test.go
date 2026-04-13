@@ -227,6 +227,67 @@ org_name = "../etc"
 	}
 }
 
+func TestLoad_RejectsNewlineInMetadata(t *testing.T) {
+	t.Parallel()
+	cases := []struct {
+		name string
+		body string
+		want string
+	}{
+		{
+			name: "origin",
+			body: "[repo]\nname=\"Test\"\nurl=\"https://example.com/repo/\"\n[metadata]\norigin=\"Bad\\nInjected: yes\"\n",
+			want: "metadata.origin",
+		},
+		{
+			name: "label",
+			body: "[repo]\nname=\"Test\"\nurl=\"https://example.com/repo/\"\n[metadata]\nlabel=\"Bad\\rInjected: yes\"\n",
+			want: "metadata.label",
+		},
+		{
+			name: "description",
+			body: "[repo]\nname=\"Test\"\nurl=\"https://example.com/repo/\"\n[metadata]\ndescription=\"line1\\nline2\"\n",
+			want: "metadata.description",
+		},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			path := writeConfig(t, tc.body)
+			_, err := Load(path)
+			if err == nil {
+				t.Fatalf("expected newline-injection error for %s", tc.name)
+			}
+			if !strings.Contains(err.Error(), tc.want) || !strings.Contains(err.Error(), "newline") {
+				t.Errorf("expected newline error mentioning %q, got: %v", tc.want, err)
+			}
+		})
+	}
+}
+
+func TestLoad_RejectsReservedSuiteNames(t *testing.T) {
+	t.Parallel()
+	for _, suite := range []string{"pool", "dists", "resources", "templates"} {
+		t.Run(suite, func(t *testing.T) {
+			t.Parallel()
+			path := writeConfig(t, `
+[repo]
+name = "Test"
+url  = "https://example.com/repo/"
+[metadata]
+suites = ["`+suite+`"]
+`)
+			_, err := Load(path)
+			if err == nil {
+				t.Fatalf("expected error for reserved suite %q", suite)
+			}
+			if !strings.Contains(err.Error(), "reserved") {
+				t.Errorf("expected reserved-suite error, got: %v", err)
+			}
+		})
+	}
+}
+
 func TestAllowedArchitectures(t *testing.T) {
 	t.Parallel()
 	cfg := &RepoConfig{

@@ -1,13 +1,15 @@
 package fileutil
 
 import (
+	"errors"
 	"io"
 	"os"
 )
 
 // CopyFile copies src to dst, creating or truncating dst with mode 0644
 // (the canonical mode for files published into the repository output).
-// The destination is fsynced before close.
+// The destination is fsynced before close. On copy failure the partial
+// dst is removed so corrupt files never end up in published output.
 func CopyFile(src, dst string) error {
 	srcF, err := os.Open(src)
 	if err != nil {
@@ -20,7 +22,7 @@ func CopyFile(src, dst string) error {
 		return err
 	}
 
-	return finishCopy(srcF, dstF, dst, false)
+	return finishCopy(srcF, dstF, dst, true)
 }
 
 // CopyFileExclusive copies src to dst with mode 0644, failing if dst
@@ -46,13 +48,11 @@ func finishCopy(src io.Reader, dst *os.File, dstPath string, removeOnError bool)
 	syncErr := dst.Sync()
 	closeErr := dst.Close()
 
-	for _, e := range []error{copyErr, syncErr, closeErr} {
-		if e != nil {
-			if removeOnError {
-				os.Remove(dstPath)
-			}
-			return e
+	if err := errors.Join(copyErr, syncErr, closeErr); err != nil {
+		if removeOnError {
+			os.Remove(dstPath)
 		}
+		return err
 	}
 	return nil
 }
