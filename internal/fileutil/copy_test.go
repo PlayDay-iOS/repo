@@ -123,6 +123,39 @@ func TestCopyFileExclusive_FailsIfExists(t *testing.T) {
 	}
 }
 
+func TestCopyDir_SkipsHiddenEntries(t *testing.T) {
+	t.Parallel()
+
+	src := t.TempDir()
+	dst := t.TempDir()
+
+	if err := os.WriteFile(filepath.Join(src, "real.deb"), []byte("x"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(src, ".gitkeep"), nil, 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(filepath.Join(src, ".cache", "junk"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(src, ".cache", "junk", "x"), []byte("x"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := CopyDir(src, dst); err != nil {
+		t.Fatalf("CopyDir: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(dst, "real.deb")); err != nil {
+		t.Errorf("real.deb missing: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(dst, ".gitkeep")); !os.IsNotExist(err) {
+		t.Error(".gitkeep should be skipped")
+	}
+	if _, err := os.Stat(filepath.Join(dst, ".cache")); !os.IsNotExist(err) {
+		t.Error(".cache directory should be skipped")
+	}
+}
+
 func TestCopyDir_RejectsSymlink(t *testing.T) {
 	t.Parallel()
 

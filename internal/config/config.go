@@ -52,29 +52,29 @@ func Load(path string) (*RepoConfig, error) {
 
 	cfg.Name = strings.TrimSpace(cfg.Name)
 	if cfg.Name == "" {
-		return nil, fmt.Errorf("repo.name is required")
+		return nil, fmt.Errorf("repo.name: required")
 	}
 	cfg.URL = strings.TrimSpace(cfg.URL)
 	if cfg.URL == "" {
-		return nil, fmt.Errorf("repo.url is required")
+		return nil, fmt.Errorf("repo.url: required")
 	}
 	if !strings.HasPrefix(cfg.URL, "https://") && !strings.HasPrefix(cfg.URL, "http://") {
-		return nil, fmt.Errorf("repo.url must use http:// or https:// scheme, got %q", cfg.URL)
+		return nil, fmt.Errorf("repo.url: must use http:// or https:// scheme, got %q", cfg.URL)
 	}
 	cfg.URL = strings.TrimRight(cfg.URL, "/") + "/"
 
 	if len(cfg.Suites) == 0 {
-		return nil, fmt.Errorf("metadata.suites must not be empty")
+		return nil, fmt.Errorf("metadata.suites: must not be empty")
 	}
 	cfg.Component = strings.TrimSpace(cfg.Component)
 	if cfg.Component == "" {
-		return nil, fmt.Errorf("metadata.component is required")
+		return nil, fmt.Errorf("metadata.component: required")
 	}
 	if !validate.Name.MatchString(cfg.Component) {
-		return nil, fmt.Errorf("invalid metadata.component %q: must be alphanumeric with .-_ only", cfg.Component)
+		return nil, fmt.Errorf("metadata.component: invalid %q (must be alphanumeric with .-_ only)", cfg.Component)
 	}
 	if len(cfg.Architectures) == 0 {
-		return nil, fmt.Errorf("metadata.architectures must not be empty")
+		return nil, fmt.Errorf("metadata.architectures: must not be empty")
 	}
 
 	reservedNames := map[string]bool{
@@ -83,33 +83,33 @@ func Load(path string) (*RepoConfig, error) {
 	seenSuites := make(map[string]bool, len(cfg.Suites))
 	for _, s := range cfg.Suites {
 		if !validate.Name.MatchString(s) {
-			return nil, fmt.Errorf("invalid suite name %q: must be alphanumeric with .-_ only", s)
+			return nil, fmt.Errorf("metadata.suites: invalid suite %q (must be alphanumeric with .-_ only)", s)
 		}
 		if reservedNames[s] {
-			return nil, fmt.Errorf("suite name %q is reserved and would conflict with build output", s)
+			return nil, fmt.Errorf("metadata.suites: suite %q is reserved and would conflict with build output", s)
 		}
 		if seenSuites[s] {
-			return nil, fmt.Errorf("duplicate suite name %q", s)
+			return nil, fmt.Errorf("metadata.suites: duplicate suite %q", s)
 		}
 		seenSuites[s] = true
 	}
 	for _, a := range cfg.Architectures {
 		if !validate.Name.MatchString(a) {
-			return nil, fmt.Errorf("invalid architecture name %q: must be alphanumeric with .-_ only", a)
+			return nil, fmt.Errorf("metadata.architectures: invalid architecture %q (must be alphanumeric with .-_ only)", a)
 		}
 	}
 
 	cfg.OrgName = strings.TrimSpace(cfg.OrgName)
 	if cfg.OrgName != "" && !validate.Name.MatchString(cfg.OrgName) {
-		return nil, fmt.Errorf("invalid github.org_name %q: must be alphanumeric with .-_ only", cfg.OrgName)
+		return nil, fmt.Errorf("github.org_name: invalid %q (must be alphanumeric with .-_ only)", cfg.OrgName)
 	}
 
 	// Reject newlines in free-form string fields that end up in Release stanzas.
 	for name, val := range map[string]*string{
-		"origin": &cfg.Origin, "label": &cfg.Label, "description": &cfg.Description,
+		"metadata.origin": &cfg.Origin, "metadata.label": &cfg.Label, "metadata.description": &cfg.Description,
 	} {
 		if strings.ContainsAny(*val, "\n\r") {
-			return nil, fmt.Errorf("config field %q must not contain newlines", name)
+			return nil, fmt.Errorf("%s: must not contain newlines", name)
 		}
 	}
 

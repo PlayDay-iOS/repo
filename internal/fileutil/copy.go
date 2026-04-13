@@ -6,6 +6,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // CopyFile copies src to dst, creating or truncating dst.
@@ -39,10 +40,19 @@ func CopyFile(src, dst string) error {
 // Only regular files and real directories are copied; symlinks (to files or
 // directories) and other non-regular entries cause an error. This prevents
 // an attacker-controlled pool tree from escaping via a symlinked directory.
+// Hidden entries (names beginning with ".") are skipped so that VCS
+// placeholders such as .gitkeep do not leak into published output.
 func CopyDir(src, dst string) error {
 	return filepath.WalkDir(src, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
+		}
+
+		if path != src && strings.HasPrefix(d.Name(), ".") {
+			if d.IsDir() {
+				return filepath.SkipDir
+			}
+			return nil
 		}
 
 		if d.Type()&os.ModeSymlink != 0 {

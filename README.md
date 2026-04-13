@@ -6,7 +6,7 @@ Built as a single Go binary (`repotool`) with no external tool dependencies.
 
 ## Repository layout
 
-- `pool/<suite>/<component>/`: source `.deb` files per suite. Tracked placeholders for `stable` and `beta` live under `pool/` to preserve the directories; rename or add more to match `metadata.suites` in `repo.toml`.
+- `pool/<suite>/<component>/`: source `.deb` files per suite. `.gitkeep` placeholders live under `pool/` only to keep empty directories tracked in git; the build creates pool subdirectories on demand and skips hidden files when mirroring into the published output.
 - `repo.toml`: repository configuration (TOML)
 - `templates/index.html.tmpl`: landing page template
 - `resources/CydiaIcon.png`: source icon file (Made by [Evehly](https://www.deviantart.com/evehly/art/The-Last-Pringle-852158299))
@@ -15,7 +15,7 @@ Notes:
 
 - `repo.name` and `repo.url` are required in `repo.toml`. `metadata.component` is a single string ("main" by default).
 - Published suite roots use `./` source style (`deb <url>/<suite>/ ./`).
-- Set `SOURCE_DATE_EPOCH` for reproducible builds (Unix timestamp). The build workflow derives this from the latest commit timestamp automatically.
+- Set `SOURCE_DATE_EPOCH` for reproducible builds (Unix timestamp). The build workflow derives this from the latest commit timestamp automatically. A non-empty but unparseable value is rejected.
 - Index files are hashed with MD5, SHA1, SHA256, and SHA512 for compatibility with older clients.
 
 ## Requirements
@@ -47,7 +47,8 @@ Expected files after build (rooted at the output directory):
   - `Release`, `Release.gpg`, `InRelease` (signed variants only when a key is supplied)
   - `CydiaIcon.png`
   - `index.html`
-  - `pool/<suite>/<component>/*.deb` (mirror, if packages exist)
+  - `<suite>/pool/<suite>/<component>/*.deb` (mirror, if packages exist)
+- `repo-public.key` (root, only if a `repo-public.key` file exists at the repo root; the landing page links to it only when this file is present)
 
 Source lines:
 
@@ -58,7 +59,7 @@ Source lines:
 
 ```sh
 repotool build  [--output _site] [--config repo.toml] [--template templates/index.html.tmpl]
-repotool import [--config repo.toml] [--allowlist org-import-allowlist.txt] [--suite <name>] [--include-prereleases]
+repotool import [--config repo.toml] [--allowlist org-import-allowlist.txt] [--suite <name>] [--include-prereleases] [--timeout 30m]
 repotool render [--output _site] [--config repo.toml] [--template templates/index.html.tmpl]
 repotool --version
 ```
@@ -84,6 +85,7 @@ The `--suite` flag on `import` defaults to the first entry of `metadata.suites` 
 | `ORG_NAME`                  | Overrides `github.org_name` from `repo.toml`.                             |
 | `TARGET_SUITE`              | Default target suite for `import` when `--suite` is not passed.           |
 | `INCLUDE_PRERELEASES`       | `true`/`false`; default for `--include-prereleases` when flag not passed. |
+| `IMPORT_TIMEOUT`            | Go duration (e.g. `30m`, `2h`); default for `--timeout` on `import`.       |
 
 ### Configuration schema
 
@@ -98,7 +100,7 @@ label         = "PlayDay-iOS"             # optional, written into Release
 description   = "..."                     # optional, written into Release
 suites        = ["stable", "beta"]        # default: ["stable"]
 component     = "main"                    # default: "main"; single string
-architectures = ["iphoneos-arm64", "all"] # default: arm/arm64/all
+architectures = ["iphoneos-arm64", "all"] # example override; default is ["iphoneos-arm", "iphoneos-arm64", "all"]
 
 [github]
 org_name = "PlayDay-iOS"  # required only for `import`
@@ -114,7 +116,7 @@ To export the public key for client trust setup:
 gpg --armor --export <key-id> > repo-public.key
 ```
 
-The build copies `repo-public.key` (if present at the repo root) into the output directory.
+The build copies `repo-public.key` (if present at the repo root) into the output directory. The landing page links to it only when the file is present, so unsigned repos do not show a dead link.
 
 In GitHub Actions, set these repository secrets (workflow maps them to the runtime env vars above):
 

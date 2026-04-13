@@ -157,22 +157,35 @@ func TestRun_InvalidGPGKeyErrors(t *testing.T) {
 	}
 }
 
-func TestResolveBuildTime_Override(t *testing.T) {
-	t.Parallel()
-	fixed := time.Date(2026, 1, 15, 12, 0, 0, 0, time.UTC)
-	got := ResolveBuildTime(fixed)
-	if !got.Equal(fixed) {
-		t.Errorf("expected override time, got %v", got)
-	}
-}
-
-func TestResolveBuildTime_FallsBackToNow(t *testing.T) {
-	t.Parallel()
+func TestBuildTimeFromEnv_Unset(t *testing.T) {
+	t.Setenv("SOURCE_DATE_EPOCH", "")
 	before := time.Now().UTC().Add(-time.Second)
-	got := ResolveBuildTime(time.Time{})
+	got, err := BuildTimeFromEnv()
+	if err != nil {
+		t.Fatal(err)
+	}
 	after := time.Now().UTC().Add(time.Second)
 	if got.Before(before) || got.After(after) {
 		t.Errorf("expected current time, got %v", got)
+	}
+}
+
+func TestBuildTimeFromEnv_Valid(t *testing.T) {
+	t.Setenv("SOURCE_DATE_EPOCH", "1700000000")
+	got, err := BuildTimeFromEnv()
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := time.Unix(1700000000, 0).UTC()
+	if !got.Equal(want) {
+		t.Errorf("expected %v, got %v", want, got)
+	}
+}
+
+func TestBuildTimeFromEnv_Invalid(t *testing.T) {
+	t.Setenv("SOURCE_DATE_EPOCH", "not-a-number")
+	if _, err := BuildTimeFromEnv(); err == nil {
+		t.Fatal("expected error for invalid SOURCE_DATE_EPOCH")
 	}
 }
 

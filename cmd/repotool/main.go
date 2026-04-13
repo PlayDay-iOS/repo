@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -57,6 +58,7 @@ var (
 	flagAllowlist     string
 	flagSuite         string
 	flagPrereleases   bool
+	flagImportTimeout time.Duration
 	flagRenderOutput  string
 	flagRenderTmpl    string
 )
@@ -70,6 +72,7 @@ func init() {
 	importCmd.Flags().StringVar(&flagAllowlist, "allowlist", "", "Path to allowlist file (default: <cwd>/org-import-allowlist.txt)")
 	importCmd.Flags().StringVar(&flagSuite, "suite", "", "Target suite (default: first entry of metadata.suites, or TARGET_SUITE env)")
 	importCmd.Flags().BoolVar(&flagPrereleases, "include-prereleases", false, "Include prerelease assets")
+	importCmd.Flags().DurationVar(&flagImportTimeout, "timeout", 0, "Upper bound for the import run (e.g. 30m, 2h); 0 = use built-in default")
 
 	renderCmd.Flags().StringVar(&flagRenderOutput, "output", "", "Output directory (default: <cwd>/_site)")
 	renderCmd.Flags().StringVar(&flagRenderTmpl, "template", "", "Path to HTML template (default: <cwd>/templates/index.html.tmpl)")
@@ -84,16 +87,6 @@ func main() {
 	if err := rootCmd.ExecuteContext(ctx); err != nil {
 		os.Exit(1)
 	}
-}
-
-// parseBuildTime reads SOURCE_DATE_EPOCH for reproducible builds.
-func parseBuildTime() time.Time {
-	if v := os.Getenv("SOURCE_DATE_EPOCH"); v != "" {
-		if epoch, err := strconv.ParseInt(v, 10, 64); err == nil {
-			return time.Unix(epoch, 0).UTC()
-		}
-	}
-	return time.Time{}
 }
 
 // ghToken returns the GitHub token from GH_TOKEN or GITHUB_TOKEN.
@@ -123,12 +116,17 @@ func runBuild(cmd *cobra.Command, args []string) error {
 		tmplPath = filepath.Join(root, "templates", "index.html.tmpl")
 	}
 
+	buildTime, err := build.BuildTimeFromEnv()
+	if err != nil {
+		return err
+	}
+
 	return build.Run(cmd.Context(), build.Options{
 		RootDir:       root,
 		OutputDir:     output,
 		ConfigPath:    cfgPath,
 		TemplatePath:  tmplPath,
-		BuildTime:     parseBuildTime(),
+		BuildTime:     buildTime,
 		GPGKey:        os.Getenv("GPG_PRIVATE_KEY"),
 		GPGPassphrase: os.Getenv("GPG_PASSPHRASE"),
 	})
@@ -163,6 +161,17 @@ func runImport(cmd *cobra.Command, args []string) error {
 		}
 	}
 
+	timeout := flagImportTimeout
+	if !cmd.Flags().Changed("timeout") {
+		if envVal := os.Getenv("IMPORT_TIMEOUT"); envVal != "" {
+			d, parseErr := time.ParseDuration(envVal)
+			if parseErr != nil {
+				return fmt.Errorf("invalid IMPORT_TIMEOUT %q: %w", envVal, parseErr)
+			}
+			timeout = d
+		}
+	}
+
 	return ghimport.Run(cmd.Context(), ghimport.Options{
 		RootDir:            root,
 		ConfigPath:         cfgPath,
@@ -171,6 +180,7 @@ func runImport(cmd *cobra.Command, args []string) error {
 		IncludePrereleases: prereleases,
 		Token:              ghToken(),
 		APIBase:            os.Getenv("GITHUB_API_BASE"),
+		Timeout:            timeout,
 	})
 }
 
@@ -198,6 +208,15 @@ func runRender(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
+	buildTime, err := build.BuildTimeFromEnv()
+	if err != nil {
+		return err
+	}
+
 	signed := os.Getenv("GPG_PRIVATE_KEY") != ""
-	return page.RenderLandingPage(cmd.Context(), output, cfg, tmplPath, build.ResolveBuildTime(parseBuildTime()), signed)
+	hasPublicKey := false
+	if _, err := os.Stat(filepath.Join(root, "repo-public.key")); err == nil {
+		hasPublicKey = true
+	}
+	return page.RenderLandingPage(cmd.Context(), output, cfg, tmplPath, buildTime, signed, hasPublicKey)
 }

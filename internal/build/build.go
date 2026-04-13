@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"slices"
+	"strconv"
 	"strings"
 	"time"
 
@@ -29,13 +30,19 @@ type Options struct {
 	Logger        *slog.Logger
 }
 
-// ResolveBuildTime returns the build timestamp from the given override,
-// or the current time if the override is zero.
-func ResolveBuildTime(override time.Time) time.Time {
-	if !override.IsZero() {
-		return override
+// BuildTimeFromEnv resolves the build timestamp from SOURCE_DATE_EPOCH for
+// reproducible builds. If the variable is unset, the current UTC time is
+// returned. A non-empty but unparseable value is reported as an error.
+func BuildTimeFromEnv() (time.Time, error) {
+	v := os.Getenv("SOURCE_DATE_EPOCH")
+	if v == "" {
+		return time.Now().UTC(), nil
 	}
-	return time.Now().UTC()
+	epoch, err := strconv.ParseInt(v, 10, 64)
+	if err != nil {
+		return time.Time{}, fmt.Errorf("invalid SOURCE_DATE_EPOCH %q: %w", v, err)
+	}
+	return time.Unix(epoch, 0).UTC(), nil
 }
 
 // Run executes the full repository build.
@@ -79,7 +86,10 @@ func Run(ctx context.Context, opts Options) error {
 		return fmt.Errorf("writing output marker: %w", err)
 	}
 
-	buildTime := ResolveBuildTime(opts.BuildTime)
+	buildTime := opts.BuildTime
+	if buildTime.IsZero() {
+		buildTime = time.Now().UTC()
+	}
 
 	allowedArch := cfg.AllowedArchitectures()
 	for _, suite := range cfg.Suites {
@@ -92,14 +102,16 @@ func Run(ctx context.Context, opts Options) error {
 		return fmt.Errorf("copying root icon: %w", err)
 	}
 
+	hasPublicKey := false
 	pubKey := filepath.Join(opts.RootDir, "repo-public.key")
 	if _, err := os.Stat(pubKey); err == nil {
 		if err := fileutil.CopyFile(pubKey, filepath.Join(opts.OutputDir, "repo-public.key")); err != nil {
 			return fmt.Errorf("copying public key: %w", err)
 		}
+		hasPublicKey = true
 	}
 
-	if err := page.RenderLandingPage(ctx, opts.OutputDir, cfg, opts.TemplatePath, buildTime, signed); err != nil {
+	if err := page.RenderLandingPage(ctx, opts.OutputDir, cfg, opts.TemplatePath, buildTime, signed, hasPublicKey); err != nil {
 		return fmt.Errorf("rendering landing page: %w", err)
 	}
 

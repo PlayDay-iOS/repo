@@ -230,7 +230,7 @@
         {{end}}{{end}}
         {{range .Suites}}<p class="code">{{.URL}}Packages</p>
         {{end}}
-        <p class="code">{{.RepoURL}}repo-public.key</p>
+        {{if .HasPublicKey}}<p class="code">{{.RepoURL}}repo-public.key</p>{{end}}
       </section>
 
       <p class="footer">Generated: {{.GeneratedAt}}</p>

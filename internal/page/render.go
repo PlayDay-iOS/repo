@@ -28,11 +28,12 @@ type SuiteInfo struct {
 
 // TemplateData holds all values injected into the landing page template.
 type TemplateData struct {
-	RepoName    string
-	RepoURL     string
-	Suites      []SuiteInfo
-	GeneratedAt string
-	Signed      bool
+	RepoName     string
+	RepoURL      string
+	Suites       []SuiteInfo
+	GeneratedAt  string
+	Signed       bool
+	HasPublicKey bool
 }
 
 // TitleCase converts a string to title case using English locale rules.
@@ -44,7 +45,8 @@ func TitleCase(s string) string {
 }
 
 // RenderLandingPage renders the HTML landing page into outputDir/index.html.
-func RenderLandingPage(ctx context.Context, outputDir string, cfg *config.RepoConfig, templatePath string, buildTime time.Time, signed bool) error {
+// hasPublicKey controls whether the repo-public.key download line is shown.
+func RenderLandingPage(ctx context.Context, outputDir string, cfg *config.RepoConfig, templatePath string, buildTime time.Time, signed, hasPublicKey bool) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
@@ -75,11 +77,12 @@ func RenderLandingPage(ctx context.Context, outputDir string, cfg *config.RepoCo
 	}
 
 	data := TemplateData{
-		RepoName:    cfg.Name,
-		RepoURL:     repoURL,
-		Suites:      suites,
-		GeneratedAt: buildTime.UTC().Format("2006-01-02 15:04 UTC"),
-		Signed:      signed,
+		RepoName:     cfg.Name,
+		RepoURL:      repoURL,
+		Suites:       suites,
+		GeneratedAt:  buildTime.UTC().Format("2006-01-02 15:04 UTC"),
+		Signed:       signed,
+		HasPublicKey: hasPublicKey,
 	}
 
 	if err := os.MkdirAll(outputDir, 0755); err != nil {

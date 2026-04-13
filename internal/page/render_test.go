@@ -45,7 +45,7 @@ func TestRenderLandingPage(t *testing.T) {
 	}
 
 	outDir := filepath.Join(dir, "out")
-	if err := RenderLandingPage(context.Background(), outDir, cfg, tmplPath, time.Now(), false); err != nil {
+	if err := RenderLandingPage(context.Background(), outDir, cfg, tmplPath, time.Now(), false, false); err != nil {
 		t.Fatal(err)
 	}
 
@@ -97,7 +97,7 @@ func TestLandingTemplate_RendersKeyMarkers(t *testing.T) {
 	}
 
 	outDir := filepath.Join(dir, "out")
-	if err := RenderLandingPage(context.Background(), outDir, cfg, templatePath, time.Now(), true); err != nil {
+	if err := RenderLandingPage(context.Background(), outDir, cfg, templatePath, time.Now(), true, true); err != nil {
 		t.Fatal(err)
 	}
 
@@ -115,7 +115,8 @@ func TestLandingTemplate_RendersKeyMarkers(t *testing.T) {
 		`id="menu-sileo"`,
 		`<summary>Add to Sileo</summary>`,
 		`Tap sections to expand source options.`,
-		"InRelease", // signed variant should appear when Signed=true
+		"InRelease",      // signed variant should appear when Signed=true
+		"repo-public.key", // public-key line should appear when HasPublicKey=true
 	} {
 		if !strings.Contains(html, check) {
 			t.Errorf("missing marker %q", check)
@@ -135,14 +136,18 @@ func TestLandingTemplate_OmitsInReleaseWhenUnsigned(t *testing.T) {
 	}
 
 	outDir := filepath.Join(dir, "out")
-	if err := RenderLandingPage(context.Background(), outDir, cfg, templatePath, time.Now(), false); err != nil {
+	if err := RenderLandingPage(context.Background(), outDir, cfg, templatePath, time.Now(), false, false); err != nil {
 		t.Fatal(err)
 	}
 	data, err := os.ReadFile(filepath.Join(outDir, "index.html"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	if strings.Contains(string(data), "InRelease") {
+	html := string(data)
+	if strings.Contains(html, "InRelease") {
 		t.Error("InRelease should be omitted when signing is disabled")
+	}
+	if strings.Contains(html, "repo-public.key") {
+		t.Error("repo-public.key link should be omitted when HasPublicKey is false")
 	}
 }

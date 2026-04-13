@@ -1,8 +1,9 @@
 package repo
 
 import (
-	"bytes"
+	"compress/gzip"
 	"context"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -11,38 +12,79 @@ import (
 	"github.com/PlayDay-iOS/repo/internal/deb"
 )
 
-func Test_writePackages_Empty(t *testing.T) {
-	t.Parallel()
-	var buf bytes.Buffer
-	if err := writePackages(nil, &buf); err != nil {
+func readPackagesGz(t *testing.T, path string) string {
+	t.Helper()
+	f, err := os.Open(path)
+	if err != nil {
 		t.Fatal(err)
 	}
-	if buf.Len() != 0 {
-		t.Errorf("expected empty output, got %d bytes", buf.Len())
+	defer f.Close()
+	gz, err := gzip.NewReader(f)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer gz.Close()
+	data, err := io.ReadAll(gz)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return string(data)
+}
+
+func TestWritePackagesAll_EmptyEntries(t *testing.T) {
+	t.Parallel()
+	dir := t.TempDir()
+	if err := WritePackagesAll(context.Background(), nil, dir); err != nil {
+		t.Fatal(err)
+	}
+	for _, name := range []string{"Packages", "Packages.gz", "Packages.xz", "Packages.bz2"} {
+		info, err := os.Stat(filepath.Join(dir, name))
+		if err != nil {
+			t.Errorf("missing %s: %v", name, err)
+			continue
+		}
+		if name == "Packages" && info.Size() != 0 {
+			t.Errorf("Packages with no entries should be empty, got %d bytes", info.Size())
+		}
 	}
 }
 
-func Test_writePackages_SingleEntry(t *testing.T) {
+func TestWritePackagesAll_RendersStanzas(t *testing.T) {
 	t.Parallel()
-	entries := []*deb.PackageEntry{{
-		Control: deb.NewControlData(
-			[]string{"Package", "Version"},
-			map[string]string{"Package": "com.test", "Version": "1.0"},
-		),
-		Filename: "pool/stable/main/test.deb",
-		Size:     1234,
-		MD5:      "abc123",
-		SHA1:     "def456",
-		SHA256:   "789ghi",
-		SHA512:   "jkl012",
-	}}
+	entries := []*deb.PackageEntry{
+		{
+			Control: deb.NewControlData(
+				[]string{"Package", "Version"},
+				map[string]string{"Package": "com.test", "Version": "1.0"},
+			),
+			Filename: "pool/stable/main/test.deb",
+			Size:     1234,
+			MD5:      "abc123",
+			SHA1:     "def456",
+			SHA256:   "789ghi",
+			SHA512:   "jkl012",
+		},
+		{
+			Control: deb.NewControlData(
+				[]string{"Package"},
+				map[string]string{"Package": "com.other"},
+			),
+			Filename: "pool/stable/main/other.deb",
+			Size:     200,
+			MD5:      "m", SHA1: "s", SHA256: "h", SHA512: "k",
+		},
+	}
 
-	var buf bytes.Buffer
-	if err := writePackages(entries, &buf); err != nil {
+	dir := t.TempDir()
+	if err := WritePackagesAll(context.Background(), entries, dir); err != nil {
 		t.Fatal(err)
 	}
 
-	out := buf.String()
+	plain, err := os.ReadFile(filepath.Join(dir, "Packages"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	out := string(plain)
 	for _, want := range []string{
 		"Package: com.test",
 		"Filename: pool/stable/main/test.deb",
@@ -51,52 +93,18 @@ func Test_writePackages_SingleEntry(t *testing.T) {
 		"SHA1: def456",
 		"SHA256: 789ghi",
 		"SHA512: jkl012",
+		"Package: com.other",
 	} {
 		if !strings.Contains(out, want) {
-			t.Errorf("stanza missing %q", want)
+			t.Errorf("Packages missing %q", want)
 		}
 	}
-}
-
-func Test_writePackages_MultipleSeparated(t *testing.T) {
-	t.Parallel()
-	entries := []*deb.PackageEntry{
-		{
-			Control: deb.NewControlData(
-				[]string{"Package"},
-				map[string]string{"Package": "a"},
-			),
-			Filename: "a.deb", Size: 100, MD5: "m", SHA1: "s", SHA256: "h", SHA512: "k",
-		},
-		{
-			Control: deb.NewControlData(
-				[]string{"Package"},
-				map[string]string{"Package": "b"},
-			),
-			Filename: "b.deb", Size: 200, MD5: "m", SHA1: "s", SHA256: "h", SHA512: "k",
-		},
+	if strings.Count(out, "\n\n") < 1 {
+		t.Error("multiple entries should be separated by blank line")
 	}
 
-	var buf bytes.Buffer
-	if err := writePackages(entries, &buf); err != nil {
-		t.Fatal(err)
-	}
-
-	if strings.Count(buf.String(), "\n\n") < 1 {
-		t.Error("entries should be separated by blank line")
-	}
-}
-
-func TestWritePackagesAll_CreatesAllFormats(t *testing.T) {
-	t.Parallel()
-	dir := t.TempDir()
-	if err := WritePackagesAll(context.Background(), nil, dir); err != nil {
-		t.Fatal(err)
-	}
-	for _, name := range []string{"Packages", "Packages.gz", "Packages.xz", "Packages.bz2"} {
-		if _, err := os.Stat(filepath.Join(dir, name)); err != nil {
-			t.Errorf("missing %s: %v", name, err)
-		}
+	if got := readPackagesGz(t, filepath.Join(dir, "Packages.gz")); got != out {
+		t.Errorf("Packages.gz content differs from Packages")
 	}
 }
 

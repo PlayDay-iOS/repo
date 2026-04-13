@@ -18,6 +18,9 @@ import (
 	"github.com/google/go-github/v84/github"
 )
 
+// DefaultTimeout is the default upper bound for the entire import run.
+const DefaultTimeout = 30 * time.Minute
+
 // Options configures the import command.
 type Options struct {
 	RootDir            string
@@ -27,6 +30,7 @@ type Options struct {
 	IncludePrereleases bool
 	Token              string // GitHub API token (GH_TOKEN or GITHUB_TOKEN)
 	APIBase            string // GitHub API base URL (default: https://api.github.com)
+	Timeout            time.Duration // upper bound for the import run; zero = DefaultTimeout
 	Logger             *slog.Logger
 }
 
@@ -54,7 +58,7 @@ func Run(ctx context.Context, opts Options) error {
 	}
 
 	if cfg.OrgName == "" {
-		return fmt.Errorf("repo.org_name is required for import (set in repo.toml or ORG_NAME env)")
+		return fmt.Errorf("github.org_name is required for import (set in repo.toml or ORG_NAME env)")
 	}
 	if opts.Token == "" {
 		return fmt.Errorf("GitHub API token required for import: set GH_TOKEN or GITHUB_TOKEN (unauthenticated access is rate-limited to 60 req/hr)")
@@ -95,7 +99,11 @@ func Run(ctx context.Context, opts Options) error {
 
 	allowedArch := cfg.AllowedArchitectures()
 
-	runCtx, cancel := context.WithTimeout(ctx, 30*time.Minute)
+	timeout := opts.Timeout
+	if timeout <= 0 {
+		timeout = DefaultTimeout
+	}
+	runCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
 	tmpDir, err := os.MkdirTemp("", "ghimport-*")

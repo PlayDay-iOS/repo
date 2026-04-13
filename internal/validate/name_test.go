@@ -19,6 +19,7 @@ func TestName_Valid(t *testing.T) {
 	}
 	for _, name := range valid {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			if !Name.MatchString(name) {
 				t.Errorf("expected %q to be valid", name)
 			}
@@ -42,6 +43,7 @@ func TestName_Invalid(t *testing.T) {
 	}
 	for _, name := range invalid {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			if Name.MatchString(name) {
 				t.Errorf("expected %q to be invalid", name)
 			}
