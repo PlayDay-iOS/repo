@@ -13,11 +13,8 @@ on:
       include_prereleases:
         description: "Include prerelease assets"
         required: false
-        default: "false"
-        type: choice
-        options:
-          - "false"
-          - "true"
+        default: false
+        type: boolean
   push:
     branches:
       - main
