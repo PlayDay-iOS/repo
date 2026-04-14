@@ -4,6 +4,6 @@
 # tweak-one
 # tweak-two
 
-LowerInstall
-stash-unified
 LegacyWiFiFix
+LowerInstall
+StashUnified
