@@ -5,7 +5,7 @@ url  = "https://playday-ios.github.io/repo/"
 [metadata]
 origin        = "PlayDay-iOS"
 label         = "PlayDay-iOS"
-suites        = ["stable", "beta"]
+suites        = ["stable", "beta"] # keep in sync with target_suite options in import-org-packages.yml
 component     = "main"
 architectures = ["iphoneos-arm", "iphoneos-arm64", "all"]
 description   = "APT repository for iOS packages published by PlayDay."

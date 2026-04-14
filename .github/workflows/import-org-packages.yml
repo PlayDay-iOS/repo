@@ -9,7 +9,10 @@ on:
         description: "Target suite for imported packages"
         required: false
         default: "stable"
-        type: string
+        type: choice
+        options: # keep in sync with metadata.suites in repo.toml
+          - "stable"
+          - "beta"
       include_prereleases:
         description: "Include prerelease assets"
         required: false
