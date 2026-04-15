@@ -104,13 +104,82 @@ func TestRun_WithDeb(t *testing.T) {
 	if !strings.Contains(content, "Filename: pool/stable/main/test.deb") {
 		t.Error("Packages should reference correct filename")
 	}
+	if !strings.Contains(content, "Depiction: https://example.com/repo/depictions/com.test.pkg/1.0/depiction.html") {
+		t.Errorf("Packages should contain injected Depiction URL:\n%s", content)
+	}
+	if !strings.Contains(content, "SileoDepiction: https://example.com/repo/depictions/com.test.pkg/1.0/sileo.json") {
+		t.Errorf("Packages should contain injected SileoDepiction URL:\n%s", content)
+	}
+
 	mirrorPath := filepath.Join(opts.OutputDir, "stable", "pool", "stable", "main", "test.deb")
 	if _, err := os.Stat(mirrorPath); err != nil {
 		t.Error("pool mirror should exist at stable/pool/stable/main/test.deb")
 	}
-
 	if _, err := os.Stat(filepath.Join(opts.OutputDir, "pool")); !os.IsNotExist(err) {
 		t.Error("top-level pool/ should not exist in output")
+	}
+
+	htmlPath := filepath.Join(opts.OutputDir, "depictions", "com.test.pkg", "1.0", "depiction.html")
+	if _, err := os.Stat(htmlPath); err != nil {
+		t.Errorf("missing depiction.html: %v", err)
+	}
+	jsonPath := filepath.Join(opts.OutputDir, "depictions", "com.test.pkg", "1.0", "sileo.json")
+	if _, err := os.Stat(jsonPath); err != nil {
+		t.Errorf("missing sileo.json: %v", err)
+	}
+	cssPath := filepath.Join(opts.OutputDir, "depictions", "style.css")
+	if _, err := os.Stat(cssPath); err != nil {
+		t.Errorf("missing depictions/style.css: %v", err)
+	}
+}
+
+func TestRun_EmptyPoolSkipsDepictionsDir(t *testing.T) {
+	t.Parallel()
+	_, opts := newTestRepo(t, "stable", nil)
+
+	if err := Run(context.Background(), opts); err != nil {
+		t.Fatalf("Run failed: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(opts.OutputDir, "depictions")); !os.IsNotExist(err) {
+		t.Error("depictions/ should not exist when no entries")
+	}
+}
+
+func TestRun_Reproducible(t *testing.T) {
+	t.Parallel()
+	debData := testutil.BuildMinimalDeb([]testutil.Field{
+		{Key: "Package", Value: "com.test.pkg"},
+		{Key: "Version", Value: "1.0"},
+		{Key: "Architecture", Value: "iphoneos-arm64"},
+		{Key: "Maintainer", Value: "Test <t@t.com>"},
+		{Key: "Description", Value: "Test package"},
+	})
+
+	_, opts := newTestRepo(t, "stable", map[string][]byte{"test.deb": debData})
+	opts.BuildTime = time.Unix(1700000000, 0).UTC()
+
+	if err := Run(context.Background(), opts); err != nil {
+		t.Fatalf("first Run failed: %v", err)
+	}
+	pkgFirst, _ := os.ReadFile(filepath.Join(opts.OutputDir, "stable", "Packages"))
+	htmlFirst, _ := os.ReadFile(filepath.Join(opts.OutputDir, "depictions", "com.test.pkg", "1.0", "depiction.html"))
+	jsonFirst, _ := os.ReadFile(filepath.Join(opts.OutputDir, "depictions", "com.test.pkg", "1.0", "sileo.json"))
+
+	if err := Run(context.Background(), opts); err != nil {
+		t.Fatalf("second Run failed: %v", err)
+	}
+	pkgSecond, _ := os.ReadFile(filepath.Join(opts.OutputDir, "stable", "Packages"))
+	htmlSecond, _ := os.ReadFile(filepath.Join(opts.OutputDir, "depictions", "com.test.pkg", "1.0", "depiction.html"))
+	jsonSecond, _ := os.ReadFile(filepath.Join(opts.OutputDir, "depictions", "com.test.pkg", "1.0", "sileo.json"))
+
+	if string(pkgFirst) != string(pkgSecond) {
+		t.Error("Packages output drifted between runs")
+	}
+	if string(htmlFirst) != string(htmlSecond) {
+		t.Error("depiction.html drifted between runs")
+	}
+	if string(jsonFirst) != string(jsonSecond) {
+		t.Error("sileo.json drifted between runs")
 	}
 }
 

@@ -13,6 +13,7 @@ import (
 
 	"github.com/PlayDay-iOS/repo/internal/config"
 	"github.com/PlayDay-iOS/repo/internal/deb"
+	"github.com/PlayDay-iOS/repo/internal/depiction"
 	"github.com/PlayDay-iOS/repo/internal/fileutil"
 	"github.com/PlayDay-iOS/repo/internal/page"
 	"github.com/PlayDay-iOS/repo/internal/repo"
@@ -20,13 +21,15 @@ import (
 
 // Options configures the build.
 type Options struct {
-	RootDir       string
-	OutputDir     string
-	ConfigPath    string
-	TemplatePath  string
-	BuildTime     time.Time
-	GPGKey        string // armored private key; empty disables signing
-	GPGPassphrase string
+	RootDir                string
+	OutputDir              string
+	ConfigPath             string
+	TemplatePath           string
+	DepictionTemplatePath  string
+	DepictionStylePath     string
+	BuildTime              time.Time
+	GPGKey                 string // armored private key; empty disables signing
+	GPGPassphrase          string
 }
 
 // BuildTimeFromEnv resolves the build timestamp from SOURCE_DATE_EPOCH for
@@ -85,10 +88,13 @@ func Run(ctx context.Context, opts Options) error {
 	}
 
 	allowedArch := cfg.AllowedArchitectures()
+	var allEntries []*deb.PackageEntry
 	for _, suite := range cfg.Suites {
-		if err := buildSuite(ctx, opts, cfg, suite, allowedArch); err != nil {
+		suiteEntries, err := buildSuite(ctx, opts, cfg, suite, allowedArch)
+		if err != nil {
 			return err
 		}
+		allEntries = append(allEntries, suiteEntries...)
 	}
 
 	if err := copyRootIcon(opts.RootDir, opts.OutputDir); err != nil {
@@ -104,6 +110,18 @@ func Run(ctx context.Context, opts Options) error {
 		hasPublicKey = true
 	}
 
+	if err := depiction.Render(ctx, opts.OutputDir, allEntries, cfg, depiction.Options{
+		TemplatePath: opts.DepictionTemplatePath,
+		StylePath:    opts.DepictionStylePath,
+	}); err != nil {
+		return fmt.Errorf("rendering depictions: %w", err)
+	}
+	if len(allEntries) > 0 {
+		if err := depiction.WriteStylesheet(opts.OutputDir, opts.DepictionStylePath); err != nil {
+			return fmt.Errorf("writing depiction stylesheet: %w", err)
+		}
+	}
+
 	if err := page.RenderLandingPage(ctx, opts.OutputDir, cfg, opts.TemplatePath, opts.BuildTime, signed, hasPublicKey); err != nil {
 		return fmt.Errorf("rendering landing page: %w", err)
 	}
@@ -112,33 +130,35 @@ func Run(ctx context.Context, opts Options) error {
 	return nil
 }
 
-func buildSuite(ctx context.Context, opts Options, cfg *config.RepoConfig, suite string, allowedArch map[string]bool) error {
+func buildSuite(ctx context.Context, opts Options, cfg *config.RepoConfig, suite string, allowedArch map[string]bool) ([]*deb.PackageEntry, error) {
 	if err := ctx.Err(); err != nil {
-		return err
+		return nil, err
 	}
 
 	suiteDir := filepath.Join(opts.OutputDir, suite)
 	if err := os.MkdirAll(suiteDir, 0755); err != nil {
-		return fmt.Errorf("creating suite dir %s: %w", suite, err)
+		return nil, fmt.Errorf("creating suite dir %s: %w", suite, err)
 	}
 
 	poolSuiteDir := filepath.Join(opts.RootDir, "pool", suite, cfg.Component)
 	poolInfo, statErr := os.Stat(poolSuiteDir)
 	if statErr != nil && !os.IsNotExist(statErr) {
-		return fmt.Errorf("checking pool dir %s: %w", poolSuiteDir, statErr)
+		return nil, fmt.Errorf("checking pool dir %s: %w", poolSuiteDir, statErr)
 	}
 
 	var entries []*deb.PackageEntry
 	if statErr == nil && poolInfo.IsDir() {
 		scanned, err := deb.ScanPool(ctx, opts.RootDir, poolSuiteDir, allowedArch)
 		if err != nil {
-			return fmt.Errorf("scanning pool for %s: %w", suite, err)
+			return nil, fmt.Errorf("scanning pool for %s: %w", suite, err)
 		}
 		entries = scanned
 	}
 
+	depiction.EnrichEntries(entries, cfg)
+
 	if err := repo.WritePackagesAll(ctx, entries, suiteDir); err != nil {
-		return fmt.Errorf("writing packages for %s: %w", suite, err)
+		return nil, fmt.Errorf("writing packages for %s: %w", suite, err)
 	}
 
 	// Mirror only the validated .deb files into the suite dir so clients can
@@ -148,21 +168,21 @@ func buildSuite(ctx context.Context, opts Options, cfg *config.RepoConfig, suite
 	for _, e := range entries {
 		relToRoot, err := filepath.Rel(opts.RootDir, e.Path)
 		if err != nil {
-			return fmt.Errorf("computing mirror path for %s: %w", e.Path, err)
+			return nil, fmt.Errorf("computing mirror path for %s: %w", e.Path, err)
 		}
 		target := filepath.Join(suiteDir, relToRoot)
 		if err := os.MkdirAll(filepath.Dir(target), 0755); err != nil {
-			return fmt.Errorf("creating mirror dir for %s: %w", e.Path, err)
+			return nil, fmt.Errorf("creating mirror dir for %s: %w", e.Path, err)
 		}
 		if err := fileutil.CopyFile(e.Path, target); err != nil {
-			return fmt.Errorf("mirroring %s: %w", e.Path, err)
+			return nil, fmt.Errorf("mirroring %s: %w", e.Path, err)
 		}
 	}
 
 	iconSrc := filepath.Join(opts.RootDir, "resources", "CydiaIcon.png")
 	if _, err := os.Stat(iconSrc); err == nil {
 		if err := fileutil.CopyFile(iconSrc, filepath.Join(suiteDir, "CydiaIcon.png")); err != nil {
-			return fmt.Errorf("copying suite icon for %s: %w", suite, err)
+			return nil, fmt.Errorf("copying suite icon for %s: %w", suite, err)
 		}
 	}
 
@@ -184,18 +204,18 @@ func buildSuite(ctx context.Context, opts Options, cfg *config.RepoConfig, suite
 		Date:          opts.BuildTime,
 	}
 	if err := repo.WriteRelease(ctx, releaseParams, suiteDir); err != nil {
-		return fmt.Errorf("writing release for %s: %w", suite, err)
+		return nil, fmt.Errorf("writing release for %s: %w", suite, err)
 	}
 
 	if err := repo.SignRelease(ctx, suiteDir, opts.GPGKey, opts.GPGPassphrase); err != nil {
-		return fmt.Errorf("signing %s: %w", suite, err)
+		return nil, fmt.Errorf("signing %s: %w", suite, err)
 	}
 
 	if err := page.WriteSuiteIndexHTML(suiteDir, suite, cfg.URL); err != nil {
-		return fmt.Errorf("writing suite index for %s: %w", suite, err)
+		return nil, fmt.Errorf("writing suite index for %s: %w", suite, err)
 	}
 
-	return nil
+	return entries, nil
 }
 
 func copyRootIcon(rootDir, outputDir string) error {
