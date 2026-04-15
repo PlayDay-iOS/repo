@@ -72,3 +72,56 @@ func TestNewControlData_DropsExtraValues(t *testing.T) {
 		t.Errorf("Get(Package) = %q", c.Get("Package"))
 	}
 }
+
+func TestControlData_Set_AddsNewKeyToOrder(t *testing.T) {
+	t.Parallel()
+	c := NewControlData([]string{"Package"}, map[string]string{"Package": "foo"})
+	c.Set("Description", "Example package")
+
+	if got := c.Get("Description"); got != "Example package" {
+		t.Errorf("Get(Description) = %q", got)
+	}
+	if got := c.Order(); !slices.Equal(got, []string{"Package", "Description"}) {
+		t.Errorf("Order() = %v, want [Package Description]", got)
+	}
+}
+
+func TestControlData_Set_ReplacesExistingValueInPlace(t *testing.T) {
+	t.Parallel()
+	c := NewControlData(
+		[]string{"Package", "Version"},
+		map[string]string{"Package": "foo", "Version": "1.0"},
+	)
+	c.Set("Package", "bar")
+
+	if got := c.Get("Package"); got != "bar" {
+		t.Errorf("Get(Package) = %q, want bar", got)
+	}
+	if got := c.Order(); !slices.Equal(got, []string{"Package", "Version"}) {
+		t.Errorf("Order() = %v, want [Package Version]", got)
+	}
+}
+
+func TestControlData_Set_CaseInsensitiveMatchPreservesOriginalCase(t *testing.T) {
+	t.Parallel()
+	c := NewControlData([]string{"Package"}, map[string]string{"Package": "foo"})
+	c.Set("package", "bar") // lowercase input on existing key
+
+	if got := c.Get("Package"); got != "bar" {
+		t.Errorf("Get(Package) = %q, want bar", got)
+	}
+	if got := c.Order(); !slices.Equal(got, []string{"Package"}) {
+		t.Errorf("Order() = %v, want [Package] (case preserved)", got)
+	}
+}
+
+func TestControlData_Set_IsIdempotent(t *testing.T) {
+	t.Parallel()
+	c := NewControlData([]string{"Package"}, map[string]string{"Package": "foo"})
+	c.Set("Depiction", "https://example.com/d.html")
+	c.Set("Depiction", "https://example.com/d.html")
+
+	if got := c.Order(); !slices.Equal(got, []string{"Package", "Depiction"}) {
+		t.Errorf("Order() = %v, want [Package Depiction] (no duplicate)", got)
+	}
+}

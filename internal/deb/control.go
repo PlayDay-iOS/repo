@@ -43,6 +43,17 @@ func (c *ControlData) Order() []string {
 	return c.order
 }
 
+// Set inserts or replaces a field value. Matching is case-insensitive.
+// A new key is appended to Order using the provided canonical case; an
+// existing key keeps its original position and case.
+func (c *ControlData) Set(key, value string) {
+	lowered := strings.ToLower(key)
+	if _, exists := c.values[lowered]; !exists {
+		c.order = append(c.order, key)
+	}
+	c.values[lowered] = value
+}
+
 // ExtractControlFromReader reads a .deb (ar archive) from an io.ReaderAt and parses the control file.
 func ExtractControlFromReader(r io.ReaderAt, name string) (*ControlData, error) {
 	pkg, err := deblib.Load(r, name)
