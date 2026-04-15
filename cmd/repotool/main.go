@@ -53,12 +53,14 @@ var renderCmd = &cobra.Command{
 }
 
 var (
-	flagOutput        string
-	flagTemplate      string
-	flagAllowlist     string
-	flagSuite         string
-	flagPrereleases   bool
-	flagImportTimeout time.Duration
+	flagOutput               string
+	flagTemplate             string
+	flagAllowlist            string
+	flagSuite                string
+	flagPrereleases          bool
+	flagImportTimeout        time.Duration
+	flagDepictionTemplate    string
+	flagDepictionStyle       string
 )
 
 func init() {
@@ -68,6 +70,9 @@ func init() {
 		c.Flags().StringVar(&flagOutput, "output", "", "Output directory (default: <cwd>/_site)")
 		c.Flags().StringVar(&flagTemplate, "template", "", "Path to HTML template override (default: built-in)")
 	}
+
+	buildCmd.Flags().StringVar(&flagDepictionTemplate, "depiction-template", "", "Path to depiction HTML template override (default: built-in)")
+	buildCmd.Flags().StringVar(&flagDepictionStyle, "depiction-style", "", "Path to depiction CSS override (default: built-in)")
 
 	importCmd.Flags().StringVar(&flagAllowlist, "allowlist", "", "Path to allowlist file (default: <cwd>/org-import-allowlist.txt)")
 	importCmd.Flags().StringVar(&flagSuite, "suite", "", "Target suite (default: first entry of metadata.suites, or TARGET_SUITE env)")
@@ -115,13 +120,15 @@ func runBuild(cmd *cobra.Command, args []string) error {
 	}
 
 	return build.Run(cmd.Context(), build.Options{
-		RootDir:       root,
-		OutputDir:     output,
-		ConfigPath:    cfgPath,
-		TemplatePath:  flagTemplate,
-		BuildTime:     buildTime,
-		GPGKey:        os.Getenv("GPG_PRIVATE_KEY"),
-		GPGPassphrase: os.Getenv("GPG_PASSPHRASE"),
+		RootDir:               root,
+		OutputDir:             output,
+		ConfigPath:            cfgPath,
+		TemplatePath:          flagTemplate,
+		DepictionTemplatePath: flagDepictionTemplate,
+		DepictionStylePath:    flagDepictionStyle,
+		BuildTime:             buildTime,
+		GPGKey:                os.Getenv("GPG_PRIVATE_KEY"),
+		GPGPassphrase:         os.Getenv("GPG_PASSPHRASE"),
 	})
 }
 
