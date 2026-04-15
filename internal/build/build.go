@@ -57,6 +57,20 @@ func Run(ctx context.Context, opts Options) error {
 	opts.GPGKey = strings.TrimSpace(opts.GPGKey)
 	signed := opts.GPGKey != ""
 
+	for _, p := range []struct {
+		flag, path string
+	}{
+		{"--depiction-template", opts.DepictionTemplatePath},
+		{"--depiction-style", opts.DepictionStylePath},
+	} {
+		if p.path == "" {
+			continue
+		}
+		if _, err := os.Stat(p.path); err != nil {
+			return fmt.Errorf("%s: %w", p.flag, err)
+		}
+	}
+
 	absOut, err := filepath.Abs(opts.OutputDir)
 	if err != nil {
 		return fmt.Errorf("resolving output dir: %w", err)

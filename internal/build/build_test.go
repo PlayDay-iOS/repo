@@ -338,3 +338,35 @@ func TestValidateOutputDir_AllowsNormalPaths(t *testing.T) {
 		t.Errorf("should allow normal path: %v", err)
 	}
 }
+
+func TestRun_MissingDepictionTemplatePath_HardFailsAtStart(t *testing.T) {
+	t.Parallel()
+	_, opts := newTestRepo(t, "stable", nil)
+	opts.DepictionTemplatePath = filepath.Join(t.TempDir(), "does-not-exist.tmpl")
+
+	err := Run(context.Background(), opts)
+	if err == nil {
+		t.Fatal("expected error for missing depiction template path")
+	}
+	if !strings.Contains(err.Error(), "--depiction-template") {
+		t.Errorf("error should name the flag, got: %v", err)
+	}
+	// Build should have stopped before writing the output marker.
+	if _, statErr := os.Stat(filepath.Join(opts.OutputDir, ".repotool-output")); !os.IsNotExist(statErr) {
+		t.Error("output dir should not have been touched before validation failure")
+	}
+}
+
+func TestRun_MissingDepictionStylePath_HardFailsAtStart(t *testing.T) {
+	t.Parallel()
+	_, opts := newTestRepo(t, "stable", nil)
+	opts.DepictionStylePath = filepath.Join(t.TempDir(), "does-not-exist.css")
+
+	err := Run(context.Background(), opts)
+	if err == nil {
+		t.Fatal("expected error for missing depiction style path")
+	}
+	if !strings.Contains(err.Error(), "--depiction-style") {
+		t.Errorf("error should name the flag, got: %v", err)
+	}
+}
