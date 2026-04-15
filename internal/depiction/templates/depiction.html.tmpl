@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{.Name}}</title>
+    <link rel="stylesheet" href="{{.StyleURL}}" />
+  </head>
+  <body>
+    <header>
+      <h1>{{.Name}}</h1>
+      {{with .Section}}<p class="section">{{.}}</p>{{end}}
+    </header>
+    {{with .Compat}}<section class="compat">{{.}}</section>{{end}}
+    <section class="desc">{{.DescriptionHTML}}</section>
+    <dl class="meta">
+      <dt>Package</dt><dd>{{.Package}}</dd>
+      <dt>Version</dt><dd>{{.Version}}</dd>
+      <dt>Architecture</dt><dd>{{.Architecture}}</dd>
+      <dt>Maintainer</dt><dd>{{.Maintainer}}</dd>
+      {{with .InstalledSize}}<dt>Installed-Size</dt><dd>{{.}}</dd>{{end}}
+      {{with .Depends}}<dt>Depends</dt><dd>{{.}}</dd>{{end}}
+    </dl>
+  </body>
+</html>
