@@ -2,6 +2,7 @@ package depiction
 
 import (
 	"fmt"
+	"log/slog"
 	"regexp"
 	"strconv"
 	"strings"
@@ -67,6 +68,7 @@ func ParseCompat(depends, override string) (string, bool) {
 		v, err := parseIOSVersion(verStr)
 		if err != nil {
 			// regex limits to digits and dots, but keep the guard for safety.
+			slog.Warn("depiction: malformed firmware version literal", "value", verStr, "err", err)
 			continue
 		}
 		switch op {
@@ -100,9 +102,11 @@ func ParseCompat(depends, override string) (string, bool) {
 	// Contradiction: low bound above (or equal-to-exclusive) high bound.
 	if lo != nil && hi != nil {
 		if hi.less(*lo) {
+			slog.Warn("depiction: contradictory firmware bounds", "depends", depends)
 			return "", false
 		}
 		if lo.equal(*hi) && !(loIncl && hiIncl) {
+			slog.Warn("depiction: contradictory firmware bounds", "depends", depends)
 			return "", false
 		}
 	}

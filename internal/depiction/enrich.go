@@ -1,6 +1,8 @@
 package depiction
 
 import (
+	"log/slog"
+
 	"github.com/PlayDay-iOS/repo/internal/config"
 	"github.com/PlayDay-iOS/repo/internal/deb"
 )
@@ -22,6 +24,10 @@ func EnrichEntries(entries []*deb.PackageEntry, cfg *config.RepoConfig) {
 
 		origDepiction := e.Control.Get("Depiction")
 		isOurURL := origDepiction == PackageDepictionURL(cfg.URL, pkg, ver)
+
+		if existing := e.Control.Get("SileoDepiction"); existing != "" && existing != PackageSileoURL(cfg.URL, pkg, ver) {
+			slog.Debug("depiction: overwriting existing SileoDepiction", "package", pkg, "version", ver, "existing", existing)
+		}
 
 		e.Control.Set("Depiction", PackageDepictionURL(cfg.URL, pkg, ver))
 		e.Control.Set("SileoDepiction", PackageSileoURL(cfg.URL, pkg, ver))
