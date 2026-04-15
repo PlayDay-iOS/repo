@@ -51,8 +51,8 @@ Expected files after build (rooted at the output directory):
 - `repo-public.key` (root, only if a `repo-public.key` file exists at the repo root; the landing page links to it only when this file is present)
 - `depictions/` (when at least one suite has entries):
   - `style.css` — shared stylesheet for HTML depictions
-  - `<Package>/<VersionEscaped>/depiction.html` — Cydia HTML depiction
-  - `<Package>/<VersionEscaped>/sileo.json` — Sileo native depiction JSON
+  - `<DebBasename>/depiction.html` — Cydia HTML depiction
+  - `<DebBasename>/sileo.json` — Sileo native depiction JSON
 
 Source lines:
 
@@ -61,7 +61,7 @@ Source lines:
 
 ## Depictions
 
-`repotool build` auto-generates Cydia HTML and Sileo native JSON depictions for every version in the pool. Each entry's `Packages` stanza gets `Depiction:` and `SileoDepiction:` URLs injected that point at the generated files.
+`repotool build` auto-generates Cydia HTML and Sileo native JSON depictions for every `.deb` in the pool, keyed by the `.deb` filename (without the `.deb` extension). Each entry's `Packages` stanza gets `Depiction:` and `SileoDepiction:` URLs injected that point at the generated files.
 
 - Content is derived from the `.deb` control file only — no per-package source files.
 - A compatibility banner ("iOS X.Y – Z.W") is rendered when the control sets `Depends: firmware (>= X), firmware (<< Y)` clauses, or when a free-text `X-Supported-iOS:` field is present.

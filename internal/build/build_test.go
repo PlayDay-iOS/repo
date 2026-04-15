@@ -104,10 +104,10 @@ func TestRun_WithDeb(t *testing.T) {
 	if !strings.Contains(content, "Filename: pool/stable/main/test.deb") {
 		t.Error("Packages should reference correct filename")
 	}
-	if !strings.Contains(content, "Depiction: https://example.com/repo/depictions/com.test.pkg/1.0/depiction.html") {
+	if !strings.Contains(content, "Depiction: https://example.com/repo/depictions/test/depiction.html") {
 		t.Errorf("Packages should contain injected Depiction URL:\n%s", content)
 	}
-	if !strings.Contains(content, "SileoDepiction: https://example.com/repo/depictions/com.test.pkg/1.0/sileo.json") {
+	if !strings.Contains(content, "SileoDepiction: https://example.com/repo/depictions/test/sileo.json") {
 		t.Errorf("Packages should contain injected SileoDepiction URL:\n%s", content)
 	}
 
@@ -119,11 +119,11 @@ func TestRun_WithDeb(t *testing.T) {
 		t.Error("top-level pool/ should not exist in output")
 	}
 
-	htmlPath := filepath.Join(opts.OutputDir, "depictions", "com.test.pkg", "1.0", "depiction.html")
+	htmlPath := filepath.Join(opts.OutputDir, "depictions", "test", "depiction.html")
 	if _, err := os.Stat(htmlPath); err != nil {
 		t.Errorf("missing depiction.html: %v", err)
 	}
-	jsonPath := filepath.Join(opts.OutputDir, "depictions", "com.test.pkg", "1.0", "sileo.json")
+	jsonPath := filepath.Join(opts.OutputDir, "depictions", "test", "sileo.json")
 	if _, err := os.Stat(jsonPath); err != nil {
 		t.Errorf("missing sileo.json: %v", err)
 	}
@@ -162,15 +162,15 @@ func TestRun_Reproducible(t *testing.T) {
 		t.Fatalf("first Run failed: %v", err)
 	}
 	pkgFirst, _ := os.ReadFile(filepath.Join(opts.OutputDir, "stable", "Packages"))
-	htmlFirst, _ := os.ReadFile(filepath.Join(opts.OutputDir, "depictions", "com.test.pkg", "1.0", "depiction.html"))
-	jsonFirst, _ := os.ReadFile(filepath.Join(opts.OutputDir, "depictions", "com.test.pkg", "1.0", "sileo.json"))
+	htmlFirst, _ := os.ReadFile(filepath.Join(opts.OutputDir, "depictions", "test", "depiction.html"))
+	jsonFirst, _ := os.ReadFile(filepath.Join(opts.OutputDir, "depictions", "test", "sileo.json"))
 
 	if err := Run(context.Background(), opts); err != nil {
 		t.Fatalf("second Run failed: %v", err)
 	}
 	pkgSecond, _ := os.ReadFile(filepath.Join(opts.OutputDir, "stable", "Packages"))
-	htmlSecond, _ := os.ReadFile(filepath.Join(opts.OutputDir, "depictions", "com.test.pkg", "1.0", "depiction.html"))
-	jsonSecond, _ := os.ReadFile(filepath.Join(opts.OutputDir, "depictions", "com.test.pkg", "1.0", "sileo.json"))
+	htmlSecond, _ := os.ReadFile(filepath.Join(opts.OutputDir, "depictions", "test", "depiction.html"))
+	jsonSecond, _ := os.ReadFile(filepath.Join(opts.OutputDir, "depictions", "test", "sileo.json"))
 
 	if string(pkgFirst) != string(pkgSecond) {
 		t.Error("Packages output drifted between runs")

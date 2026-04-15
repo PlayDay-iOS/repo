@@ -8,35 +8,27 @@ import (
 func TestPackageDepictionURL(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
-		name            string
-		repo, pkg, ver  string
-		want            string
+		name     string
+		repo     string
+		baseName string
+		want     string
 	}{
 		{
-			name: "plain",
-			repo: "https://example.com/repo/",
-			pkg:  "com.foo.bar",
-			ver:  "1.0",
-			want: "https://example.com/repo/depictions/com.foo.bar/1.0/depiction.html",
+			name:     "plain basename",
+			repo:     "https://example.com/repo/",
+			baseName: "test-1.0",
+			want:     "https://example.com/repo/depictions/test-1.0/depiction.html",
 		},
 		{
-			name: "epoch version is percent-escaped",
-			repo: "https://example.com/repo/",
-			pkg:  "com.foo.bar",
-			ver:  "1:1.8r-260",
-			want: "https://example.com/repo/depictions/com.foo.bar/1%3A1.8r-260/depiction.html",
-		},
-		{
-			name: "tilde passes through (unreserved per RFC 3986)",
-			repo: "https://example.com/repo/",
-			pkg:  "com.foo.bar",
-			ver:  "1.0~rc1",
-			want: "https://example.com/repo/depictions/com.foo.bar/1.0~rc1/depiction.html",
+			name:     "basename with dots and dashes",
+			repo:     "https://example.com/repo/",
+			baseName: "us.hackulo.appsync50plus-2.1-legacy",
+			want:     "https://example.com/repo/depictions/us.hackulo.appsync50plus-2.1-legacy/depiction.html",
 		},
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			got := PackageDepictionURL(tc.repo, tc.pkg, tc.ver)
+			got := PackageDepictionURL(tc.repo, tc.baseName)
 			if got != tc.want {
 				t.Errorf("PackageDepictionURL() = %q, want %q", got, tc.want)
 			}
@@ -49,8 +41,8 @@ func TestPackageDepictionURL(t *testing.T) {
 
 func TestPackageSileoURL(t *testing.T) {
 	t.Parallel()
-	got := PackageSileoURL("https://example.com/repo/", "com.foo.bar", "1:1.8r-260")
-	want := "https://example.com/repo/depictions/com.foo.bar/1%3A1.8r-260/sileo.json"
+	got := PackageSileoURL("https://example.com/repo/", "us.hackulo.appsync50plus-2.1-legacy")
+	want := "https://example.com/repo/depictions/us.hackulo.appsync50plus-2.1-legacy/sileo.json"
 	if got != want {
 		t.Errorf("PackageSileoURL() = %q, want %q", got, want)
 	}

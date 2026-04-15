@@ -42,10 +42,10 @@ type templateData struct {
 	DescriptionHTML template.HTML
 }
 
-// Render writes per-version depiction.html and sileo.json files under
-// outputDir/depictions/<Package>/<VersionEscaped>/. Entries with the same
-// (Package, Version) are deduplicated; if two such entries produce
-// different serialized output, the build fails.
+// Render writes per-deb depiction.html and sileo.json files under
+// outputDir/depictions/<basename>/. Entries with the same basename are
+// deduplicated; if two such entries produce different serialized output,
+// the build fails.
 //
 // When entries is empty, Render is a no-op and creates no directories.
 func Render(ctx context.Context, outputDir string, entries []*deb.PackageEntry, cfg *config.RepoConfig, opts Options) error {
@@ -82,38 +82,36 @@ func Render(ctx context.Context, outputDir string, entries []*deb.PackageEntry, 
 			return err
 		}
 
-		pkg := e.Control.Get("Package")
-		ver := e.Control.Get("Version")
-		key := pkg + "@" + ver
+		bn := entryBaseName(e)
 
 		data := buildTemplateData(e, styleURL)
 		var htmlBuf bytes.Buffer
 		if err := tmpl.Execute(&htmlBuf, data); err != nil {
-			return fmt.Errorf("rendering depiction for %s: %w", key, err)
+			return fmt.Errorf("rendering depiction for %s: %w", bn, err)
 		}
 		jsonBytes, err := buildSileoBytes(e, data.Compat)
 		if err != nil {
-			return fmt.Errorf("building sileo JSON for %s: %w", key, err)
+			return fmt.Errorf("building sileo JSON for %s: %w", bn, err)
 		}
 		cur := rendered{html: htmlBuf.Bytes(), json: jsonBytes}
 
-		if prev, exists := seen[key]; exists {
+		if prev, exists := seen[bn]; exists {
 			if !bytes.Equal(prev.html, cur.html) || !bytes.Equal(prev.json, cur.json) {
-				return fmt.Errorf("depiction content mismatch for %s", key)
+				return fmt.Errorf("depiction content mismatch for %s", bn)
 			}
 			continue
 		}
-		seen[key] = cur
+		seen[bn] = cur
 
-		dir := filepath.Join(outputDir, "depictions", pkg, escapeVersion(ver))
+		dir := filepath.Join(outputDir, "depictions", bn)
 		if err := os.MkdirAll(dir, 0755); err != nil {
-			return fmt.Errorf("creating depiction dir for %s: %w", key, err)
+			return fmt.Errorf("creating depiction dir for %s: %w", bn, err)
 		}
 		if err := fileutil.WriteAtomicBytes(filepath.Join(dir, "depiction.html"), 0644, cur.html); err != nil {
-			return fmt.Errorf("writing depiction.html for %s: %w", key, err)
+			return fmt.Errorf("writing depiction.html for %s: %w", bn, err)
 		}
 		if err := fileutil.WriteAtomicBytes(filepath.Join(dir, "sileo.json"), 0644, cur.json); err != nil {
-			return fmt.Errorf("writing sileo.json for %s: %w", key, err)
+			return fmt.Errorf("writing sileo.json for %s: %w", bn, err)
 		}
 	}
 	return nil

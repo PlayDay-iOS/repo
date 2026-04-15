@@ -11,7 +11,7 @@ import (
 	"github.com/PlayDay-iOS/repo/internal/deb"
 )
 
-func newEntry(fields map[string]string) *deb.PackageEntry {
+func newEntry(filename string, fields map[string]string) *deb.PackageEntry {
 	keys := []string{"Package", "Version", "Architecture", "Maintainer", "Description"}
 	for k := range fields {
 		found := false
@@ -25,7 +25,10 @@ func newEntry(fields map[string]string) *deb.PackageEntry {
 			keys = append(keys, k)
 		}
 	}
-	return &deb.PackageEntry{Control: deb.NewControlData(keys, fields)}
+	return &deb.PackageEntry{
+		Filename: filename,
+		Control:  deb.NewControlData(keys, fields),
+	}
 }
 
 func TestRender_WritesExpectedTree(t *testing.T) {
@@ -33,7 +36,7 @@ func TestRender_WritesExpectedTree(t *testing.T) {
 	outDir := t.TempDir()
 	cfg := &config.RepoConfig{URL: "https://example.com/repo/"}
 	entries := []*deb.PackageEntry{
-		newEntry(map[string]string{
+		newEntry("pool/stable/main/com.foo.bar-1.0.deb", map[string]string{
 			"Package":      "com.foo.bar",
 			"Version":      "1.0",
 			"Architecture": "iphoneos-arm64",
@@ -47,8 +50,8 @@ func TestRender_WritesExpectedTree(t *testing.T) {
 		t.Fatalf("Render failed: %v", err)
 	}
 
-	htmlPath := filepath.Join(outDir, "depictions", "com.foo.bar", "1.0", "depiction.html")
-	jsonPath := filepath.Join(outDir, "depictions", "com.foo.bar", "1.0", "sileo.json")
+	htmlPath := filepath.Join(outDir, "depictions", "com.foo.bar-1.0", "depiction.html")
+	jsonPath := filepath.Join(outDir, "depictions", "com.foo.bar-1.0", "sileo.json")
 	if _, err := os.Stat(htmlPath); err != nil {
 		t.Errorf("missing depiction.html: %v", err)
 	}
@@ -69,46 +72,26 @@ func TestRender_WritesExpectedTree(t *testing.T) {
 	}
 }
 
-func TestRender_EpochVersionEscapedInPath(t *testing.T) {
-	t.Parallel()
-	outDir := t.TempDir()
-	cfg := &config.RepoConfig{URL: "https://example.com/repo/"}
-	entries := []*deb.PackageEntry{
-		newEntry(map[string]string{
-			"Package":      "com.foo.bar",
-			"Version":      "1:1.8r-260",
-			"Architecture": "iphoneos-arm",
-			"Maintainer":   "x",
-			"Description":  "x",
-		}),
-	}
-
-	if err := Render(context.Background(), outDir, entries, cfg, Options{}); err != nil {
-		t.Fatalf("Render failed: %v", err)
-	}
-
-	escapedDir := filepath.Join(outDir, "depictions", "com.foo.bar", "1%3A1.8r-260")
-	if _, err := os.Stat(filepath.Join(escapedDir, "depiction.html")); err != nil {
-		t.Errorf("expected percent-escaped version dir, stat err: %v", err)
-	}
-}
-
 func TestRender_DeduplicatesIdenticalPairAcrossSuites(t *testing.T) {
 	t.Parallel()
 	outDir := t.TempDir()
 	cfg := &config.RepoConfig{URL: "https://example.com/repo/"}
-	// Two entries with identical control — simulates same .deb in two suites.
+	// Two entries with identical control and same basename — simulates same
+	// .deb mirrored into two suites.
 	fields := map[string]string{
 		"Package": "com.foo.bar", "Version": "1.0",
 		"Architecture": "iphoneos-arm64", "Maintainer": "x", "Description": "x",
 	}
-	entries := []*deb.PackageEntry{newEntry(fields), newEntry(fields)}
+	entries := []*deb.PackageEntry{
+		newEntry("pool/stable/main/com.foo.bar-1.0.deb", fields),
+		newEntry("pool/stable/main/com.foo.bar-1.0.deb", fields),
+	}
 
 	if err := Render(context.Background(), outDir, entries, cfg, Options{}); err != nil {
 		t.Fatalf("Render failed: %v", err)
 	}
 	// Only one file written (idempotent).
-	if _, err := os.Stat(filepath.Join(outDir, "depictions", "com.foo.bar", "1.0", "depiction.html")); err != nil {
+	if _, err := os.Stat(filepath.Join(outDir, "depictions", "com.foo.bar-1.0", "depiction.html")); err != nil {
 		t.Errorf("expected single depiction, got: %v", err)
 	}
 }
@@ -117,11 +100,11 @@ func TestRender_FailsOnDivergentContentForSamePair(t *testing.T) {
 	t.Parallel()
 	outDir := t.TempDir()
 	cfg := &config.RepoConfig{URL: "https://example.com/repo/"}
-	a := newEntry(map[string]string{
+	a := newEntry("pool/stable/main/com.foo.bar-1.0.deb", map[string]string{
 		"Package": "com.foo.bar", "Version": "1.0",
 		"Architecture": "iphoneos-arm64", "Maintainer": "a", "Description": "one",
 	})
-	b := newEntry(map[string]string{
+	b := newEntry("pool/stable/main/com.foo.bar-1.0.deb", map[string]string{
 		"Package": "com.foo.bar", "Version": "1.0",
 		"Architecture": "iphoneos-arm64", "Maintainer": "b", "Description": "two",
 	})
@@ -155,7 +138,7 @@ func TestRender_TemplateOverrideUsed(t *testing.T) {
 	}
 	cfg := &config.RepoConfig{URL: "https://example.com/repo/"}
 	entries := []*deb.PackageEntry{
-		newEntry(map[string]string{
+		newEntry("pool/stable/main/foo-1.0.deb", map[string]string{
 			"Package": "foo", "Version": "1.0",
 			"Architecture": "iphoneos-arm64", "Maintainer": "x", "Description": "x",
 		}),
@@ -164,7 +147,7 @@ func TestRender_TemplateOverrideUsed(t *testing.T) {
 	if err := Render(context.Background(), outDir, entries, cfg, Options{TemplatePath: overridePath}); err != nil {
 		t.Fatalf("Render failed: %v", err)
 	}
-	b, _ := os.ReadFile(filepath.Join(outDir, "depictions", "foo", "1.0", "depiction.html"))
+	b, _ := os.ReadFile(filepath.Join(outDir, "depictions", "foo-1.0", "depiction.html"))
 	if string(b) != "OVERRIDE: foo" {
 		t.Errorf("expected override content, got %q", string(b))
 	}

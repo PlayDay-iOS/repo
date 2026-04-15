@@ -9,30 +9,33 @@ import (
 	"github.com/PlayDay-iOS/repo/internal/deb"
 )
 
-func makeEntry(fields map[string]string) *deb.PackageEntry {
+func makeEntry(filename string, fields map[string]string) *deb.PackageEntry {
 	keys := make([]string, 0, len(fields))
 	// Deterministic order: sort so tests are stable.
 	for k := range fields {
 		keys = append(keys, k)
 	}
 	slices.Sort(keys)
-	return &deb.PackageEntry{Control: deb.NewControlData(keys, fields)}
+	return &deb.PackageEntry{
+		Filename: filename,
+		Control:  deb.NewControlData(keys, fields),
+	}
 }
 
 func TestEnrichEntries_InjectsDepictionAndSileoFields(t *testing.T) {
 	t.Parallel()
 	cfg := &config.RepoConfig{URL: "https://example.com/repo/"}
-	e := makeEntry(map[string]string{
+	e := makeEntry("pool/stable/main/com.foo.bar-1.0.deb", map[string]string{
 		"Package": "com.foo.bar",
 		"Version": "1.0",
 	})
 
 	EnrichEntries([]*deb.PackageEntry{e}, cfg)
 
-	if got := e.Control.Get("Depiction"); got != "https://example.com/repo/depictions/com.foo.bar/1.0/depiction.html" {
+	if got := e.Control.Get("Depiction"); got != "https://example.com/repo/depictions/com.foo.bar-1.0/depiction.html" {
 		t.Errorf("Depiction = %q", got)
 	}
-	if got := e.Control.Get("SileoDepiction"); got != "https://example.com/repo/depictions/com.foo.bar/1.0/sileo.json" {
+	if got := e.Control.Get("SileoDepiction"); got != "https://example.com/repo/depictions/com.foo.bar-1.0/sileo.json" {
 		t.Errorf("SileoDepiction = %q", got)
 	}
 }
@@ -40,7 +43,7 @@ func TestEnrichEntries_InjectsDepictionAndSileoFields(t *testing.T) {
 func TestEnrichEntries_PreservesOriginalDepictionAsHomepageWhenHomepageAbsent(t *testing.T) {
 	t.Parallel()
 	cfg := &config.RepoConfig{URL: "https://example.com/repo/"}
-	e := makeEntry(map[string]string{
+	e := makeEntry("pool/stable/main/com.foo.bar-1.0.deb", map[string]string{
 		"Package":   "com.foo.bar",
 		"Version":   "1.0",
 		"Depiction": "https://original.example/depiction.html",
@@ -56,7 +59,7 @@ func TestEnrichEntries_PreservesOriginalDepictionAsHomepageWhenHomepageAbsent(t 
 func TestEnrichEntries_DoesNotOverwriteExistingHomepage(t *testing.T) {
 	t.Parallel()
 	cfg := &config.RepoConfig{URL: "https://example.com/repo/"}
-	e := makeEntry(map[string]string{
+	e := makeEntry("pool/stable/main/com.foo.bar-1.0.deb", map[string]string{
 		"Package":   "com.foo.bar",
 		"Version":   "1.0",
 		"Depiction": "https://original.example/depiction.html",
@@ -73,7 +76,7 @@ func TestEnrichEntries_DoesNotOverwriteExistingHomepage(t *testing.T) {
 func TestEnrichEntries_SkipsHomepageWhenOriginalDepictionAbsent(t *testing.T) {
 	t.Parallel()
 	cfg := &config.RepoConfig{URL: "https://example.com/repo/"}
-	e := makeEntry(map[string]string{
+	e := makeEntry("pool/stable/main/com.foo.bar-1.0.deb", map[string]string{
 		"Package": "com.foo.bar",
 		"Version": "1.0",
 	})
@@ -88,7 +91,7 @@ func TestEnrichEntries_SkipsHomepageWhenOriginalDepictionAbsent(t *testing.T) {
 func TestEnrichEntries_IsIdempotent(t *testing.T) {
 	t.Parallel()
 	cfg := &config.RepoConfig{URL: "https://example.com/repo/"}
-	e := makeEntry(map[string]string{
+	e := makeEntry("pool/stable/main/com.foo.bar-1.0.deb", map[string]string{
 		"Package":   "com.foo.bar",
 		"Version":   "1.0",
 		"Depiction": "https://original.example/depiction.html",
@@ -113,7 +116,7 @@ func TestEnrichEntries_IsIdempotent(t *testing.T) {
 func TestEnrichEntries_StanzaRetainsPreExistingKeysInOriginalOrder(t *testing.T) {
 	t.Parallel()
 	cfg := &config.RepoConfig{URL: "https://example.com/repo/"}
-	e := makeEntry(map[string]string{
+	e := makeEntry("pool/stable/main/com.foo.bar-1.0.deb", map[string]string{
 		"Package":     "com.foo.bar",
 		"Version":     "1.0",
 		"Maintainer":  "x",
