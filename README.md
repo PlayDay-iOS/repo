@@ -49,16 +49,28 @@ Expected files after build (rooted at the output directory):
   - `index.html`
   - `pool/<suite>/<component>/*.deb` (mirror of validated packages, keeping the filenames from the source pool; absent when the suite has none)
 - `repo-public.key` (root, only if a `repo-public.key` file exists at the repo root; the landing page links to it only when this file is present)
+- `depictions/` (when at least one suite has entries):
+  - `style.css` — shared stylesheet for HTML depictions
+  - `<Package>/<VersionEscaped>/depiction.html` — Cydia HTML depiction
+  - `<Package>/<VersionEscaped>/sileo.json` — Sileo native depiction JSON
 
 Source lines:
 
 - Stable: `deb https://playday-ios.github.io/repo/stable/ ./`
 - Beta: `deb https://playday-ios.github.io/repo/beta/ ./`
 
+## Depictions
+
+`repotool build` auto-generates Cydia HTML and Sileo native JSON depictions for every version in the pool. Each entry's `Packages` stanza gets `Depiction:` and `SileoDepiction:` URLs injected that point at the generated files.
+
+- Content is derived from the `.deb` control file only — no per-package source files.
+- A compatibility banner ("iOS X.Y – Z.W") is rendered when the control sets `Depends: firmware (>= X), firmware (<< Y)` clauses, or when a free-text `X-Supported-iOS:` field is present.
+- If the control already had a `Depiction:` value, it is preserved under `Homepage:` when `Homepage:` was empty.
+
 ## CLI
 
 ```sh
-repotool build  [--output _site] [--config repo.toml] [--template <path>]
+repotool build  [--output _site] [--config repo.toml] [--template <path>] [--depiction-template <path>] [--depiction-style <path>]
 repotool import [--config repo.toml] [--allowlist org-import-allowlist.txt] [--suite <name>] [--include-prereleases] [--timeout 30m]
 repotool render [--output _site] [--config repo.toml] [--template <path>]
 repotool --version
@@ -69,6 +81,8 @@ Flag defaults:
 - `--output` defaults to `<cwd>/_site`
 - `--config` defaults to `<cwd>/repo.toml`
 - `--template` is empty by default — `repotool` renders the embedded template. Pass a file path to override.
+- `--depiction-template` is empty by default — `repotool` uses the embedded depiction HTML template. Pass a file path to override.
+- `--depiction-style` is empty by default — `repotool` uses the embedded depiction stylesheet. Pass a file path to override.
 - `--allowlist` defaults to `<cwd>/org-import-allowlist.txt`
 
 The `--suite` flag on `import` defaults to the first entry of `metadata.suites` in `repo.toml`, or the `TARGET_SUITE` env var when set.
