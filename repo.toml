@@ -13,3 +13,9 @@ description   = "APT repository for iOS packages published by PlayDay."
 [github]
 # org_name is required for `repotool import`. Overridable via ORG_NAME env.
 org_name = "PlayDay-iOS"
+
+[hosting]
+# .deb payloads are uploaded to GitHub Releases by `repotool publish-pool`.
+# Packages stanzas reference absolute download URLs from these releases.
+# owner defaults to github.org_name; repo defaults to the cwd basename.
+tag_prefix = "pool-"
