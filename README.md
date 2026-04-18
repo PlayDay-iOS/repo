@@ -47,7 +47,7 @@ Expected files after build (rooted at the output directory):
   - `Release`, `Release.gpg`, `InRelease` (signed variants only when a key is supplied)
   - `CydiaIcon.png`
   - `index.html`
-  - `pool/<suite>/<component>/*.deb` (mirror of validated packages, keeping the filenames from the source pool; absent when the suite has none)
+  - Note: `.deb` payloads are served from GitHub Releases, not from the Pages bundle. See `repotool publish-pool`.
 - `repo-public.key` (root, only if a `repo-public.key` file exists at the repo root; the landing page links to it only when this file is present)
 - `depictions/` (when at least one suite has entries):
   - `style.css` — shared stylesheet for HTML depictions
@@ -72,6 +72,7 @@ Source lines:
 ```sh
 repotool build  [--output _site] [--config repo.toml] [--template <path>] [--depiction-template <path>] [--depiction-style <path>]
 repotool import [--config repo.toml] [--allowlist org-import-allowlist.txt] [--suite <name>] [--include-prereleases] [--timeout 30m]
+repotool publish-pool [--config repo.toml]
 repotool render [--output _site] [--config repo.toml] [--template <path>]
 repotool --version
 ```
@@ -94,7 +95,7 @@ The `--suite` flag on `import` defaults to the first entry of `metadata.suites` 
 | `SOURCE_DATE_EPOCH`         | Pins `Date:` and landing-page timestamp for reproducible builds.          |
 | `GPG_PRIVATE_KEY`           | Armored signing key. Empty = signing skipped (no error).                  |
 | `GPG_PASSPHRASE`            | Passphrase for `GPG_PRIVATE_KEY` when required.                           |
-| `GH_TOKEN` / `GITHUB_TOKEN` | GitHub API token for `import`; `GH_TOKEN` takes precedence.               |
+| `GH_TOKEN` / `GITHUB_TOKEN` | GitHub API token for `import` and `publish-pool`; `GH_TOKEN` takes precedence. |
 | `GITHUB_API_BASE`           | Alternate GitHub API endpoint (e.g. GitHub Enterprise).                   |
 | `ORG_NAME`                  | Overrides `github.org_name` from `repo.toml`.                             |
 | `TARGET_SUITE`              | Default target suite for `import` when `--suite` is not passed.           |
@@ -118,6 +119,10 @@ architectures = ["iphoneos-arm64", "all"] # example override; default is ["iphon
 
 [github]
 org_name = "PlayDay-iOS"  # required only for `import`
+
+[hosting]
+# owner defaults to github.org_name; repo defaults to cwd basename
+tag_prefix = "pool-"    # release tag = tag_prefix + suite name; default: "pool-"
 ```
 
 ## Signing (optional)
