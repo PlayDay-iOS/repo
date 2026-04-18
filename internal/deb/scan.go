@@ -16,14 +16,15 @@ import (
 
 // PackageEntry holds metadata for a single .deb found during pool scanning.
 type PackageEntry struct {
-	Control  *ControlData
-	Path     string // absolute path to .deb file
-	Filename string // relative path for Packages file
-	Size     int64
-	MD5      string
-	SHA1     string
-	SHA256   string
-	SHA512   string
+	Control       *ControlData
+	Path          string // absolute path to .deb file (may be a symlink)
+	CanonicalPath string // resolved absolute path (after EvalSymlinks)
+	Filename      string // relative path for Packages file
+	Size          int64
+	MD5           string
+	SHA1          string
+	SHA256        string
+	SHA512        string
 }
 
 // generatedFields are fields appended by Stanza() and should be
@@ -71,7 +72,21 @@ func ScanPool(ctx context.Context, rootDir, poolDir string, allowedArchitectures
 		if err := ctx.Err(); err != nil {
 			return err
 		}
-		if d.IsDir() || !d.Type().IsRegular() || !strings.HasSuffix(strings.ToLower(d.Name()), ".deb") {
+		if d.IsDir() {
+			return nil
+		}
+		if !strings.HasSuffix(strings.ToLower(d.Name()), ".deb") {
+			return nil
+		}
+		isRegular := d.Type().IsRegular()
+		if d.Type()&fs.ModeSymlink != 0 {
+			fi, statErr := os.Stat(path)
+			if statErr != nil {
+				return fmt.Errorf("following symlink %s: %w", path, statErr)
+			}
+			isRegular = fi.Mode().IsRegular()
+		}
+		if !isRegular {
 			return nil
 		}
 
@@ -96,6 +111,15 @@ func ScanPool(ctx context.Context, rootDir, poolDir string, allowedArchitectures
 // scanDebFile hashes, parses, and validates a single .deb file.
 // rootDir must already be cleaned by the caller.
 func scanDebFile(path, name, rootDir string, allowedArchitectures map[string]bool) (*PackageEntry, error) {
+	canonical, err := filepath.EvalSymlinks(path)
+	if err != nil {
+		return nil, fmt.Errorf("resolving symlink %s: %w", path, err)
+	}
+	canonical = filepath.Clean(canonical)
+	if !strings.HasPrefix(canonical, rootDir+string(os.PathSeparator)) {
+		return nil, fmt.Errorf("file %s resolves to %s outside root directory", path, canonical)
+	}
+
 	f, err := os.Open(path)
 	if err != nil {
 		return nil, fmt.Errorf("opening %s: %w", path, err)
@@ -130,13 +154,14 @@ func scanDebFile(path, name, rootDir string, allowedArchitectures map[string]boo
 	}
 
 	return &PackageEntry{
-		Control:  control,
-		Path:     path,
-		Filename: filepath.ToSlash(relPath),
-		Size:     size,
-		MD5:      sums.MD5,
-		SHA1:     sums.SHA1,
-		SHA256:   sums.SHA256,
-		SHA512:   sums.SHA512,
+		Control:       control,
+		Path:          path,
+		CanonicalPath: canonical,
+		Filename:      filepath.ToSlash(relPath),
+		Size:          size,
+		MD5:           sums.MD5,
+		SHA1:          sums.SHA1,
+		SHA256:        sums.SHA256,
+		SHA512:        sums.SHA512,
 	}, nil
 }
