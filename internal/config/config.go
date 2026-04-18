@@ -2,11 +2,30 @@ package config
 
 import (
 	"fmt"
+	"path/filepath"
 	"strings"
 
 	"github.com/PlayDay-iOS/repo/internal/validate"
 	"github.com/spf13/viper"
 )
+
+// HostingConfig holds GitHub Releases hosting settings.
+type HostingConfig struct {
+	Owner     string
+	Repo      string
+	TagPrefix string
+}
+
+// ReleaseTag returns the GitHub Release tag for a given suite.
+func (h HostingConfig) ReleaseTag(suite string) string {
+	return h.TagPrefix + suite
+}
+
+// AssetURL returns the absolute download URL for a release asset.
+func (h HostingConfig) AssetURL(suite, basename string) string {
+	return fmt.Sprintf("https://github.com/%s/%s/releases/download/%s/%s",
+		h.Owner, h.Repo, h.ReleaseTag(suite), basename)
+}
 
 // RepoConfig holds the parsed repository configuration.
 type RepoConfig struct {
@@ -19,6 +38,7 @@ type RepoConfig struct {
 	Architectures []string
 	Description   string
 	OrgName       string
+	Hosting       HostingConfig
 }
 
 // Load reads and validates the config file at path.
@@ -113,7 +133,40 @@ func Load(path string) (*RepoConfig, error) {
 		}
 	}
 
+	// Parse [hosting] block with defaults.
+	tagPrefix := v.GetString("hosting.tag_prefix")
+	if !v.IsSet("hosting.tag_prefix") {
+		tagPrefix = "pool-"
+	}
+	cfg.Hosting = HostingConfig{
+		Owner:     strings.TrimSpace(v.GetString("hosting.owner")),
+		Repo:      strings.TrimSpace(v.GetString("hosting.repo")),
+		TagPrefix: tagPrefix,
+	}
+
+	if cfg.Hosting.Owner != "" && !validate.Name.MatchString(cfg.Hosting.Owner) {
+		return nil, fmt.Errorf("hosting.owner: invalid %q (must be alphanumeric with .-_ only)", cfg.Hosting.Owner)
+	}
+	if cfg.Hosting.Repo != "" && !validate.Name.MatchString(cfg.Hosting.Repo) {
+		return nil, fmt.Errorf("hosting.repo: invalid %q (must be alphanumeric with .-_ only)", cfg.Hosting.Repo)
+	}
+
 	return cfg, nil
+}
+
+// ResolveHosting fills in hosting defaults from OrgName and rootDir.
+// Must be called before using Hosting.AssetURL.
+func (c *RepoConfig) ResolveHosting(rootDir string) error {
+	if c.Hosting.Owner == "" {
+		c.Hosting.Owner = c.OrgName
+	}
+	if c.Hosting.Owner == "" {
+		return fmt.Errorf("hosting.owner or github.org_name required for release hosting")
+	}
+	if c.Hosting.Repo == "" {
+		c.Hosting.Repo = filepath.Base(rootDir)
+	}
+	return nil
 }
 
 // PrimarySuite returns the first configured suite (guaranteed non-empty after Load).

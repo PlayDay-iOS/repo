@@ -288,6 +288,175 @@ suites = ["`+suite+`"]
 	}
 }
 
+func TestLoad_HostingDefaults(t *testing.T) {
+	t.Parallel()
+	path := writeConfig(t, `
+[repo]
+name = "Test"
+url  = "https://example.com/repo/"
+[github]
+org_name = "TestOrg"
+`)
+	cfg, err := Load(path)
+	if err != nil {
+		t.Fatalf("Load failed: %v", err)
+	}
+	if cfg.Hosting.Owner != "" {
+		t.Errorf("Hosting.Owner should be empty before ResolveHosting, got %q", cfg.Hosting.Owner)
+	}
+	if cfg.Hosting.TagPrefix != "pool-" {
+		t.Errorf("Hosting.TagPrefix = %q, want %q", cfg.Hosting.TagPrefix, "pool-")
+	}
+}
+
+func TestLoad_HostingExplicit(t *testing.T) {
+	t.Parallel()
+	path := writeConfig(t, `
+[repo]
+name = "Test"
+url  = "https://example.com/repo/"
+[hosting]
+owner      = "MyOrg"
+repo       = "my-repo"
+tag_prefix = "deb-"
+`)
+	cfg, err := Load(path)
+	if err != nil {
+		t.Fatalf("Load failed: %v", err)
+	}
+	if cfg.Hosting.Owner != "MyOrg" {
+		t.Errorf("Hosting.Owner = %q", cfg.Hosting.Owner)
+	}
+	if cfg.Hosting.Repo != "my-repo" {
+		t.Errorf("Hosting.Repo = %q", cfg.Hosting.Repo)
+	}
+	if cfg.Hosting.TagPrefix != "deb-" {
+		t.Errorf("Hosting.TagPrefix = %q", cfg.Hosting.TagPrefix)
+	}
+}
+
+func TestLoad_HostingEmptyTagPrefix(t *testing.T) {
+	t.Parallel()
+	path := writeConfig(t, `
+[repo]
+name = "Test"
+url  = "https://example.com/repo/"
+[hosting]
+tag_prefix = ""
+`)
+	cfg, err := Load(path)
+	if err != nil {
+		t.Fatalf("Load failed: %v", err)
+	}
+	if cfg.Hosting.TagPrefix != "" {
+		t.Errorf("Hosting.TagPrefix = %q, want empty", cfg.Hosting.TagPrefix)
+	}
+}
+
+func TestResolveHosting_DefaultsFromOrgName(t *testing.T) {
+	t.Parallel()
+	cfg := &RepoConfig{
+		OrgName: "TestOrg",
+		Hosting: HostingConfig{TagPrefix: "pool-"},
+	}
+	if err := cfg.ResolveHosting("/fake/root/myrepo"); err != nil {
+		t.Fatal(err)
+	}
+	if cfg.Hosting.Owner != "TestOrg" {
+		t.Errorf("Owner = %q, want TestOrg", cfg.Hosting.Owner)
+	}
+	if cfg.Hosting.Repo != "myrepo" {
+		t.Errorf("Repo = %q, want myrepo", cfg.Hosting.Repo)
+	}
+}
+
+func TestResolveHosting_ExplicitOverridesDefaults(t *testing.T) {
+	t.Parallel()
+	cfg := &RepoConfig{
+		OrgName: "TestOrg",
+		Hosting: HostingConfig{Owner: "Other", Repo: "other-repo", TagPrefix: "v-"},
+	}
+	if err := cfg.ResolveHosting("/fake/root/myrepo"); err != nil {
+		t.Fatal(err)
+	}
+	if cfg.Hosting.Owner != "Other" {
+		t.Errorf("Owner = %q, want Other", cfg.Hosting.Owner)
+	}
+	if cfg.Hosting.Repo != "other-repo" {
+		t.Errorf("Repo = %q, want other-repo", cfg.Hosting.Repo)
+	}
+}
+
+func TestResolveHosting_MissingOwnerErrors(t *testing.T) {
+	t.Parallel()
+	cfg := &RepoConfig{Hosting: HostingConfig{TagPrefix: "pool-"}}
+	err := cfg.ResolveHosting("/fake/root/myrepo")
+	if err == nil {
+		t.Fatal("expected error when owner cannot be inferred")
+	}
+	if !strings.Contains(err.Error(), "hosting.owner") || !strings.Contains(err.Error(), "github.org_name") {
+		t.Errorf("error should name both fields, got: %v", err)
+	}
+}
+
+func TestHostingConfig_ReleaseTag(t *testing.T) {
+	t.Parallel()
+	h := HostingConfig{TagPrefix: "pool-"}
+	if got := h.ReleaseTag("stable"); got != "pool-stable" {
+		t.Errorf("ReleaseTag = %q", got)
+	}
+	h2 := HostingConfig{TagPrefix: ""}
+	if got := h2.ReleaseTag("beta"); got != "beta" {
+		t.Errorf("ReleaseTag with empty prefix = %q", got)
+	}
+}
+
+func TestHostingConfig_AssetURL(t *testing.T) {
+	t.Parallel()
+	h := HostingConfig{Owner: "PlayDay-iOS", Repo: "repo", TagPrefix: "pool-"}
+	got := h.AssetURL("stable", "test_1.0+beta_iphoneos-arm.deb")
+	want := "https://github.com/PlayDay-iOS/repo/releases/download/pool-stable/test_1.0+beta_iphoneos-arm.deb"
+	if got != want {
+		t.Errorf("AssetURL = %q, want %q", got, want)
+	}
+}
+
+func TestLoad_InvalidHostingOwner(t *testing.T) {
+	t.Parallel()
+	path := writeConfig(t, `
+[repo]
+name = "Test"
+url  = "https://example.com/repo/"
+[hosting]
+owner = "evil/org"
+`)
+	_, err := Load(path)
+	if err == nil {
+		t.Fatal("expected error for invalid hosting.owner")
+	}
+	if !strings.Contains(err.Error(), "hosting.owner") {
+		t.Errorf("expected hosting.owner error, got: %v", err)
+	}
+}
+
+func TestLoad_InvalidHostingRepo(t *testing.T) {
+	t.Parallel()
+	path := writeConfig(t, `
+[repo]
+name = "Test"
+url  = "https://example.com/repo/"
+[hosting]
+repo = "../escape"
+`)
+	_, err := Load(path)
+	if err == nil {
+		t.Fatal("expected error for invalid hosting.repo")
+	}
+	if !strings.Contains(err.Error(), "hosting.repo") {
+		t.Errorf("expected hosting.repo error, got: %v", err)
+	}
+}
+
 func TestAllowedArchitectures(t *testing.T) {
 	t.Parallel()
 	cfg := &RepoConfig{
