@@ -33,6 +33,10 @@ name = "Test"
 url  = "https://example.com/repo/"
 [metadata]
 suites = ["`+suite+`"]
+[github]
+org_name = "TestOrg"
+[hosting]
+repo = "testrepo"
 `), 0644); err != nil {
 		t.Fatal(err)
 	}
@@ -101,8 +105,8 @@ func TestRun_WithDeb(t *testing.T) {
 	if !strings.Contains(content, "Package: com.test.pkg") {
 		t.Error("Packages should contain the package")
 	}
-	if !strings.Contains(content, "Filename: pool/stable/main/test.deb") {
-		t.Error("Packages should reference correct filename")
+	if !strings.Contains(content, "Filename: https://github.com/TestOrg/testrepo/releases/download/pool-stable/test.deb") {
+		t.Errorf("Packages should contain absolute Filename URL:\n%s", content)
 	}
 	if !strings.Contains(content, "Depiction: https://example.com/repo/depictions/test/depiction.html") {
 		t.Errorf("Packages should contain injected Depiction URL:\n%s", content)
@@ -111,12 +115,10 @@ func TestRun_WithDeb(t *testing.T) {
 		t.Errorf("Packages should contain injected SileoDepiction URL:\n%s", content)
 	}
 
-	mirrorPath := filepath.Join(opts.OutputDir, "stable", "pool", "stable", "main", "test.deb")
-	if _, err := os.Stat(mirrorPath); err != nil {
-		t.Error("pool mirror should exist at stable/pool/stable/main/test.deb")
-	}
-	if _, err := os.Stat(filepath.Join(opts.OutputDir, "pool")); !os.IsNotExist(err) {
-		t.Error("top-level pool/ should not exist in output")
+	// No .deb mirror in output — payloads are on GitHub Releases
+	mirrorPath := filepath.Join(opts.OutputDir, "stable", "pool")
+	if _, err := os.Stat(mirrorPath); !os.IsNotExist(err) {
+		t.Error("pool mirror should NOT exist in output with releases hosting")
 	}
 
 	htmlPath := filepath.Join(opts.OutputDir, "depictions", "test", "depiction.html")
@@ -368,5 +370,102 @@ func TestRun_MissingDepictionStylePath_HardFailsAtStart(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), "--depiction-style") {
 		t.Errorf("error should name the flag, got: %v", err)
+	}
+}
+
+func newTestRepoMultiSuite(t *testing.T, stableDebs map[string][]byte, betaSymlinks []string) (string, Options) {
+	t.Helper()
+	root := t.TempDir()
+
+	stablePool := filepath.Join(root, "pool", "stable", "main")
+	betaPool := filepath.Join(root, "pool", "beta", "main")
+	if err := os.MkdirAll(stablePool, 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(betaPool, 0755); err != nil {
+		t.Fatal(err)
+	}
+
+	for name, data := range stableDebs {
+		if err := os.WriteFile(filepath.Join(stablePool, name), data, 0644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	for _, name := range betaSymlinks {
+		target := filepath.Join(stablePool, name)
+		link := filepath.Join(betaPool, name)
+		if err := os.Symlink(target, link); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	if err := os.WriteFile(filepath.Join(root, "repo.toml"), []byte(`
+[repo]
+name = "Test"
+url  = "https://example.com/repo/"
+[metadata]
+suites = ["stable", "beta"]
+[github]
+org_name = "TestOrg"
+[hosting]
+repo = "testrepo"
+`), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := os.MkdirAll(filepath.Join(root, "resources"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "resources", "CydiaIcon.png"), []byte("PNG"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	return root, Options{
+		RootDir:    root,
+		OutputDir:  filepath.Join(root, "_site"),
+		ConfigPath: filepath.Join(root, "repo.toml"),
+	}
+}
+
+func TestRun_SymlinkCrossSuite_UsesCanonicalSuiteInURL(t *testing.T) {
+	t.Parallel()
+	debData := testutil.BuildMinimalDeb([]testutil.Field{
+		{Key: "Package", Value: "com.test.pkg"},
+		{Key: "Version", Value: "1.0"},
+		{Key: "Architecture", Value: "iphoneos-arm64"},
+		{Key: "Maintainer", Value: "Test <t@t.com>"},
+		{Key: "Description", Value: "Test package"},
+	})
+
+	_, opts := newTestRepoMultiSuite(t, map[string][]byte{"test.deb": debData}, []string{"test.deb"})
+
+	if err := Run(context.Background(), opts); err != nil {
+		t.Fatalf("Run failed: %v", err)
+	}
+
+	// Stable should reference pool-stable release
+	stableData, err := os.ReadFile(filepath.Join(opts.OutputDir, "stable", "Packages"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(stableData), "Filename: https://github.com/TestOrg/testrepo/releases/download/pool-stable/test.deb") {
+		t.Errorf("stable Packages should reference pool-stable URL:\n%s", string(stableData))
+	}
+
+	// Beta symlink should also reference pool-stable (canonical path is in stable)
+	betaData, err := os.ReadFile(filepath.Join(opts.OutputDir, "beta", "Packages"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(betaData), "Filename: https://github.com/TestOrg/testrepo/releases/download/pool-stable/test.deb") {
+		t.Errorf("beta Packages should reference pool-stable URL (dedup):\n%s", string(betaData))
+	}
+
+	// No .deb mirror in either suite
+	for _, suite := range []string{"stable", "beta"} {
+		poolDir := filepath.Join(opts.OutputDir, suite, "pool")
+		if _, err := os.Stat(poolDir); !os.IsNotExist(err) {
+			t.Errorf("%s should have no pool/ mirror in output", suite)
+		}
 	}
 }

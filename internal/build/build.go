@@ -21,15 +21,15 @@ import (
 
 // Options configures the build.
 type Options struct {
-	RootDir                string
-	OutputDir              string
-	ConfigPath             string
-	TemplatePath           string
-	DepictionTemplatePath  string
-	DepictionStylePath     string
-	BuildTime              time.Time
-	GPGKey                 string // armored private key; empty disables signing
-	GPGPassphrase          string
+	RootDir               string
+	OutputDir             string
+	ConfigPath            string
+	TemplatePath          string
+	DepictionTemplatePath string
+	DepictionStylePath    string
+	BuildTime             time.Time
+	GPGKey                string // armored private key; empty disables signing
+	GPGPassphrase         string
 }
 
 // BuildTimeFromEnv resolves the build timestamp from SOURCE_DATE_EPOCH for
@@ -52,6 +52,10 @@ func Run(ctx context.Context, opts Options) error {
 	cfg, err := config.Load(opts.ConfigPath)
 	if err != nil {
 		return fmt.Errorf("loading config: %w", err)
+	}
+
+	if err := cfg.ResolveHosting(opts.RootDir); err != nil {
+		return fmt.Errorf("resolving hosting config: %w", err)
 	}
 
 	opts.GPGKey = strings.TrimSpace(opts.GPGKey)
@@ -171,26 +175,16 @@ func buildSuite(ctx context.Context, opts Options, cfg *config.RepoConfig, suite
 
 	depiction.EnrichEntries(entries, cfg)
 
-	if err := repo.WritePackagesAll(ctx, entries, suiteDir); err != nil {
-		return nil, fmt.Errorf("writing packages for %s: %w", suite, err)
+	for _, e := range entries {
+		canonSuite, err := deb.CanonicalSuite(opts.RootDir, e.CanonicalPath)
+		if err != nil {
+			return nil, fmt.Errorf("resolving canonical suite for %s: %w", e.Path, err)
+		}
+		e.Filename = cfg.Hosting.AssetURL(canonSuite, filepath.Base(e.CanonicalPath))
 	}
 
-	// Mirror only the validated .deb files into the suite dir so clients can
-	// fetch them via the published suite URL. Copying just the entries (rather
-	// than the whole pool tree) prevents arbitrary non-.deb files and empty
-	// placeholder directories from leaking into the published output.
-	for _, e := range entries {
-		relToRoot, err := filepath.Rel(opts.RootDir, e.Path)
-		if err != nil {
-			return nil, fmt.Errorf("computing mirror path for %s: %w", e.Path, err)
-		}
-		target := filepath.Join(suiteDir, relToRoot)
-		if err := os.MkdirAll(filepath.Dir(target), 0755); err != nil {
-			return nil, fmt.Errorf("creating mirror dir for %s: %w", e.Path, err)
-		}
-		if err := fileutil.CopyFile(e.Path, target); err != nil {
-			return nil, fmt.Errorf("mirroring %s: %w", e.Path, err)
-		}
+	if err := repo.WritePackagesAll(ctx, entries, suiteDir); err != nil {
+		return nil, fmt.Errorf("writing packages for %s: %w", suite, err)
 	}
 
 	iconSrc := filepath.Join(opts.RootDir, "resources", "CydiaIcon.png")
