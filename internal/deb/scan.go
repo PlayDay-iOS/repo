@@ -108,6 +108,21 @@ func ScanPool(ctx context.Context, rootDir, poolDir string, allowedArchitectures
 	return entries, nil
 }
 
+// CanonicalSuite extracts the suite name from a canonical pool path.
+// canonicalPath must be an absolute path under rootDir following the
+// pool/<suite>/<component>/<file> layout.
+func CanonicalSuite(rootDir, canonicalPath string) (string, error) {
+	rel, err := filepath.Rel(rootDir, canonicalPath)
+	if err != nil {
+		return "", fmt.Errorf("computing relative path: %w", err)
+	}
+	parts := strings.SplitN(filepath.ToSlash(rel), "/", 4)
+	if len(parts) < 3 || parts[0] != "pool" {
+		return "", fmt.Errorf("path %s not in expected pool/<suite>/<component>/ layout", canonicalPath)
+	}
+	return parts[1], nil
+}
+
 // scanDebFile hashes, parses, and validates a single .deb file.
 // rootDir must already be cleaned by the caller.
 func scanDebFile(path, name, rootDir string, allowedArchitectures map[string]bool) (*PackageEntry, error) {

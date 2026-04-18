@@ -239,6 +239,60 @@ func TestScanPool_SymlinkCycle(t *testing.T) {
 	}
 }
 
+func TestCanonicalSuite(t *testing.T) {
+	t.Parallel()
+	cases := []struct {
+		name          string
+		rootDir       string
+		canonicalPath string
+		want          string
+		wantErr       bool
+	}{
+		{
+			name:          "stable suite",
+			rootDir:       "/repo",
+			canonicalPath: "/repo/pool/stable/main/test.deb",
+			want:          "stable",
+		},
+		{
+			name:          "beta suite",
+			rootDir:       "/repo",
+			canonicalPath: "/repo/pool/beta/main/test.deb",
+			want:          "beta",
+		},
+		{
+			name:          "not in pool layout",
+			rootDir:       "/repo",
+			canonicalPath: "/repo/other/test.deb",
+			wantErr:       true,
+		},
+		{
+			name:          "too short path",
+			rootDir:       "/repo",
+			canonicalPath: "/repo/pool",
+			wantErr:       true,
+		},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			got, err := CanonicalSuite(tc.rootDir, tc.canonicalPath)
+			if tc.wantErr {
+				if err == nil {
+					t.Fatal("expected error")
+				}
+				return
+			}
+			if err != nil {
+				t.Fatal(err)
+			}
+			if got != tc.want {
+				t.Errorf("CanonicalSuite = %q, want %q", got, tc.want)
+			}
+		})
+	}
+}
+
 func TestScanPool_SymlinkOutsideRoot(t *testing.T) {
 	t.Parallel()
 	dir := t.TempDir()
