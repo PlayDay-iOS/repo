@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"testing"
 
 	"github.com/PlayDay-iOS/repo/internal/config"
@@ -106,7 +107,7 @@ func TestPublishPool_SkipsExistingAsset(t *testing.T) {
 	}
 	fi, _ := os.Stat(filepath.Join(stableDir, "test.deb"))
 
-	var uploadCalled bool
+	var uploadCalled atomic.Bool
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 
@@ -124,7 +125,7 @@ func TestPublishPool_SkipsExistingAsset(t *testing.T) {
 			return
 		}
 		if r.Method == http.MethodPost {
-			uploadCalled = true
+			uploadCalled.Store(true)
 		}
 		w.WriteHeader(http.StatusNotFound)
 	})
@@ -139,7 +140,7 @@ func TestPublishPool_SkipsExistingAsset(t *testing.T) {
 	if err := PublishPool(context.Background(), client, cfg, root); err != nil {
 		t.Fatal(err)
 	}
-	if uploadCalled {
+	if uploadCalled.Load() {
 		t.Error("should not upload when asset exists with matching size")
 	}
 }

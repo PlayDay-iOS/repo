@@ -32,8 +32,13 @@ func NewPublisher(client *github.Client, owner, repo string) *Publisher {
 // sleepFn is the function used for retry backoff; overridable in tests.
 var sleepFn = time.Sleep
 
+// retryable returns true for HTTP status codes that warrant a retry.
+func retryable(code int) bool {
+	return code == http.StatusTooManyRequests || code >= 500
+}
+
 // EnsureRelease returns the release ID for the given tag, creating the
-// release if it does not exist. Retries on 5xx up to 3 times.
+// release if it does not exist. Retries on 5xx and 429 up to 3 times.
 func (p *Publisher) EnsureRelease(ctx context.Context, tag string) (int64, error) {
 	var lastErr error
 	for attempt := range 3 {
@@ -44,9 +49,9 @@ func (p *Publisher) EnsureRelease(ctx context.Context, tag string) (int64, error
 		if resp != nil && resp.StatusCode == http.StatusNotFound {
 			return p.createRelease(ctx, tag)
 		}
-		if resp != nil && resp.StatusCode >= 500 {
+		if resp != nil && retryable(resp.StatusCode) {
 			lastErr = err
-			slog.Warn("GitHub API 5xx, retrying", "attempt", attempt+1, "status", resp.StatusCode, "tag", tag)
+			slog.Warn("GitHub API error, retrying", "attempt", attempt+1, "status", resp.StatusCode, "tag", tag)
 			sleepFn(time.Duration(1<<uint(attempt)) * time.Second)
 			continue
 		}

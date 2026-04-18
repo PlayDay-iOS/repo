@@ -220,3 +220,37 @@ func TestRetryOn5xx(t *testing.T) {
 		t.Errorf("expected 3 attempts, got %d", got)
 	}
 }
+
+func TestRetryOn429(t *testing.T) {
+	t.Parallel()
+	var attempts atomic.Int32
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		n := attempts.Add(1)
+		if strings.Contains(r.URL.Path, "/releases/tags/") {
+			if n < 2 {
+				w.WriteHeader(http.StatusTooManyRequests)
+				return
+			}
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(&github.RepositoryRelease{
+				ID:      github.Ptr(int64(1)),
+				TagName: github.Ptr("pool-stable"),
+			})
+			return
+		}
+		w.WriteHeader(http.StatusNotFound)
+	})
+	client := newTestClient(t, handler)
+	p := NewPublisher(client, "owner", "repo")
+
+	id, err := p.EnsureRelease(context.Background(), "pool-stable")
+	if err != nil {
+		t.Fatalf("expected retry on 429 to succeed, got: %v", err)
+	}
+	if id != 1 {
+		t.Errorf("release ID = %d, want 1", id)
+	}
+	if got := attempts.Load(); got != 2 {
+		t.Errorf("expected 2 attempts, got %d", got)
+	}
+}

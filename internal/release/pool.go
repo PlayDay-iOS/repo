@@ -117,6 +117,11 @@ func collectPoolEntries(rootDir string, suites []string, component string) ([]po
 			}
 			canonical = filepath.Clean(canonical)
 
+			// Reject symlinks that resolve outside the repo root.
+			if !strings.HasPrefix(canonical, rootDir+string(os.PathSeparator)) {
+				return fmt.Errorf("resolved path %s escapes root %s", canonical, rootDir)
+			}
+
 			if seen[canonical] {
 				return nil
 			}
