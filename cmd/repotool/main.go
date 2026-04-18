@@ -11,12 +11,14 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/google/go-github/v84/github"
 	"github.com/spf13/cobra"
 
 	"github.com/PlayDay-iOS/repo/internal/build"
 	"github.com/PlayDay-iOS/repo/internal/config"
 	"github.com/PlayDay-iOS/repo/internal/ghimport"
 	"github.com/PlayDay-iOS/repo/internal/page"
+	"github.com/PlayDay-iOS/repo/internal/release"
 )
 
 var version = func() string {
@@ -52,15 +54,21 @@ var renderCmd = &cobra.Command{
 	RunE:  runRender,
 }
 
+var publishPoolCmd = &cobra.Command{
+	Use:   "publish-pool",
+	Short: "Upload .deb files from pool/ to GitHub Releases",
+	RunE:  runPublishPool,
+}
+
 var (
-	flagOutput               string
-	flagTemplate             string
-	flagAllowlist            string
-	flagSuite                string
-	flagPrereleases          bool
-	flagImportTimeout        time.Duration
-	flagDepictionTemplate    string
-	flagDepictionStyle       string
+	flagOutput            string
+	flagTemplate          string
+	flagAllowlist         string
+	flagSuite             string
+	flagPrereleases       bool
+	flagImportTimeout     time.Duration
+	flagDepictionTemplate string
+	flagDepictionStyle    string
 )
 
 func init() {
@@ -79,7 +87,7 @@ func init() {
 	importCmd.Flags().BoolVar(&flagPrereleases, "include-prereleases", false, "Include prerelease assets")
 	importCmd.Flags().DurationVar(&flagImportTimeout, "timeout", 0, "Upper bound for the import run (e.g. 30m, 2h); 0 = use built-in default")
 
-	rootCmd.AddCommand(buildCmd, importCmd, renderCmd)
+	rootCmd.AddCommand(buildCmd, importCmd, renderCmd, publishPoolCmd)
 }
 
 func main() {
@@ -215,4 +223,41 @@ func runRender(cmd *cobra.Command, args []string) error {
 		hasPublicKey = true
 	}
 	return page.RenderLandingPage(cmd.Context(), output, cfg, flagTemplate, buildTime, signed, hasPublicKey)
+}
+
+func runPublishPool(cmd *cobra.Command, args []string) error {
+	root, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+
+	cfgPath := configPath
+	if cfgPath == "" {
+		cfgPath = filepath.Join(root, "repo.toml")
+	}
+
+	cfg, err := config.Load(cfgPath)
+	if err != nil {
+		return err
+	}
+	if err := cfg.ResolveHosting(root); err != nil {
+		return err
+	}
+
+	token := ghToken()
+	if token == "" {
+		return fmt.Errorf("GH_TOKEN or GITHUB_TOKEN required for publish-pool")
+	}
+
+	client := github.NewClient(nil).WithAuthToken(token)
+	apiBase := os.Getenv("GITHUB_API_BASE")
+	if apiBase != "" {
+		var parseErr error
+		client, parseErr = client.WithEnterpriseURLs(apiBase, apiBase)
+		if parseErr != nil {
+			return fmt.Errorf("parsing GITHUB_API_BASE: %w", parseErr)
+		}
+	}
+
+	return release.PublishPool(cmd.Context(), client, cfg, root)
 }
