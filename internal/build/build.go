@@ -23,6 +23,7 @@ import (
 type Options struct {
 	RootDir               string
 	OutputDir             string
+	IndexDir              string
 	ConfigPath            string
 	TemplatePath          string
 	DepictionTemplatePath string
@@ -75,31 +76,27 @@ func Run(ctx context.Context, opts Options) error {
 		}
 	}
 
-	absOut, err := filepath.Abs(opts.OutputDir)
+	if opts.IndexDir == "" {
+		opts.IndexDir = filepath.Join(opts.RootDir, "_index")
+	}
+
+	absOut, err := prepareOutputDir(opts.OutputDir)
 	if err != nil {
-		return fmt.Errorf("resolving output dir: %w", err)
-	}
-	if err := validateOutputDir(absOut); err != nil {
-		return err
-	}
-
-	const outputMarker = ".repotool-output"
-	if err := validateExistingOutputDir(absOut, outputMarker); err != nil {
-		return err
-	}
-
-	if err := os.RemoveAll(absOut); err != nil {
-		return fmt.Errorf("cleaning output dir: %w", err)
+		return fmt.Errorf("output dir: %w", err)
 	}
 	opts.OutputDir = absOut
 
-	if err := os.MkdirAll(absOut, 0755); err != nil {
-		return fmt.Errorf("creating output dir: %w", err)
+	absIndex, err := filepath.Abs(opts.IndexDir)
+	if err != nil {
+		return fmt.Errorf("resolving index dir: %w", err)
 	}
-
-	if err := os.WriteFile(filepath.Join(absOut, outputMarker), nil, 0644); err != nil {
-		return fmt.Errorf("writing output marker: %w", err)
+	if absIndex == absOut {
+		return fmt.Errorf("index dir and output dir must differ: both are %s", absOut)
 	}
+	if absIndex, err = prepareOutputDir(absIndex); err != nil {
+		return fmt.Errorf("index dir: %w", err)
+	}
+	opts.IndexDir = absIndex
 
 	if opts.BuildTime.IsZero() {
 		opts.BuildTime = time.Now().UTC()
@@ -113,6 +110,10 @@ func Run(ctx context.Context, opts Options) error {
 			return err
 		}
 		allEntries = append(allEntries, suiteEntries...)
+
+		if err := writeLegacySuite(ctx, opts, cfg, suite); err != nil {
+			return err
+		}
 	}
 
 	if err := copyRootIcon(opts.RootDir, opts.OutputDir); err != nil {
@@ -153,7 +154,7 @@ func buildSuite(ctx context.Context, opts Options, cfg *config.RepoConfig, suite
 		return nil, err
 	}
 
-	suiteDir := filepath.Join(opts.OutputDir, suite)
+	suiteDir := filepath.Join(opts.IndexDir, suite)
 	if err := os.MkdirAll(suiteDir, 0755); err != nil {
 		return nil, fmt.Errorf("creating suite dir %s: %w", suite, err)
 	}
@@ -186,11 +187,8 @@ func buildSuite(ctx context.Context, opts Options, cfg *config.RepoConfig, suite
 		return nil, fmt.Errorf("writing packages for %s: %w", suite, err)
 	}
 
-	iconSrc := filepath.Join(opts.RootDir, "resources", "CydiaIcon.png")
-	if _, err := os.Stat(iconSrc); err == nil {
-		if err := fileutil.CopyFile(iconSrc, filepath.Join(suiteDir, "CydiaIcon.png")); err != nil {
-			return nil, fmt.Errorf("copying suite icon for %s: %w", suite, err)
-		}
+	if err := copySuiteIcon(opts.RootDir, suiteDir); err != nil {
+		return nil, fmt.Errorf("copying suite icon for %s: %w", suite, err)
 	}
 
 	suiteSuffix := " (" + page.TitleCase(suite) + ")"
@@ -218,11 +216,118 @@ func buildSuite(ctx context.Context, opts Options, cfg *config.RepoConfig, suite
 		return nil, fmt.Errorf("signing %s: %w", suite, err)
 	}
 
-	if err := page.WriteSuiteIndexHTML(suiteDir, suite, cfg.URL); err != nil {
-		return nil, fmt.Errorf("writing suite index for %s: %w", suite, err)
+	return entries, nil
+}
+
+// writeLegacySuite publishes a stand-in index at the Pages suite URL that the
+// repository used to be served from. GitHub Pages cannot redirect, and payloads
+// no longer live there, so rather than leave subscribers with an index whose
+// downloads 404, the suite advertises a single stub package naming the release
+// URL they should add instead.
+func writeLegacySuite(ctx context.Context, opts Options, cfg *config.RepoConfig, suite string) error {
+	suiteDir := filepath.Join(opts.OutputDir, suite)
+	if err := os.MkdirAll(suiteDir, 0755); err != nil {
+		return fmt.Errorf("creating legacy suite dir %s: %w", suite, err)
+	}
+
+	entries, err := stubEntries(ctx, opts.RootDir, cfg, suite, suiteDir)
+	if err != nil {
+		return fmt.Errorf("preparing stub for %s: %w", suite, err)
+	}
+
+	if err := repo.WritePackagesAll(ctx, entries, suiteDir); err != nil {
+		return fmt.Errorf("writing legacy packages for %s: %w", suite, err)
+	}
+
+	if err := copySuiteIcon(opts.RootDir, suiteDir); err != nil {
+		return fmt.Errorf("copying legacy suite icon for %s: %w", suite, err)
+	}
+
+	releaseParams := repo.ReleaseParams{
+		Origin:        cfg.Origin,
+		Label:         cfg.Label,
+		Suite:         suite,
+		Codename:      suite,
+		Architectures: strings.Join(cfg.Architectures, " "),
+		Components:    ".",
+		Description:   fmt.Sprintf("%s (moved to %s)", cfg.Description, cfg.Hosting.SourceURL(suite)),
+		Date:          opts.BuildTime,
+	}
+	if err := repo.WriteRelease(ctx, releaseParams, suiteDir); err != nil {
+		return fmt.Errorf("writing legacy release for %s: %w", suite, err)
+	}
+
+	if err := repo.SignRelease(ctx, suiteDir, opts.GPGKey, opts.GPGPassphrase); err != nil {
+		return fmt.Errorf("signing legacy %s: %w", suite, err)
+	}
+
+	return page.WriteSuiteIndexHTML(suiteDir, suite, cfg.URL)
+}
+
+// stubEntries copies the migration stub .deb into suiteDir and returns its
+// Packages entry, pointed at the suite's new source URL. It returns no entries
+// when the stub is absent, which leaves the legacy suite index empty.
+func stubEntries(ctx context.Context, rootDir string, cfg *config.RepoConfig, suite, suiteDir string) ([]*deb.PackageEntry, error) {
+	stubDir := filepath.Join(rootDir, "resources", "source-moved")
+	if _, err := os.Stat(stubDir); err != nil {
+		return nil, nil
+	}
+
+	// Architecture is not filtered here: the stub is our own artifact and is
+	// meant to show up regardless of what the repository accepts.
+	entries, err := deb.ScanPool(ctx, stubDir, stubDir, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, e := range entries {
+		base := filepath.Base(e.Path)
+		if err := fileutil.CopyFile(e.Path, filepath.Join(suiteDir, base)); err != nil {
+			return nil, fmt.Errorf("copying stub %s: %w", base, err)
+		}
+		e.Filename = "./" + base
+		e.Control.Set("Description", fmt.Sprintf(
+			"This source has moved. Remove it and add %s instead.", cfg.Hosting.SourceURL(suite)))
 	}
 
 	return entries, nil
+}
+
+func copySuiteIcon(rootDir, suiteDir string) error {
+	iconSrc := filepath.Join(rootDir, "resources", "CydiaIcon.png")
+	if _, err := os.Stat(iconSrc); err != nil {
+		return nil // no icon, not an error
+	}
+	return fileutil.CopyFile(iconSrc, filepath.Join(suiteDir, "CydiaIcon.png"))
+}
+
+// prepareOutputDir resolves, validates and empties a directory the build owns,
+// leaving the marker that proves ownership on the next run.
+func prepareOutputDir(dir string) (string, error) {
+	abs, err := filepath.Abs(dir)
+	if err != nil {
+		return "", fmt.Errorf("resolving %s: %w", dir, err)
+	}
+	if err := validateOutputDir(abs); err != nil {
+		return "", err
+	}
+
+	const outputMarker = ".repotool-output"
+	if err := validateExistingOutputDir(abs, outputMarker); err != nil {
+		return "", err
+	}
+
+	if err := os.RemoveAll(abs); err != nil {
+		return "", fmt.Errorf("cleaning %s: %w", abs, err)
+	}
+	if err := os.MkdirAll(abs, 0755); err != nil {
+		return "", fmt.Errorf("creating %s: %w", abs, err)
+	}
+	if err := os.WriteFile(filepath.Join(abs, outputMarker), nil, 0644); err != nil {
+		return "", fmt.Errorf("writing marker in %s: %w", abs, err)
+	}
+
+	return abs, nil
 }
 
 func copyRootIcon(rootDir, outputDir string) error {

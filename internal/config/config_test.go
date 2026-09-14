@@ -411,13 +411,17 @@ func TestHostingConfig_ReleaseTag(t *testing.T) {
 	}
 }
 
-func TestHostingConfig_AssetURL(t *testing.T) {
+func TestHostingConfig_SourceURL(t *testing.T) {
 	t.Parallel()
 	h := HostingConfig{Owner: "PlayDay-iOS", Repo: "repo", TagPrefix: "pool-"}
-	got := h.AssetURL("stable", "test_1.0+beta_iphoneos-arm.deb")
-	want := "https://github.com/PlayDay-iOS/repo/releases/download/pool-stable/test_1.0+beta_iphoneos-arm.deb"
+	got := h.SourceURL("stable")
+	want := "https://github.com/PlayDay-iOS/repo/releases/download/pool-stable/"
 	if got != want {
-		t.Errorf("AssetURL = %q, want %q", got, want)
+		t.Errorf("SourceURL = %q, want %q", got, want)
+	}
+	// The trailing slash is load-bearing: APT concatenates Filename onto it.
+	if !strings.HasSuffix(got, "/") {
+		t.Errorf("SourceURL = %q, want a trailing slash", got)
 	}
 }
 

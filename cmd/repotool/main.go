@@ -62,6 +62,7 @@ var publishPoolCmd = &cobra.Command{
 
 var (
 	flagOutput            string
+	flagIndexOutput       string
 	flagTemplate          string
 	flagAllowlist         string
 	flagSuite             string
@@ -79,6 +80,7 @@ func init() {
 		c.Flags().StringVar(&flagTemplate, "template", "", "Path to HTML template override (default: built-in)")
 	}
 
+	buildCmd.Flags().StringVar(&flagIndexOutput, "index-output", "", "Directory for the APT index uploaded to GitHub Releases (default: <cwd>/_index)")
 	buildCmd.Flags().StringVar(&flagDepictionTemplate, "depiction-template", "", "Path to depiction HTML template override (default: built-in)")
 	buildCmd.Flags().StringVar(&flagDepictionStyle, "depiction-style", "", "Path to depiction CSS override (default: built-in)")
 
@@ -117,6 +119,10 @@ func runBuild(cmd *cobra.Command, args []string) error {
 	if output == "" {
 		output = filepath.Join(root, "_site")
 	}
+	indexOutput := flagIndexOutput
+	if indexOutput == "" {
+		indexOutput = filepath.Join(root, "_index")
+	}
 	cfgPath := configPath
 	if cfgPath == "" {
 		cfgPath = filepath.Join(root, "repo.toml")
@@ -130,6 +136,7 @@ func runBuild(cmd *cobra.Command, args []string) error {
 	return build.Run(cmd.Context(), build.Options{
 		RootDir:               root,
 		OutputDir:             output,
+		IndexDir:              indexOutput,
 		ConfigPath:            cfgPath,
 		TemplatePath:          flagTemplate,
 		DepictionTemplatePath: flagDepictionTemplate,
