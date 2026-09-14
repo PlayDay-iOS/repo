@@ -60,6 +60,12 @@ var publishPoolCmd = &cobra.Command{
 	RunE:  runPublishPool,
 }
 
+var publishIndexCmd = &cobra.Command{
+	Use:   "publish-index",
+	Short: "Upload the built APT index from _index/ to GitHub Releases",
+	RunE:  runPublishIndex,
+}
+
 var (
 	flagOutput            string
 	flagIndexOutput       string
@@ -89,7 +95,9 @@ func init() {
 	importCmd.Flags().BoolVar(&flagPrereleases, "include-prereleases", false, "Include prerelease assets")
 	importCmd.Flags().DurationVar(&flagImportTimeout, "timeout", 0, "Upper bound for the import run (e.g. 30m, 2h); 0 = use built-in default")
 
-	rootCmd.AddCommand(buildCmd, importCmd, renderCmd, publishPoolCmd)
+	publishIndexCmd.Flags().StringVar(&flagIndexOutput, "index-output", "", "Directory holding the built index (default: <cwd>/_index)")
+
+	rootCmd.AddCommand(buildCmd, importCmd, renderCmd, publishPoolCmd, publishIndexCmd)
 }
 
 func main() {
@@ -232,10 +240,26 @@ func runRender(cmd *cobra.Command, args []string) error {
 	return page.RenderLandingPage(cmd.Context(), output, cfg, flagTemplate, buildTime, signed, hasPublicKey)
 }
 
-func runPublishPool(cmd *cobra.Command, args []string) error {
-	root, err := os.Getwd()
+func runPublishIndex(cmd *cobra.Command, args []string) error {
+	root, cfg, client, err := publishContext("publish-index")
 	if err != nil {
 		return err
+	}
+
+	indexDir := flagIndexOutput
+	if indexDir == "" {
+		indexDir = filepath.Join(root, "_index")
+	}
+
+	return release.PublishIndex(cmd.Context(), client, cfg, indexDir)
+}
+
+// publishContext loads the config and an authenticated client for the commands
+// that talk to GitHub Releases.
+func publishContext(command string) (string, *config.RepoConfig, *github.Client, error) {
+	root, err := os.Getwd()
+	if err != nil {
+		return "", nil, nil, err
 	}
 
 	cfgPath := configPath
@@ -245,15 +269,15 @@ func runPublishPool(cmd *cobra.Command, args []string) error {
 
 	cfg, err := config.Load(cfgPath)
 	if err != nil {
-		return err
+		return "", nil, nil, err
 	}
 	if err := cfg.ResolveHosting(root); err != nil {
-		return err
+		return "", nil, nil, err
 	}
 
 	token := ghToken()
 	if token == "" {
-		return fmt.Errorf("GH_TOKEN or GITHUB_TOKEN required for publish-pool")
+		return "", nil, nil, fmt.Errorf("GH_TOKEN or GITHUB_TOKEN required for %s", command)
 	}
 
 	client := github.NewClient(nil).WithAuthToken(token)
@@ -262,8 +286,17 @@ func runPublishPool(cmd *cobra.Command, args []string) error {
 		var parseErr error
 		client, parseErr = client.WithEnterpriseURLs(apiBase, apiBase)
 		if parseErr != nil {
-			return fmt.Errorf("parsing GITHUB_API_BASE: %w", parseErr)
+			return "", nil, nil, fmt.Errorf("parsing GITHUB_API_BASE: %w", parseErr)
 		}
+	}
+
+	return root, cfg, client, nil
+}
+
+func runPublishPool(cmd *cobra.Command, args []string) error {
+	root, cfg, client, err := publishContext("publish-pool")
+	if err != nil {
+		return err
 	}
 
 	return release.PublishPool(cmd.Context(), client, cfg, root)
