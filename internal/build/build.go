@@ -175,12 +175,11 @@ func buildSuite(ctx context.Context, opts Options, cfg *config.RepoConfig, suite
 
 	depiction.EnrichEntries(entries, cfg)
 
+	// APT resolves Filename by concatenating it onto the source base URI, so it
+	// must stay relative to the suite this index is served from. Each suite's
+	// release carries its own copy of the asset, symlinked entries included.
 	for _, e := range entries {
-		canonSuite, err := deb.CanonicalSuite(opts.RootDir, e.CanonicalPath)
-		if err != nil {
-			return nil, fmt.Errorf("resolving canonical suite for %s: %w", e.Path, err)
-		}
-		e.Filename = cfg.Hosting.AssetURL(canonSuite, filepath.Base(e.CanonicalPath))
+		e.Filename = "./" + filepath.Base(e.Path)
 	}
 
 	if err := repo.WritePackagesAll(ctx, entries, suiteDir); err != nil {
