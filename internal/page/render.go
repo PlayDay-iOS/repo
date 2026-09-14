@@ -25,7 +25,7 @@ const suiteIndexTemplate = `<!doctype html>
   <body>
     <h1>{{.Label}} Source</h1>
     <p>Use this source line:</p>
-    <pre>deb {{.RepoURL}}{{.Suite}}/ ./</pre>
+    <pre>deb {{.SourceURL}} ./</pre>
   </body>
 </html>
 `
@@ -86,7 +86,9 @@ func RenderLandingPage(ctx context.Context, outputDir string, cfg *config.RepoCo
 
 	var suites []SuiteInfo
 	for _, s := range cfg.Suites {
-		suiteURL := repoURL + s + "/"
+		// Index and payloads share the release URL, so that is the source a
+		// package manager must be given; the Pages site is only the gateway.
+		suiteURL := cfg.Hosting.SourceURL(s)
 		suites = append(suites, SuiteInfo{
 			Name:     s,
 			Label:    TitleCase(s),
@@ -116,15 +118,15 @@ func RenderLandingPage(ctx context.Context, outputDir string, cfg *config.RepoCo
 }
 
 // WriteSuiteIndexHTML writes a simple info page for a suite directory.
-func WriteSuiteIndexHTML(dir, suite, repoURL string) error {
+func WriteSuiteIndexHTML(dir, suite, sourceURL string) error {
 	data := struct {
-		Label   string
-		Suite   string
-		RepoURL string
+		Label     string
+		Suite     string
+		SourceURL string
 	}{
-		Label:   TitleCase(suite),
-		Suite:   suite,
-		RepoURL: repoURL,
+		Label:     TitleCase(suite),
+		Suite:     suite,
+		SourceURL: sourceURL,
 	}
 	return fileutil.WriteAtomic(filepath.Join(dir, "index.html"), 0644, func(w io.Writer) error {
 		return suiteIndexTmpl.Execute(w, data)

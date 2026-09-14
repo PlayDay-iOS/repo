@@ -261,7 +261,7 @@ func writeLegacySuite(ctx context.Context, opts Options, cfg *config.RepoConfig,
 		return fmt.Errorf("signing legacy %s: %w", suite, err)
 	}
 
-	return page.WriteSuiteIndexHTML(suiteDir, suite, cfg.URL)
+	return page.WriteSuiteIndexHTML(suiteDir, suite, cfg.Hosting.SourceURL(suite))
 }
 
 // stubEntries copies the migration stub .deb into suiteDir and returns its

@@ -226,6 +226,9 @@ func runRender(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+	if err := cfg.ResolveHosting(root); err != nil {
+		return err
+	}
 
 	buildTime, err := build.BuildTimeFromEnv()
 	if err != nil {

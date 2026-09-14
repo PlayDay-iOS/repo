@@ -26,9 +26,10 @@ func TestRenderLandingPage_FileTemplate(t *testing.T) {
 	}
 
 	cfg := &config.RepoConfig{
-		Name:   "Test Repo",
-		URL:    "https://example.com/repo/",
-		Suites: []string{"stable", "beta"},
+		Name:    "Test Repo",
+		URL:     "https://example.com/repo/",
+		Suites:  []string{"stable", "beta"},
+		Hosting: config.HostingConfig{Owner: "TestOrg", Repo: "testrepo", TagPrefix: "pool-"},
 	}
 
 	outDir := filepath.Join(dir, "out")
@@ -44,8 +45,8 @@ func TestRenderLandingPage_FileTemplate(t *testing.T) {
 
 	for _, want := range []string{
 		"<title>Test Repo</title>",
-		"deb https://example.com/repo/stable/ ./",
-		"deb https://example.com/repo/beta/ ./",
+		"deb https://github.com/TestOrg/testrepo/releases/download/pool-stable/ ./",
+		"deb https://github.com/TestOrg/testrepo/releases/download/pool-beta/ ./",
 		"cydia://",
 		"zbra://",
 		"sileo://",
@@ -59,7 +60,8 @@ func TestRenderLandingPage_FileTemplate(t *testing.T) {
 func TestWriteSuiteIndexHTML(t *testing.T) {
 	t.Parallel()
 	dir := t.TempDir()
-	if err := WriteSuiteIndexHTML(dir, "stable", "https://example.com/repo/"); err != nil {
+	source := "https://github.com/TestOrg/testrepo/releases/download/pool-stable/"
+	if err := WriteSuiteIndexHTML(dir, "stable", source); err != nil {
 		t.Fatal(err)
 	}
 
@@ -67,7 +69,9 @@ func TestWriteSuiteIndexHTML(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !strings.Contains(string(data), "deb https://example.com/repo/stable/ ./") {
+	// This page is served from the URL the repository used to live at, so it
+	// has to advertise the new source rather than the one it sits on.
+	if !strings.Contains(string(data), "deb "+source+" ./") {
 		t.Error("missing source line")
 	}
 }
