@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"io/fs"
 	"log/slog"
+	"maps"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 
 	"github.com/PlayDay-iOS/repo/internal/config"
@@ -42,8 +44,9 @@ func PublishPool(ctx context.Context, client *github.Client, cfg *config.RepoCon
 		tag := cfg.Hosting.ReleaseTag(suite)
 		group := bySuite[tag]
 		if len(group) == 0 {
+			// Not skipped: a suite emptied of packages still has to lose the
+			// payloads a previous run left on its release.
 			slog.Info("no assets for suite", "suite", suite, "tag", tag)
-			continue
 		}
 
 		releaseID, err := pub.EnsureRelease(ctx, tag)
@@ -79,9 +82,44 @@ func PublishPool(ctx context.Context, client *github.Client, cfg *config.RepoCon
 				return fmt.Errorf("uploading %s: %w", e.basename, err)
 			}
 		}
+
+		if err := pruneStaleDebs(ctx, pub, tag, group, existing); err != nil {
+			return err
+		}
 	}
 
 	return nil
+}
+
+// pruneStaleDebs deletes payloads left on a suite's release by an earlier run
+// that its pool no longer contains. Only .deb assets are considered, which is
+// what keeps the index published to the same release (Release, Packages*,
+// InRelease, CydiaIcon.png) out of reach.
+func pruneStaleDebs(ctx context.Context, pub *Publisher, tag string, group []poolEntry, existing map[string]Asset) error {
+	expected := make(map[string]bool, len(group))
+	for _, e := range group {
+		expected[e.basename] = true
+	}
+
+	for _, name := range slices.Sorted(maps.Keys(existing)) {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+		if expected[name] || !isDeb(name) {
+			continue
+		}
+		slog.Warn("pruning stale asset", "name", name, "tag", tag)
+		if err := pub.DeleteAsset(ctx, existing[name].ID, name); err != nil {
+			return fmt.Errorf("pruning %s from %s: %w", name, tag, err)
+		}
+	}
+
+	return nil
+}
+
+// isDeb reports whether an asset or file name is a Debian package.
+func isDeb(name string) bool {
+	return strings.HasSuffix(strings.ToLower(name), ".deb")
 }
 
 // collectPoolEntries walks all suite pool dirs and resolves symlinks. Each
@@ -105,7 +143,7 @@ func collectPoolEntries(rootDir string, suites []string, component string) ([]po
 			if d.IsDir() {
 				return nil
 			}
-			if !strings.HasSuffix(strings.ToLower(d.Name()), ".deb") {
+			if !isDeb(d.Name()) {
 				return nil
 			}
 
