@@ -44,11 +44,6 @@ jobs:
       - name: Run tests
         run: go test -race ./...
 
-      - name: Upload pool assets to GitHub Releases
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./repotool publish-pool
-
       - name: Compute SOURCE_DATE_EPOCH
         run: echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
 
@@ -56,12 +51,20 @@ jobs:
         env:
           GPG_PRIVATE_KEY: ${{ secrets.APT_GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.APT_GPG_PASSPHRASE }}
-        run: ./repotool build --output _site --index-output _index
+        run: ./repotool build --output _site --dist-output _dist
 
-      - name: Upload index to GitHub Releases
+      # The published tree is a single orphan commit force-pushed to the serving
+      # branch: its .deb blobs are already in main's pool/, so git sends only the
+      # index. A separate index file keeps the checkout's own index untouched.
+      - name: Publish dist branch
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./repotool publish-index --index-output _index
+          GIT_INDEX_FILE: ${{ runner.temp }}/dist.index
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git --work-tree=_dist add -A -- . ':!.repotool-output'
+          commit=$(git commit-tree -m "chore(dist): publish ${GITHUB_SHA}" "$(git write-tree)")
+          git push -f origin "${commit}:refs/heads/dist"
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
