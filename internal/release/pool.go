@@ -10,12 +10,11 @@ import (
 	"strings"
 
 	"github.com/PlayDay-iOS/repo/internal/config"
-	"github.com/PlayDay-iOS/repo/internal/deb"
 	"github.com/google/go-github/v84/github"
 )
 
-// poolEntry tracks a single .deb by its canonical (resolved) path
-// and the suite it belongs to.
+// poolEntry tracks a single .deb by its canonical (resolved) path, the suite
+// it is published under, and the asset name it is uploaded as.
 type poolEntry struct {
 	canonicalPath string
 	basename      string
@@ -23,15 +22,14 @@ type poolEntry struct {
 	size          int64
 }
 
-// PublishPool walks the pool directory, deduplicates by canonical path,
-// and uploads missing assets to the appropriate GitHub Release per suite.
+// PublishPool walks the pool directory and uploads missing assets to each
+// suite's GitHub Release.
 func PublishPool(ctx context.Context, client *github.Client, cfg *config.RepoConfig, rootDir string) error {
 	entries, err := collectPoolEntries(rootDir, cfg.Suites, cfg.Component)
 	if err != nil {
 		return fmt.Errorf("collecting pool entries: %w", err)
 	}
 
-	// Group by canonical suite tag
 	bySuite := make(map[string][]poolEntry)
 	for _, e := range entries {
 		tag := cfg.Hosting.ReleaseTag(e.suite)
@@ -86,11 +84,12 @@ func PublishPool(ctx context.Context, client *github.Client, cfg *config.RepoCon
 	return nil
 }
 
-// collectPoolEntries walks all suite pool dirs, resolves symlinks, and
-// deduplicates by canonical path (so a symlink in beta pointing to stable
-// only appears once, under stable's suite).
+// collectPoolEntries walks all suite pool dirs and resolves symlinks. Each
+// suite's index addresses that suite's own release, so an entry is collected
+// per suite it appears in; only a repeated asset name within one suite is
+// dropped, since a release tag is a single flat namespace.
 func collectPoolEntries(rootDir string, suites []string, component string) ([]poolEntry, error) {
-	seen := make(map[string]bool) // canonical path → already collected
+	seen := make(map[string]bool) // suite + asset name → already collected
 	var entries []poolEntry
 
 	for _, suite := range suites {
@@ -122,10 +121,12 @@ func collectPoolEntries(rootDir string, suites []string, component string) ([]po
 				return fmt.Errorf("resolved path %s escapes root %s", canonical, rootDir)
 			}
 
-			if seen[canonical] {
+			basename := d.Name()
+			key := suite + "/" + basename
+			if seen[key] {
 				return nil
 			}
-			seen[canonical] = true
+			seen[key] = true
 
 			fi, err := os.Stat(canonical)
 			if err != nil {
@@ -135,16 +136,10 @@ func collectPoolEntries(rootDir string, suites []string, component string) ([]po
 				return nil
 			}
 
-			// Reuse deb.CanonicalSuite to extract the suite from the resolved path
-			canonSuite, err := deb.CanonicalSuite(rootDir, canonical)
-			if err != nil {
-				return err
-			}
-
 			entries = append(entries, poolEntry{
 				canonicalPath: canonical,
-				basename:      filepath.Base(canonical),
-				suite:         canonSuite,
+				basename:      basename,
+				suite:         suite,
 				size:          fi.Size(),
 			})
 			return nil

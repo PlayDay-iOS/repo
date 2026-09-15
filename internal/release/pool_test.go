@@ -145,7 +145,7 @@ func TestPublishPool_SkipsExistingAsset(t *testing.T) {
 	}
 }
 
-func TestPublishPool_SymlinkDedup(t *testing.T) {
+func TestPublishPool_SymlinkUploadsIntoEachSuite(t *testing.T) {
 	t.Parallel()
 	root := t.TempDir()
 	stableDir := filepath.Join(root, "pool", "stable", "main")
@@ -219,11 +219,78 @@ func TestPublishPool_SymlinkDedup(t *testing.T) {
 
 	mu.Lock()
 	defer mu.Unlock()
-	// test.deb should be uploaded ONLY to pool-stable (canonical location)
-	if len(uploadsByRelease["pool-stable"]) != 1 || uploadsByRelease["pool-stable"][0] != "test.deb" {
-		t.Errorf("pool-stable uploads = %v, want [test.deb]", uploadsByRelease["pool-stable"])
+	// Each suite's index addresses its own release, so a symlinked deb needs a
+	// copy in both rather than a single canonical upload.
+	for _, tag := range []string{"pool-stable", "pool-beta"} {
+		if len(uploadsByRelease[tag]) != 1 || uploadsByRelease[tag][0] != "test.deb" {
+			t.Errorf("%s uploads = %v, want [test.deb]", tag, uploadsByRelease[tag])
+		}
 	}
-	if len(uploadsByRelease["pool-beta"]) != 0 {
-		t.Errorf("pool-beta should have no uploads (symlink dedup), got %v", uploadsByRelease["pool-beta"])
+}
+
+func TestPublishPool_DuplicateNamesWithinSuiteUploadedOnce(t *testing.T) {
+	t.Parallel()
+	root := t.TempDir()
+	stableDir := filepath.Join(root, "pool", "stable", "main")
+	nestedDir := filepath.Join(stableDir, "nested")
+	if err := os.MkdirAll(nestedDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+
+	debData := testutil.BuildMinimalDeb([]testutil.Field{
+		{Key: "Package", Value: "com.test.pkg"},
+		{Key: "Version", Value: "1.0"},
+		{Key: "Architecture", Value: "iphoneos-arm64"},
+		{Key: "Maintainer", Value: "Test <test@test.com>"},
+		{Key: "Description", Value: "Test"},
+	})
+	if err := os.WriteFile(filepath.Join(stableDir, "test.deb"), debData, 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Symlink(filepath.Join(stableDir, "test.deb"), filepath.Join(nestedDir, "test.deb")); err != nil {
+		t.Fatal(err)
+	}
+
+	var mu sync.Mutex
+	var uploads []string
+
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		if r.Method == http.MethodGet && strings.Contains(r.URL.Path, "/releases/tags/") {
+			json.NewEncoder(w).Encode(&github.RepositoryRelease{ID: github.Ptr(int64(1)), TagName: github.Ptr("pool-stable")})
+			return
+		}
+		if r.Method == http.MethodGet && strings.Contains(r.URL.Path, "/assets") {
+			json.NewEncoder(w).Encode([]*github.ReleaseAsset{})
+			return
+		}
+		if r.Method == http.MethodPost && strings.Contains(r.URL.Path, "/assets") {
+			name := r.URL.Query().Get("name")
+			mu.Lock()
+			uploads = append(uploads, name)
+			mu.Unlock()
+			json.NewEncoder(w).Encode(&github.ReleaseAsset{ID: github.Ptr(int64(10)), Name: github.Ptr(name)})
+			return
+		}
+		w.WriteHeader(http.StatusNotFound)
+	})
+	client := newTestClient(t, handler)
+
+	cfg := &config.RepoConfig{
+		Suites:    []string{"stable"},
+		Component: "main",
+		Hosting:   config.HostingConfig{Owner: "org", Repo: "repo", TagPrefix: "pool-"},
+	}
+
+	if err := PublishPool(context.Background(), client, cfg, root); err != nil {
+		t.Fatal(err)
+	}
+
+	mu.Lock()
+	defer mu.Unlock()
+	// A release tag is one flat namespace, so the same asset name can only be
+	// uploaded once no matter how many pool paths reach it.
+	if len(uploads) != 1 {
+		t.Errorf("uploads = %v, want exactly one test.deb", uploads)
 	}
 }

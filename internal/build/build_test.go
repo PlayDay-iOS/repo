@@ -48,12 +48,38 @@ repo = "testrepo"
 		t.Fatal(err)
 	}
 
+	writeStubDeb(t, root)
+
 	return root, Options{
 		RootDir:    root,
 		OutputDir:  filepath.Join(root, "_site"),
+		IndexDir:   filepath.Join(root, "_index"),
 		ConfigPath: filepath.Join(root, "repo.toml"),
 		// TemplatePath is intentionally empty: build uses the embedded default.
 	}
+}
+
+// writeStubDeb installs the migration stub that the legacy Pages index
+// advertises in place of the real packages.
+func writeStubDeb(t *testing.T, root string) string {
+	t.Helper()
+	dir := filepath.Join(root, "resources", "source-moved")
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	name := "dev.playday3008.source-moved_1.0.0_all.deb"
+	data := testutil.BuildMinimalDeb([]testutil.Field{
+		{Key: "Package", Value: "dev.playday3008.source-moved"},
+		{Key: "Name", Value: "Repository Moved"},
+		{Key: "Version", Value: "1.0.0"},
+		{Key: "Architecture", Value: "all"},
+		{Key: "Maintainer", Value: "PlayDay-iOS"},
+		{Key: "Description", Value: "placeholder"},
+	})
+	if err := os.WriteFile(filepath.Join(dir, name), data, 0644); err != nil {
+		t.Fatal(err)
+	}
+	return name
 }
 
 func TestRun_EmptyPool(t *testing.T) {
@@ -65,18 +91,28 @@ func TestRun_EmptyPool(t *testing.T) {
 	}
 
 	for _, f := range []string{
-		"index.html",
-		"CydiaIcon.png",
 		"stable/Packages",
 		"stable/Packages.gz",
 		"stable/Packages.xz",
 		"stable/Packages.bz2",
 		"stable/Release",
 		"stable/CydiaIcon.png",
+	} {
+		if _, err := os.Stat(filepath.Join(opts.IndexDir, f)); err != nil {
+			t.Errorf("missing expected index file: %s", f)
+		}
+	}
+
+	for _, f := range []string{
+		"index.html",
+		"CydiaIcon.png",
+		"stable/Packages",
+		"stable/Release",
+		"stable/CydiaIcon.png",
 		"stable/index.html",
 	} {
 		if _, err := os.Stat(filepath.Join(opts.OutputDir, f)); err != nil {
-			t.Errorf("missing expected file: %s", f)
+			t.Errorf("missing expected site file: %s", f)
 		}
 	}
 }
@@ -97,7 +133,7 @@ func TestRun_WithDeb(t *testing.T) {
 		t.Fatalf("Run failed: %v", err)
 	}
 
-	pkgData, err := os.ReadFile(filepath.Join(opts.OutputDir, "stable", "Packages"))
+	pkgData, err := os.ReadFile(filepath.Join(opts.IndexDir, "stable", "Packages"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -105,8 +141,8 @@ func TestRun_WithDeb(t *testing.T) {
 	if !strings.Contains(content, "Package: com.test.pkg") {
 		t.Error("Packages should contain the package")
 	}
-	if !strings.Contains(content, "Filename: https://github.com/TestOrg/testrepo/releases/download/pool-stable/test.deb") {
-		t.Errorf("Packages should contain absolute Filename URL:\n%s", content)
+	if !strings.Contains(content, "Filename: ./test.deb") {
+		t.Errorf("Packages should contain a Filename relative to the source base:\n%s", content)
 	}
 	if !strings.Contains(content, "Depiction: https://example.com/repo/depictions/test/depiction.html") {
 		t.Errorf("Packages should contain injected Depiction URL:\n%s", content)
@@ -116,7 +152,7 @@ func TestRun_WithDeb(t *testing.T) {
 	}
 
 	// No .deb mirror in output — payloads are on GitHub Releases
-	mirrorPath := filepath.Join(opts.OutputDir, "stable", "pool")
+	mirrorPath := filepath.Join(opts.IndexDir, "stable", "pool")
 	if _, err := os.Stat(mirrorPath); !os.IsNotExist(err) {
 		t.Error("pool mirror should NOT exist in output with releases hosting")
 	}
@@ -163,14 +199,14 @@ func TestRun_Reproducible(t *testing.T) {
 	if err := Run(context.Background(), opts); err != nil {
 		t.Fatalf("first Run failed: %v", err)
 	}
-	pkgFirst, _ := os.ReadFile(filepath.Join(opts.OutputDir, "stable", "Packages"))
+	pkgFirst, _ := os.ReadFile(filepath.Join(opts.IndexDir, "stable", "Packages"))
 	htmlFirst, _ := os.ReadFile(filepath.Join(opts.OutputDir, "depictions", "test", "depiction.html"))
 	jsonFirst, _ := os.ReadFile(filepath.Join(opts.OutputDir, "depictions", "test", "sileo.json"))
 
 	if err := Run(context.Background(), opts); err != nil {
 		t.Fatalf("second Run failed: %v", err)
 	}
-	pkgSecond, _ := os.ReadFile(filepath.Join(opts.OutputDir, "stable", "Packages"))
+	pkgSecond, _ := os.ReadFile(filepath.Join(opts.IndexDir, "stable", "Packages"))
 	htmlSecond, _ := os.ReadFile(filepath.Join(opts.OutputDir, "depictions", "test", "depiction.html"))
 	jsonSecond, _ := os.ReadFile(filepath.Join(opts.OutputDir, "depictions", "test", "sileo.json"))
 
@@ -420,14 +456,60 @@ repo = "testrepo"
 		t.Fatal(err)
 	}
 
+	writeStubDeb(t, root)
+
 	return root, Options{
 		RootDir:    root,
 		OutputDir:  filepath.Join(root, "_site"),
+		IndexDir:   filepath.Join(root, "_index"),
 		ConfigPath: filepath.Join(root, "repo.toml"),
 	}
 }
 
-func TestRun_SymlinkCrossSuite_UsesCanonicalSuiteInURL(t *testing.T) {
+func TestRun_LegacySiteIndexAdvertisesOnlyTheStub(t *testing.T) {
+	t.Parallel()
+	debData := testutil.BuildMinimalDeb([]testutil.Field{
+		{Key: "Package", Value: "com.test.pkg"},
+		{Key: "Version", Value: "1.0"},
+		{Key: "Architecture", Value: "iphoneos-arm64"},
+		{Key: "Maintainer", Value: "Test <t@t.com>"},
+		{Key: "Description", Value: "Test package"},
+	})
+
+	_, opts := newTestRepo(t, "stable", map[string][]byte{"test.deb": debData})
+
+	if err := Run(context.Background(), opts); err != nil {
+		t.Fatalf("Run failed: %v", err)
+	}
+
+	data, err := os.ReadFile(filepath.Join(opts.OutputDir, "stable", "Packages"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	site := string(data)
+
+	// The old Pages URL cannot serve payloads, so advertising real packages
+	// there would reproduce the 404 this whole change exists to remove.
+	if strings.Contains(site, "Package: com.test.pkg") {
+		t.Errorf("superseded Pages index must not advertise real packages:\n%s", site)
+	}
+	if !strings.Contains(site, "Package: dev.playday3008.source-moved") {
+		t.Errorf("superseded Pages index should advertise the stub:\n%s", site)
+	}
+	if !strings.Contains(site, "Filename: ./dev.playday3008.source-moved_1.0.0_all.deb") {
+		t.Errorf("stub Filename should be relative to the Pages suite dir:\n%s", site)
+	}
+	if !strings.Contains(site, "https://github.com/TestOrg/testrepo/releases/download/pool-stable/") {
+		t.Errorf("stub should name the new source URL:\n%s", site)
+	}
+
+	stubPath := filepath.Join(opts.OutputDir, "stable", "dev.playday3008.source-moved_1.0.0_all.deb")
+	if _, err := os.Stat(stubPath); err != nil {
+		t.Errorf("stub payload should be served next to the index it is listed in: %v", err)
+	}
+}
+
+func TestRun_SymlinkCrossSuite_UsesInSuiteRelativeFilename(t *testing.T) {
 	t.Parallel()
 	debData := testutil.BuildMinimalDeb([]testutil.Field{
 		{Key: "Package", Value: "com.test.pkg"},
@@ -443,27 +525,31 @@ func TestRun_SymlinkCrossSuite_UsesCanonicalSuiteInURL(t *testing.T) {
 		t.Fatalf("Run failed: %v", err)
 	}
 
-	// Stable should reference pool-stable release
-	stableData, err := os.ReadFile(filepath.Join(opts.OutputDir, "stable", "Packages"))
+	// Stable's own copy is served from the stable release.
+	stableData, err := os.ReadFile(filepath.Join(opts.IndexDir, "stable", "Packages"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !strings.Contains(string(stableData), "Filename: https://github.com/TestOrg/testrepo/releases/download/pool-stable/test.deb") {
-		t.Errorf("stable Packages should reference pool-stable URL:\n%s", string(stableData))
+	if !strings.Contains(string(stableData), "Filename: ./test.deb") {
+		t.Errorf("stable Packages should reference the deb relative to the stable source base:\n%s", string(stableData))
 	}
 
-	// Beta symlink should also reference pool-stable (canonical path is in stable)
-	betaData, err := os.ReadFile(filepath.Join(opts.OutputDir, "beta", "Packages"))
+	betaData, err := os.ReadFile(filepath.Join(opts.IndexDir, "beta", "Packages"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !strings.Contains(string(betaData), "Filename: https://github.com/TestOrg/testrepo/releases/download/pool-stable/test.deb") {
-		t.Errorf("beta Packages should reference pool-stable URL (dedup):\n%s", string(betaData))
+	// A symlink resolving into stable is still served from beta's own release,
+	// so its Filename must stay relative to the beta source base.
+	if !strings.Contains(string(betaData), "Filename: ./test.deb") {
+		t.Errorf("beta Packages should reference the deb relative to the beta source base:\n%s", string(betaData))
+	}
+	if strings.Contains(string(betaData), "pool-stable") {
+		t.Errorf("beta Packages must not reference another suite's release:\n%s", string(betaData))
 	}
 
 	// No .deb mirror in either suite
 	for _, suite := range []string{"stable", "beta"} {
-		poolDir := filepath.Join(opts.OutputDir, suite, "pool")
+		poolDir := filepath.Join(opts.IndexDir, suite, "pool")
 		if _, err := os.Stat(poolDir); !os.IsNotExist(err) {
 			t.Errorf("%s should have no pool/ mirror in output", suite)
 		}

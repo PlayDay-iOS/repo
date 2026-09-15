@@ -1,6 +1,6 @@
 # PlayDay-iOS APT Repository
 
-Debian-style repository for iOS package managers (Cydia, Zebra, Sileo), published through GitHub Pages.
+Debian-style repository for iOS package managers (Cydia, Zebra, Sileo). Index files and `.deb` payloads are published together as GitHub Release assets; GitHub Pages carries the landing page and depictions.
 
 Built as a single Go binary (`repotool`) with no external tool dependencies.
 
@@ -10,11 +10,12 @@ Built as a single Go binary (`repotool`) with no external tool dependencies.
 - `repo.toml`: repository configuration (TOML)
 - `internal/page/templates/index.html.tmpl`: landing page template, embedded into `repotool` at build time. Override with `--template <path>`.
 - `resources/CydiaIcon.png`: source icon file (Made by [Evehly](https://www.deviantart.com/evehly/art/The-Last-Pringle-852158299))
+- `resources/source-moved/`: stub `.deb` advertised by the superseded Pages suite index (see "Two publish targets")
 
 Notes:
 
 - `repo.name` and `repo.url` are required in `repo.toml`. `repo.url` must use `https://`. `metadata.component` is a single string ("main" by default).
-- Published suite roots use `./` source style (`deb <url>/<suite>/ ./`).
+- Published suite roots use `./` source style (`deb <source-url> ./`), where the source URL is the suite's release download path.
 - Set `SOURCE_DATE_EPOCH` for reproducible builds (Unix timestamp). The build workflow derives this from the latest commit timestamp automatically. A non-empty but unparseable value is rejected.
 - Index files are hashed with MD5, SHA1, SHA256, and SHA512 for compatibility with older clients.
 
@@ -26,7 +27,7 @@ Notes:
 
 1. Add packages to `pool/<suite>/<component>/`, or use org import.
 2. Build: `go build -o repotool ./cmd/repotool && ./repotool build`
-3. GitHub Actions deploys `_site/` to GitHub Pages.
+3. GitHub Actions uploads the pool and the index to GitHub Releases, then deploys `_site/` to GitHub Pages.
 
 Main workflow: `.github/workflows/build-and-deploy.yml`
 
@@ -37,18 +38,36 @@ Main workflow: `.github/workflows/build-and-deploy.yml`
 3. Push to `main`.
 4. In repository settings, enable Pages with source set to GitHub Actions.
 
-Expected files after build (rooted at the output directory):
+### Two publish targets
 
-- `.repotool-output` — marker file written at the output root. `repotool build` refuses to wipe an existing output directory unless this marker is present, so an accidental `--output ~/important-stuff` is rejected.
-- `CydiaIcon.png` (root)
-- `index.html` (root landing page)
-- Per suite (e.g. `stable/`, `beta/`):
+`Filename:` in a `Packages` stanza is resolved by APT and Cydia through plain
+concatenation onto the source base URI, so the index and the payloads it names
+must share an origin and path prefix. The pool is far larger than the 1 GB
+GitHub Pages cap, which leaves the release tag as the only place both can live.
+
+`repotool build` therefore writes two trees:
+
+- `--index-output` (default `_index/`) holds the real index, uploaded to each
+  suite's release by `repotool publish-index`. This is what package managers
+  are pointed at.
+- `--output` (default `_site/`) holds the Pages bundle: landing page,
+  depictions, and a stand-in index per suite. Pages cannot redirect, so rather
+  than leave anyone who subscribed to the old suite URL with downloads that
+  404, that index advertises a single stub package naming the release URL to
+  add instead.
+
+Expected files after build:
+
+- `.repotool-output` — marker file written at the root of each output tree. `repotool build` refuses to wipe an existing output directory unless this marker is present, so an accidental `--output ~/important-stuff` is rejected.
+- In `_index/<suite>/`:
   - `Packages` (+ `.gz`, `.xz`, `.bz2`)
   - `Release`, `Release.gpg`, `InRelease` (signed variants only when a key is supplied)
   - `CydiaIcon.png`
-  - `index.html`
-  - Note: `.deb` payloads are served from GitHub Releases, not from the Pages bundle. See `repotool publish-pool`.
-- `repo-public.key` (root, only if a `repo-public.key` file exists at the repo root; the landing page links to it only when this file is present)
+- In `_site/`:
+  - `CydiaIcon.png` (root)
+  - `index.html` (root landing page)
+  - Per suite: the stub index (`Packages`, `Release`, signed variants), `CydiaIcon.png`, `index.html`, and the stub `.deb` itself
+- `repo-public.key` (`_site/` root, only if a `repo-public.key` file exists at the repo root; the landing page links to it only when this file is present)
 - `depictions/` (when at least one suite has entries):
   - `style.css` — shared stylesheet for HTML depictions
   - `<DebBasename>/depiction.html` — Cydia HTML depiction
@@ -56,8 +75,11 @@ Expected files after build (rooted at the output directory):
 
 Source lines:
 
-- Stable: `deb https://playday-ios.github.io/repo/stable/ ./`
-- Beta: `deb https://playday-ios.github.io/repo/beta/ ./`
+- Stable: `deb https://github.com/PlayDay-iOS/repo/releases/download/pool-stable/ ./`
+- Beta: `deb https://github.com/PlayDay-iOS/repo/releases/download/pool-beta/ ./`
+
+A suite's release carries a copy of every `.deb` its index lists, symlinked
+entries included, because a relative `Filename:` cannot reach across tags.
 
 ## Depictions
 
@@ -70,9 +92,10 @@ Source lines:
 ## CLI
 
 ```sh
-repotool build  [--output _site] [--config repo.toml] [--template <path>] [--depiction-template <path>] [--depiction-style <path>]
+repotool build  [--output _site] [--index-output _index] [--config repo.toml] [--template <path>] [--depiction-template <path>] [--depiction-style <path>]
 repotool import [--config repo.toml] [--allowlist org-import-allowlist.txt] [--suite <name>] [--include-prereleases] [--timeout 30m]
 repotool publish-pool [--config repo.toml]
+repotool publish-index [--index-output _index] [--config repo.toml]
 repotool render [--output _site] [--config repo.toml] [--template <path>]
 repotool --version
 ```
@@ -80,6 +103,7 @@ repotool --version
 Flag defaults:
 
 - `--output` defaults to `<cwd>/_site`
+- `--index-output` defaults to `<cwd>/_index`
 - `--config` defaults to `<cwd>/repo.toml`
 - `--template` is empty by default — `repotool` renders the embedded template. Pass a file path to override.
 - `--depiction-template` is empty by default — `repotool` uses the embedded depiction HTML template. Pass a file path to override.
@@ -95,7 +119,7 @@ The `--suite` flag on `import` defaults to the first entry of `metadata.suites` 
 | `SOURCE_DATE_EPOCH`         | Pins `Date:` and landing-page timestamp for reproducible builds.          |
 | `GPG_PRIVATE_KEY`           | Armored signing key. Empty = signing skipped (no error).                  |
 | `GPG_PASSPHRASE`            | Passphrase for `GPG_PRIVATE_KEY` when required.                           |
-| `GH_TOKEN` / `GITHUB_TOKEN` | GitHub API token for `import` and `publish-pool`; `GH_TOKEN` takes precedence. |
+| `GH_TOKEN` / `GITHUB_TOKEN` | GitHub API token for `import`, `publish-pool` and `publish-index`; `GH_TOKEN` takes precedence. |
 | `GITHUB_API_BASE`           | Alternate GitHub API endpoint (e.g. GitHub Enterprise).                   |
 | `ORG_NAME`                  | Overrides `github.org_name` from `repo.toml`.                             |
 | `TARGET_SUITE`              | Default target suite for `import` when `--suite` is not passed.           |
@@ -122,6 +146,7 @@ org_name = "PlayDay-iOS"  # required only for `import`
 
 [hosting]
 # owner defaults to github.org_name; repo defaults to cwd basename
+# The release tag is also the APT source base: index and payloads share it.
 tag_prefix = "pool-"    # release tag = tag_prefix + suite name; default: "pool-"
 ```
 

@@ -21,10 +21,12 @@ func (h HostingConfig) ReleaseTag(suite string) string {
 	return h.TagPrefix + suite
 }
 
-// AssetURL returns the absolute download URL for a release asset.
-func (h HostingConfig) AssetURL(suite, basename string) string {
-	return fmt.Sprintf("https://github.com/%s/%s/releases/download/%s/%s",
-		h.Owner, h.Repo, h.ReleaseTag(suite), basename)
+// SourceURL returns the APT source base URI for a suite. The index files are
+// published as assets on the same release as the .debs, so that a Filename
+// relative to this base resolves to the payload.
+func (h HostingConfig) SourceURL(suite string) string {
+	return fmt.Sprintf("https://github.com/%s/%s/releases/download/%s/",
+		h.Owner, h.Repo, h.ReleaseTag(suite))
 }
 
 // RepoConfig holds the parsed repository configuration.
@@ -155,7 +157,7 @@ func Load(path string) (*RepoConfig, error) {
 }
 
 // ResolveHosting fills in hosting defaults from OrgName and rootDir.
-// Must be called before using Hosting.AssetURL.
+// Must be called before using Hosting.SourceURL.
 func (c *RepoConfig) ResolveHosting(rootDir string) error {
 	if c.Hosting.Owner == "" {
 		c.Hosting.Owner = c.OrgName
