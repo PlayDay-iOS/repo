@@ -304,8 +304,8 @@ org_name = "TestOrg"
 	if cfg.Hosting.Owner != "" {
 		t.Errorf("Hosting.Owner should be empty before ResolveHosting, got %q", cfg.Hosting.Owner)
 	}
-	if cfg.Hosting.TagPrefix != "pool-" {
-		t.Errorf("Hosting.TagPrefix = %q, want %q", cfg.Hosting.TagPrefix, "pool-")
+	if cfg.Hosting.Branch != "dist" {
+		t.Errorf("Hosting.Branch = %q, want %q", cfg.Hosting.Branch, "dist")
 	}
 }
 
@@ -316,9 +316,9 @@ func TestLoad_HostingExplicit(t *testing.T) {
 name = "Test"
 url  = "https://example.com/repo/"
 [hosting]
-owner      = "MyOrg"
-repo       = "my-repo"
-tag_prefix = "deb-"
+owner  = "MyOrg"
+repo   = "my-repo"
+branch = "published"
 `)
 	cfg, err := Load(path)
 	if err != nil {
@@ -330,26 +330,28 @@ tag_prefix = "deb-"
 	if cfg.Hosting.Repo != "my-repo" {
 		t.Errorf("Hosting.Repo = %q", cfg.Hosting.Repo)
 	}
-	if cfg.Hosting.TagPrefix != "deb-" {
-		t.Errorf("Hosting.TagPrefix = %q", cfg.Hosting.TagPrefix)
+	if cfg.Hosting.Branch != "published" {
+		t.Errorf("Hosting.Branch = %q", cfg.Hosting.Branch)
 	}
 }
 
-func TestLoad_HostingEmptyTagPrefix(t *testing.T) {
+func TestLoad_InvalidHostingBranch(t *testing.T) {
 	t.Parallel()
-	path := writeConfig(t, `
+	for _, branch := range []string{"", "../escape", "feature/dist"} {
+		path := writeConfig(t, `
 [repo]
 name = "Test"
 url  = "https://example.com/repo/"
 [hosting]
-tag_prefix = ""
+branch = "`+branch+`"
 `)
-	cfg, err := Load(path)
-	if err != nil {
-		t.Fatalf("Load failed: %v", err)
-	}
-	if cfg.Hosting.TagPrefix != "" {
-		t.Errorf("Hosting.TagPrefix = %q, want empty", cfg.Hosting.TagPrefix)
+		_, err := Load(path)
+		if err == nil {
+			t.Fatalf("branch %q: expected error", branch)
+		}
+		if !strings.Contains(err.Error(), "hosting.branch") {
+			t.Errorf("branch %q: expected hosting.branch error, got: %v", branch, err)
+		}
 	}
 }
 
@@ -357,7 +359,7 @@ func TestResolveHosting_DefaultsFromOrgName(t *testing.T) {
 	t.Parallel()
 	cfg := &RepoConfig{
 		OrgName: "TestOrg",
-		Hosting: HostingConfig{TagPrefix: "pool-"},
+		Hosting: HostingConfig{Branch: "dist"},
 	}
 	if err := cfg.ResolveHosting("/fake/root/myrepo"); err != nil {
 		t.Fatal(err)
@@ -374,7 +376,7 @@ func TestResolveHosting_ExplicitOverridesDefaults(t *testing.T) {
 	t.Parallel()
 	cfg := &RepoConfig{
 		OrgName: "TestOrg",
-		Hosting: HostingConfig{Owner: "Other", Repo: "other-repo", TagPrefix: "v-"},
+		Hosting: HostingConfig{Owner: "Other", Repo: "other-repo", Branch: "other-dist"},
 	}
 	if err := cfg.ResolveHosting("/fake/root/myrepo"); err != nil {
 		t.Fatal(err)
@@ -389,7 +391,7 @@ func TestResolveHosting_ExplicitOverridesDefaults(t *testing.T) {
 
 func TestResolveHosting_MissingOwnerErrors(t *testing.T) {
 	t.Parallel()
-	cfg := &RepoConfig{Hosting: HostingConfig{TagPrefix: "pool-"}}
+	cfg := &RepoConfig{Hosting: HostingConfig{Branch: "dist"}}
 	err := cfg.ResolveHosting("/fake/root/myrepo")
 	if err == nil {
 		t.Fatal("expected error when owner cannot be inferred")
@@ -399,23 +401,11 @@ func TestResolveHosting_MissingOwnerErrors(t *testing.T) {
 	}
 }
 
-func TestHostingConfig_ReleaseTag(t *testing.T) {
-	t.Parallel()
-	h := HostingConfig{TagPrefix: "pool-"}
-	if got := h.ReleaseTag("stable"); got != "pool-stable" {
-		t.Errorf("ReleaseTag = %q", got)
-	}
-	h2 := HostingConfig{TagPrefix: ""}
-	if got := h2.ReleaseTag("beta"); got != "beta" {
-		t.Errorf("ReleaseTag with empty prefix = %q", got)
-	}
-}
-
 func TestHostingConfig_SourceURL(t *testing.T) {
 	t.Parallel()
-	h := HostingConfig{Owner: "PlayDay-iOS", Repo: "repo", TagPrefix: "pool-"}
+	h := HostingConfig{Owner: "PlayDay-iOS", Repo: "repo", Branch: "dist"}
 	got := h.SourceURL("stable")
-	want := "https://github.com/PlayDay-iOS/repo/releases/download/pool-stable/"
+	want := "https://raw.githubusercontent.com/PlayDay-iOS/repo/dist/stable/"
 	if got != want {
 		t.Errorf("SourceURL = %q, want %q", got, want)
 	}

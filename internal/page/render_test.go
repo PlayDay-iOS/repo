@@ -29,7 +29,7 @@ func TestRenderLandingPage_FileTemplate(t *testing.T) {
 		Name:    "Test Repo",
 		URL:     "https://example.com/repo/",
 		Suites:  []string{"stable", "beta"},
-		Hosting: config.HostingConfig{Owner: "TestOrg", Repo: "testrepo", TagPrefix: "pool-"},
+		Hosting: config.HostingConfig{Owner: "TestOrg", Repo: "testrepo", Branch: "dist"},
 	}
 
 	outDir := filepath.Join(dir, "out")
@@ -45,8 +45,8 @@ func TestRenderLandingPage_FileTemplate(t *testing.T) {
 
 	for _, want := range []string{
 		"<title>Test Repo</title>",
-		"deb https://github.com/TestOrg/testrepo/releases/download/pool-stable/ ./",
-		"deb https://github.com/TestOrg/testrepo/releases/download/pool-beta/ ./",
+		"deb https://raw.githubusercontent.com/TestOrg/testrepo/dist/stable/ ./",
+		"deb https://raw.githubusercontent.com/TestOrg/testrepo/dist/beta/ ./",
 		"cydia://",
 		"zbra://",
 		"sileo://",
@@ -60,7 +60,7 @@ func TestRenderLandingPage_FileTemplate(t *testing.T) {
 func TestWriteSuiteIndexHTML(t *testing.T) {
 	t.Parallel()
 	dir := t.TempDir()
-	source := "https://github.com/TestOrg/testrepo/releases/download/pool-stable/"
+	source := "https://raw.githubusercontent.com/TestOrg/testrepo/dist/stable/"
 	if err := WriteSuiteIndexHTML(dir, "stable", source); err != nil {
 		t.Fatal(err)
 	}

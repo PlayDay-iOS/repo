@@ -9,24 +9,21 @@ import (
 	"github.com/spf13/viper"
 )
 
-// HostingConfig holds GitHub Releases hosting settings.
+// HostingConfig holds settings for the branch the repository is served from.
 type HostingConfig struct {
-	Owner     string
-	Repo      string
-	TagPrefix string
+	Owner  string
+	Repo   string
+	Branch string
 }
 
-// ReleaseTag returns the GitHub Release tag for a given suite.
-func (h HostingConfig) ReleaseTag(suite string) string {
-	return h.TagPrefix + suite
-}
-
-// SourceURL returns the APT source base URI for a suite. The index files are
-// published as assets on the same release as the .debs, so that a Filename
-// relative to this base resolves to the payload.
+// SourceURL returns the APT source base URI for a suite. The index and the
+// .debs it names are committed to the same branch directory, so that a Filename
+// relative to this base resolves to the payload. raw.githubusercontent.com
+// serves both directly, without the signed redirect that GitHub Releases
+// answers with and that Cydia cannot follow.
 func (h HostingConfig) SourceURL(suite string) string {
-	return fmt.Sprintf("https://github.com/%s/%s/releases/download/%s/",
-		h.Owner, h.Repo, h.ReleaseTag(suite))
+	return fmt.Sprintf("https://raw.githubusercontent.com/%s/%s/%s/%s/",
+		h.Owner, h.Repo, h.Branch, suite)
 }
 
 // RepoConfig holds the parsed repository configuration.
@@ -136,14 +133,14 @@ func Load(path string) (*RepoConfig, error) {
 	}
 
 	// Parse [hosting] block with defaults.
-	tagPrefix := v.GetString("hosting.tag_prefix")
-	if !v.IsSet("hosting.tag_prefix") {
-		tagPrefix = "pool-"
+	branch := strings.TrimSpace(v.GetString("hosting.branch"))
+	if !v.IsSet("hosting.branch") {
+		branch = "dist"
 	}
 	cfg.Hosting = HostingConfig{
-		Owner:     strings.TrimSpace(v.GetString("hosting.owner")),
-		Repo:      strings.TrimSpace(v.GetString("hosting.repo")),
-		TagPrefix: tagPrefix,
+		Owner:  strings.TrimSpace(v.GetString("hosting.owner")),
+		Repo:   strings.TrimSpace(v.GetString("hosting.repo")),
+		Branch: branch,
 	}
 
 	if cfg.Hosting.Owner != "" && !validate.Name.MatchString(cfg.Hosting.Owner) {
@@ -151,6 +148,9 @@ func Load(path string) (*RepoConfig, error) {
 	}
 	if cfg.Hosting.Repo != "" && !validate.Name.MatchString(cfg.Hosting.Repo) {
 		return nil, fmt.Errorf("hosting.repo: invalid %q (must be alphanumeric with .-_ only)", cfg.Hosting.Repo)
+	}
+	if !validate.Name.MatchString(cfg.Hosting.Branch) {
+		return nil, fmt.Errorf("hosting.branch: invalid %q (must be alphanumeric with .-_ only)", cfg.Hosting.Branch)
 	}
 
 	return cfg, nil

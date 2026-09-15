@@ -53,7 +53,7 @@ repo = "testrepo"
 	return root, Options{
 		RootDir:    root,
 		OutputDir:  filepath.Join(root, "_site"),
-		IndexDir:   filepath.Join(root, "_index"),
+		DistDir:    filepath.Join(root, "_dist"),
 		ConfigPath: filepath.Join(root, "repo.toml"),
 		// TemplatePath is intentionally empty: build uses the embedded default.
 	}
@@ -98,7 +98,7 @@ func TestRun_EmptyPool(t *testing.T) {
 		"stable/Release",
 		"stable/CydiaIcon.png",
 	} {
-		if _, err := os.Stat(filepath.Join(opts.IndexDir, f)); err != nil {
+		if _, err := os.Stat(filepath.Join(opts.DistDir, f)); err != nil {
 			t.Errorf("missing expected index file: %s", f)
 		}
 	}
@@ -133,7 +133,7 @@ func TestRun_WithDeb(t *testing.T) {
 		t.Fatalf("Run failed: %v", err)
 	}
 
-	pkgData, err := os.ReadFile(filepath.Join(opts.IndexDir, "stable", "Packages"))
+	pkgData, err := os.ReadFile(filepath.Join(opts.DistDir, "stable", "Packages"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -141,8 +141,11 @@ func TestRun_WithDeb(t *testing.T) {
 	if !strings.Contains(content, "Package: com.test.pkg") {
 		t.Error("Packages should contain the package")
 	}
-	if !strings.Contains(content, "Filename: ./test.deb") {
+	if !strings.Contains(content, "Filename: test.deb") {
 		t.Errorf("Packages should contain a Filename relative to the source base:\n%s", content)
+	}
+	if _, err := os.Stat(filepath.Join(opts.DistDir, "stable", "test.deb")); err != nil {
+		t.Errorf("payload should sit next to the index its Filename is relative to: %v", err)
 	}
 	if !strings.Contains(content, "Depiction: https://example.com/repo/depictions/test/depiction.html") {
 		t.Errorf("Packages should contain injected Depiction URL:\n%s", content)
@@ -151,10 +154,10 @@ func TestRun_WithDeb(t *testing.T) {
 		t.Errorf("Packages should contain injected SileoDepiction URL:\n%s", content)
 	}
 
-	// No .deb mirror in output — payloads are on GitHub Releases
-	mirrorPath := filepath.Join(opts.IndexDir, "stable", "pool")
+	// Payloads are flattened into the suite dir, never mirrored under pool/.
+	mirrorPath := filepath.Join(opts.DistDir, "stable", "pool")
 	if _, err := os.Stat(mirrorPath); !os.IsNotExist(err) {
-		t.Error("pool mirror should NOT exist in output with releases hosting")
+		t.Error("pool mirror should NOT exist in the published tree")
 	}
 
 	htmlPath := filepath.Join(opts.OutputDir, "depictions", "test", "depiction.html")
@@ -199,14 +202,14 @@ func TestRun_Reproducible(t *testing.T) {
 	if err := Run(context.Background(), opts); err != nil {
 		t.Fatalf("first Run failed: %v", err)
 	}
-	pkgFirst, _ := os.ReadFile(filepath.Join(opts.IndexDir, "stable", "Packages"))
+	pkgFirst, _ := os.ReadFile(filepath.Join(opts.DistDir, "stable", "Packages"))
 	htmlFirst, _ := os.ReadFile(filepath.Join(opts.OutputDir, "depictions", "test", "depiction.html"))
 	jsonFirst, _ := os.ReadFile(filepath.Join(opts.OutputDir, "depictions", "test", "sileo.json"))
 
 	if err := Run(context.Background(), opts); err != nil {
 		t.Fatalf("second Run failed: %v", err)
 	}
-	pkgSecond, _ := os.ReadFile(filepath.Join(opts.IndexDir, "stable", "Packages"))
+	pkgSecond, _ := os.ReadFile(filepath.Join(opts.DistDir, "stable", "Packages"))
 	htmlSecond, _ := os.ReadFile(filepath.Join(opts.OutputDir, "depictions", "test", "depiction.html"))
 	jsonSecond, _ := os.ReadFile(filepath.Join(opts.OutputDir, "depictions", "test", "sileo.json"))
 
@@ -461,7 +464,7 @@ repo = "testrepo"
 	return root, Options{
 		RootDir:    root,
 		OutputDir:  filepath.Join(root, "_site"),
-		IndexDir:   filepath.Join(root, "_index"),
+		DistDir:    filepath.Join(root, "_dist"),
 		ConfigPath: filepath.Join(root, "repo.toml"),
 	}
 }
@@ -496,10 +499,10 @@ func TestRun_LegacySiteIndexAdvertisesOnlyTheStub(t *testing.T) {
 	if !strings.Contains(site, "Package: dev.playday3008.source-moved") {
 		t.Errorf("superseded Pages index should advertise the stub:\n%s", site)
 	}
-	if !strings.Contains(site, "Filename: ./dev.playday3008.source-moved_1.0.0_all.deb") {
+	if !strings.Contains(site, "Filename: dev.playday3008.source-moved_1.0.0_all.deb") {
 		t.Errorf("stub Filename should be relative to the Pages suite dir:\n%s", site)
 	}
-	if !strings.Contains(site, "https://github.com/TestOrg/testrepo/releases/download/pool-stable/") {
+	if !strings.Contains(site, "https://raw.githubusercontent.com/TestOrg/testrepo/dist/stable/") {
 		t.Errorf("stub should name the new source URL:\n%s", site)
 	}
 
@@ -525,31 +528,27 @@ func TestRun_SymlinkCrossSuite_UsesInSuiteRelativeFilename(t *testing.T) {
 		t.Fatalf("Run failed: %v", err)
 	}
 
-	// Stable's own copy is served from the stable release.
-	stableData, err := os.ReadFile(filepath.Join(opts.IndexDir, "stable", "Packages"))
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !strings.Contains(string(stableData), "Filename: ./test.deb") {
-		t.Errorf("stable Packages should reference the deb relative to the stable source base:\n%s", string(stableData))
-	}
-
-	betaData, err := os.ReadFile(filepath.Join(opts.IndexDir, "beta", "Packages"))
-	if err != nil {
-		t.Fatal(err)
-	}
-	// A symlink resolving into stable is still served from beta's own release,
-	// so its Filename must stay relative to the beta source base.
-	if !strings.Contains(string(betaData), "Filename: ./test.deb") {
-		t.Errorf("beta Packages should reference the deb relative to the beta source base:\n%s", string(betaData))
-	}
-	if strings.Contains(string(betaData), "pool-stable") {
-		t.Errorf("beta Packages must not reference another suite's release:\n%s", string(betaData))
-	}
-
-	// No .deb mirror in either suite
+	// A symlink resolving into stable is still served from beta's own suite dir,
+	// so each suite lists the deb relative to its own source base and carries a
+	// copy of the payload.
 	for _, suite := range []string{"stable", "beta"} {
-		poolDir := filepath.Join(opts.IndexDir, suite, "pool")
+		data, err := os.ReadFile(filepath.Join(opts.DistDir, suite, "Packages"))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !strings.Contains(string(data), "Filename: test.deb") {
+			t.Errorf("%s Packages should reference the deb relative to its own source base:\n%s", suite, string(data))
+		}
+		for line := range strings.SplitSeq(string(data), "\n") {
+			if strings.HasPrefix(line, "Filename:") && strings.Contains(line, "/") {
+				t.Errorf("%s Filename must not reach outside its own suite dir: %q", suite, line)
+			}
+		}
+		if _, err := os.Stat(filepath.Join(opts.DistDir, suite, "test.deb")); err != nil {
+			t.Errorf("%s should carry its own copy of the payload: %v", suite, err)
+		}
+
+		poolDir := filepath.Join(opts.DistDir, suite, "pool")
 		if _, err := os.Stat(poolDir); !os.IsNotExist(err) {
 			t.Errorf("%s should have no pool/ mirror in output", suite)
 		}

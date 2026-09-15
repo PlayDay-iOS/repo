@@ -1,5 +1,5 @@
 _site/
-_index/
+_dist/
 /repotool
 .gnupg/
 .ghimport-tmp-*/

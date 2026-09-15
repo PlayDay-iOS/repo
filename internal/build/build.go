@@ -23,7 +23,7 @@ import (
 type Options struct {
 	RootDir               string
 	OutputDir             string
-	IndexDir              string
+	DistDir               string
 	ConfigPath            string
 	TemplatePath          string
 	DepictionTemplatePath string
@@ -76,8 +76,8 @@ func Run(ctx context.Context, opts Options) error {
 		}
 	}
 
-	if opts.IndexDir == "" {
-		opts.IndexDir = filepath.Join(opts.RootDir, "_index")
+	if opts.DistDir == "" {
+		opts.DistDir = filepath.Join(opts.RootDir, "_dist")
 	}
 
 	absOut, err := prepareOutputDir(opts.OutputDir)
@@ -86,17 +86,17 @@ func Run(ctx context.Context, opts Options) error {
 	}
 	opts.OutputDir = absOut
 
-	absIndex, err := filepath.Abs(opts.IndexDir)
+	absDist, err := filepath.Abs(opts.DistDir)
 	if err != nil {
-		return fmt.Errorf("resolving index dir: %w", err)
+		return fmt.Errorf("resolving dist dir: %w", err)
 	}
-	if absIndex == absOut {
-		return fmt.Errorf("index dir and output dir must differ: both are %s", absOut)
+	if absDist == absOut {
+		return fmt.Errorf("dist dir and output dir must differ: both are %s", absOut)
 	}
-	if absIndex, err = prepareOutputDir(absIndex); err != nil {
-		return fmt.Errorf("index dir: %w", err)
+	if absDist, err = prepareOutputDir(absDist); err != nil {
+		return fmt.Errorf("dist dir: %w", err)
 	}
-	opts.IndexDir = absIndex
+	opts.DistDir = absDist
 
 	if opts.BuildTime.IsZero() {
 		opts.BuildTime = time.Now().UTC()
@@ -154,7 +154,7 @@ func buildSuite(ctx context.Context, opts Options, cfg *config.RepoConfig, suite
 		return nil, err
 	}
 
-	suiteDir := filepath.Join(opts.IndexDir, suite)
+	suiteDir := filepath.Join(opts.DistDir, suite)
 	if err := os.MkdirAll(suiteDir, 0755); err != nil {
 		return nil, fmt.Errorf("creating suite dir %s: %w", suite, err)
 	}
@@ -177,10 +177,15 @@ func buildSuite(ctx context.Context, opts Options, cfg *config.RepoConfig, suite
 	depiction.EnrichEntries(entries, cfg)
 
 	// APT resolves Filename by concatenating it onto the source base URI, so it
-	// must stay relative to the suite this index is served from. Each suite's
-	// release carries its own copy of the asset, symlinked entries included.
+	// must stay relative to the suite this index is served from, and the payload
+	// has to sit next to the index rather than in pool/. Suites are published
+	// independently, so each one carries its own copy.
 	for _, e := range entries {
-		e.Filename = "./" + filepath.Base(e.Path)
+		base := filepath.Base(e.Path)
+		if err := fileutil.CopyFile(e.Path, filepath.Join(suiteDir, base)); err != nil {
+			return nil, fmt.Errorf("copying %s into %s: %w", base, suite, err)
+		}
+		e.Filename = base
 	}
 
 	if err := repo.WritePackagesAll(ctx, entries, suiteDir); err != nil {
@@ -285,7 +290,7 @@ func stubEntries(ctx context.Context, rootDir string, cfg *config.RepoConfig, su
 		if err := fileutil.CopyFile(e.Path, filepath.Join(suiteDir, base)); err != nil {
 			return nil, fmt.Errorf("copying stub %s: %w", base, err)
 		}
-		e.Filename = "./" + base
+		e.Filename = base
 		e.Control.Set("Description", fmt.Sprintf(
 			"This source has moved. Remove it and add %s instead.", cfg.Hosting.SourceURL(suite)))
 	}

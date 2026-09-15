@@ -11,14 +11,12 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/google/go-github/v84/github"
 	"github.com/spf13/cobra"
 
 	"github.com/PlayDay-iOS/repo/internal/build"
 	"github.com/PlayDay-iOS/repo/internal/config"
 	"github.com/PlayDay-iOS/repo/internal/ghimport"
 	"github.com/PlayDay-iOS/repo/internal/page"
-	"github.com/PlayDay-iOS/repo/internal/release"
 )
 
 var version = func() string {
@@ -54,21 +52,9 @@ var renderCmd = &cobra.Command{
 	RunE:  runRender,
 }
 
-var publishPoolCmd = &cobra.Command{
-	Use:   "publish-pool",
-	Short: "Upload .deb files from pool/ to GitHub Releases",
-	RunE:  runPublishPool,
-}
-
-var publishIndexCmd = &cobra.Command{
-	Use:   "publish-index",
-	Short: "Upload the built APT index from _index/ to GitHub Releases",
-	RunE:  runPublishIndex,
-}
-
 var (
 	flagOutput            string
-	flagIndexOutput       string
+	flagDistOutput        string
 	flagTemplate          string
 	flagAllowlist         string
 	flagSuite             string
@@ -86,7 +72,7 @@ func init() {
 		c.Flags().StringVar(&flagTemplate, "template", "", "Path to HTML template override (default: built-in)")
 	}
 
-	buildCmd.Flags().StringVar(&flagIndexOutput, "index-output", "", "Directory for the APT index uploaded to GitHub Releases (default: <cwd>/_index)")
+	buildCmd.Flags().StringVar(&flagDistOutput, "dist-output", "", "Directory for the published tree: index plus .deb payloads (default: <cwd>/_dist)")
 	buildCmd.Flags().StringVar(&flagDepictionTemplate, "depiction-template", "", "Path to depiction HTML template override (default: built-in)")
 	buildCmd.Flags().StringVar(&flagDepictionStyle, "depiction-style", "", "Path to depiction CSS override (default: built-in)")
 
@@ -95,9 +81,7 @@ func init() {
 	importCmd.Flags().BoolVar(&flagPrereleases, "include-prereleases", false, "Include prerelease assets")
 	importCmd.Flags().DurationVar(&flagImportTimeout, "timeout", 0, "Upper bound for the import run (e.g. 30m, 2h); 0 = use built-in default")
 
-	publishIndexCmd.Flags().StringVar(&flagIndexOutput, "index-output", "", "Directory holding the built index (default: <cwd>/_index)")
-
-	rootCmd.AddCommand(buildCmd, importCmd, renderCmd, publishPoolCmd, publishIndexCmd)
+	rootCmd.AddCommand(buildCmd, importCmd, renderCmd)
 }
 
 func main() {
@@ -127,9 +111,9 @@ func runBuild(cmd *cobra.Command, args []string) error {
 	if output == "" {
 		output = filepath.Join(root, "_site")
 	}
-	indexOutput := flagIndexOutput
-	if indexOutput == "" {
-		indexOutput = filepath.Join(root, "_index")
+	distOutput := flagDistOutput
+	if distOutput == "" {
+		distOutput = filepath.Join(root, "_dist")
 	}
 	cfgPath := configPath
 	if cfgPath == "" {
@@ -144,7 +128,7 @@ func runBuild(cmd *cobra.Command, args []string) error {
 	return build.Run(cmd.Context(), build.Options{
 		RootDir:               root,
 		OutputDir:             output,
-		IndexDir:              indexOutput,
+		DistDir:               distOutput,
 		ConfigPath:            cfgPath,
 		TemplatePath:          flagTemplate,
 		DepictionTemplatePath: flagDepictionTemplate,
@@ -241,66 +225,4 @@ func runRender(cmd *cobra.Command, args []string) error {
 		hasPublicKey = true
 	}
 	return page.RenderLandingPage(cmd.Context(), output, cfg, flagTemplate, buildTime, signed, hasPublicKey)
-}
-
-func runPublishIndex(cmd *cobra.Command, args []string) error {
-	root, cfg, client, err := publishContext("publish-index")
-	if err != nil {
-		return err
-	}
-
-	indexDir := flagIndexOutput
-	if indexDir == "" {
-		indexDir = filepath.Join(root, "_index")
-	}
-
-	return release.PublishIndex(cmd.Context(), client, cfg, indexDir)
-}
-
-// publishContext loads the config and an authenticated client for the commands
-// that talk to GitHub Releases.
-func publishContext(command string) (string, *config.RepoConfig, *github.Client, error) {
-	root, err := os.Getwd()
-	if err != nil {
-		return "", nil, nil, err
-	}
-
-	cfgPath := configPath
-	if cfgPath == "" {
-		cfgPath = filepath.Join(root, "repo.toml")
-	}
-
-	cfg, err := config.Load(cfgPath)
-	if err != nil {
-		return "", nil, nil, err
-	}
-	if err := cfg.ResolveHosting(root); err != nil {
-		return "", nil, nil, err
-	}
-
-	token := ghToken()
-	if token == "" {
-		return "", nil, nil, fmt.Errorf("GH_TOKEN or GITHUB_TOKEN required for %s", command)
-	}
-
-	client := github.NewClient(nil).WithAuthToken(token)
-	apiBase := os.Getenv("GITHUB_API_BASE")
-	if apiBase != "" {
-		var parseErr error
-		client, parseErr = client.WithEnterpriseURLs(apiBase, apiBase)
-		if parseErr != nil {
-			return "", nil, nil, fmt.Errorf("parsing GITHUB_API_BASE: %w", parseErr)
-		}
-	}
-
-	return root, cfg, client, nil
-}
-
-func runPublishPool(cmd *cobra.Command, args []string) error {
-	root, cfg, client, err := publishContext("publish-pool")
-	if err != nil {
-		return err
-	}
-
-	return release.PublishPool(cmd.Context(), client, cfg, root)
 }
