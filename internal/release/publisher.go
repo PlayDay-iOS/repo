@@ -108,10 +108,18 @@ func (p *Publisher) UploadAsset(ctx context.Context, releaseID int64, name, path
 	return nil
 }
 
+// DeleteAsset removes a release asset. name is used only for error context.
+func (p *Publisher) DeleteAsset(ctx context.Context, assetID int64, name string) error {
+	if _, err := p.client.Repositories.DeleteReleaseAsset(ctx, p.owner, p.repo, assetID); err != nil {
+		return fmt.Errorf("deleting asset %s (id=%d): %w", name, assetID, err)
+	}
+	return nil
+}
+
 // ReplaceAsset deletes an existing asset and uploads a replacement.
 func (p *Publisher) ReplaceAsset(ctx context.Context, releaseID, oldAssetID int64, name, path string) error {
-	if _, err := p.client.Repositories.DeleteReleaseAsset(ctx, p.owner, p.repo, oldAssetID); err != nil {
-		return fmt.Errorf("deleting old asset %s (id=%d): %w", name, oldAssetID, err)
+	if err := p.DeleteAsset(ctx, oldAssetID, name); err != nil {
+		return err
 	}
 	return p.UploadAsset(ctx, releaseID, name, path)
 }

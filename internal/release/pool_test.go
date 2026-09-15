@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"net/http"
 	"os"
+	"path"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -292,5 +294,136 @@ func TestPublishPool_DuplicateNamesWithinSuiteUploadedOnce(t *testing.T) {
 	// uploaded once no matter how many pool paths reach it.
 	if len(uploads) != 1 {
 		t.Errorf("uploads = %v, want exactly one test.deb", uploads)
+	}
+}
+
+func TestPublishPool_PrunesStaleDebAssets(t *testing.T) {
+	t.Parallel()
+	root := t.TempDir()
+	stableDir := filepath.Join(root, "pool", "stable", "main")
+	if err := os.MkdirAll(stableDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+
+	debData := testutil.BuildMinimalDeb([]testutil.Field{
+		{Key: "Package", Value: "com.test.pkg"},
+		{Key: "Version", Value: "1.0"},
+		{Key: "Architecture", Value: "iphoneos-arm64"},
+		{Key: "Maintainer", Value: "Test <test@test.com>"},
+		{Key: "Description", Value: "Test"},
+	})
+	if err := os.WriteFile(filepath.Join(stableDir, "keep.deb"), debData, 0644); err != nil {
+		t.Fatal(err)
+	}
+	fi, err := os.Stat(filepath.Join(stableDir, "keep.deb"))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// The index now shares the release with the payloads, so the prune must
+	// leave every non-.deb asset alone.
+	assets := []*github.ReleaseAsset{
+		{ID: github.Ptr(int64(5)), Name: github.Ptr("keep.deb"), Size: github.Ptr(int(fi.Size()))},
+		{ID: github.Ptr(int64(6)), Name: github.Ptr("stale.deb"), Size: github.Ptr(123)},
+		{ID: github.Ptr(int64(7)), Name: github.Ptr("Packages"), Size: github.Ptr(123)},
+		{ID: github.Ptr(int64(8)), Name: github.Ptr("Release"), Size: github.Ptr(123)},
+		{ID: github.Ptr(int64(9)), Name: github.Ptr("CydiaIcon.png"), Size: github.Ptr(123)},
+	}
+
+	var mu sync.Mutex
+	var deleted []string
+	byID := map[string]string{"5": "keep.deb", "6": "stale.deb", "7": "Packages", "8": "Release", "9": "CydiaIcon.png"}
+
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+
+		if r.Method == http.MethodDelete && strings.Contains(r.URL.Path, "/releases/assets/") {
+			id := path.Base(r.URL.Path)
+			mu.Lock()
+			deleted = append(deleted, byID[id])
+			mu.Unlock()
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+		if r.Method == http.MethodGet && strings.Contains(r.URL.Path, "/releases/tags/") {
+			json.NewEncoder(w).Encode(&github.RepositoryRelease{ID: github.Ptr(int64(1)), TagName: github.Ptr("pool-stable")})
+			return
+		}
+		if r.Method == http.MethodGet && strings.Contains(r.URL.Path, "/releases/1/assets") {
+			json.NewEncoder(w).Encode(assets)
+			return
+		}
+		w.WriteHeader(http.StatusNotFound)
+	})
+	client := newTestClient(t, handler)
+
+	cfg := &config.RepoConfig{
+		Suites:    []string{"stable"},
+		Component: "main",
+		Hosting:   config.HostingConfig{Owner: "org", Repo: "repo", TagPrefix: "pool-"},
+	}
+
+	if err := PublishPool(context.Background(), client, cfg, root); err != nil {
+		t.Fatal(err)
+	}
+
+	mu.Lock()
+	defer mu.Unlock()
+	if len(deleted) != 1 || deleted[0] != "stale.deb" {
+		t.Errorf("deleted = %v, want [stale.deb]", deleted)
+	}
+}
+
+func TestPublishPool_PrunesSuiteWithNoPackages(t *testing.T) {
+	t.Parallel()
+	root := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(root, "pool", "stable", "main"), 0755); err != nil {
+		t.Fatal(err)
+	}
+
+	var mu sync.Mutex
+	var deleted []int64
+
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+
+		if r.Method == http.MethodDelete && strings.Contains(r.URL.Path, "/releases/assets/") {
+			id, _ := strconv.ParseInt(path.Base(r.URL.Path), 10, 64)
+			mu.Lock()
+			deleted = append(deleted, id)
+			mu.Unlock()
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+		if r.Method == http.MethodGet && strings.Contains(r.URL.Path, "/releases/tags/") {
+			json.NewEncoder(w).Encode(&github.RepositoryRelease{ID: github.Ptr(int64(1)), TagName: github.Ptr("pool-stable")})
+			return
+		}
+		if r.Method == http.MethodGet && strings.Contains(r.URL.Path, "/releases/1/assets") {
+			json.NewEncoder(w).Encode([]*github.ReleaseAsset{
+				{ID: github.Ptr(int64(6)), Name: github.Ptr("stale.deb"), Size: github.Ptr(123)},
+				{ID: github.Ptr(int64(7)), Name: github.Ptr("Packages"), Size: github.Ptr(123)},
+			})
+			return
+		}
+		w.WriteHeader(http.StatusNotFound)
+	})
+	client := newTestClient(t, handler)
+
+	cfg := &config.RepoConfig{
+		Suites:    []string{"stable"},
+		Component: "main",
+		Hosting:   config.HostingConfig{Owner: "org", Repo: "repo", TagPrefix: "pool-"},
+	}
+
+	if err := PublishPool(context.Background(), client, cfg, root); err != nil {
+		t.Fatal(err)
+	}
+
+	mu.Lock()
+	defer mu.Unlock()
+	// A suite whose pool went empty still has to lose its stale payloads.
+	if len(deleted) != 1 || deleted[0] != 6 {
+		t.Errorf("deleted = %v, want [6]", deleted)
 	}
 }

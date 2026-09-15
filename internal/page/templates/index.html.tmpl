@@ -205,13 +205,13 @@
         <p class="hint">Tap sections to expand source options.</p>
         <div class="grid">
           <details class="menu menu-cydia" id="menu-cydia"><summary>Add to Cydia</summary><div class="menu-list">
-            {{range .Suites}}<a class="menu-link" href="{{.CydiaURL}}">{{.Label}}</a>
+            {{range .Suites}}<a class="menu-link" href="{{.CydiaURL}}">{{.Label}}{{if not .Primary}} (overlay){{end}}</a>
             {{end}}</div></details>
           <details class="menu menu-zebra" id="menu-zebra"><summary>Add to Zebra</summary><div class="menu-list">
-            {{range .Suites}}<a class="menu-link" href="{{.ZebraURL}}">{{.Label}}</a>
+            {{range .Suites}}<a class="menu-link" href="{{.ZebraURL}}">{{.Label}}{{if not .Primary}} (overlay){{end}}</a>
             {{end}}</div></details>
           <details class="menu menu-sileo" id="menu-sileo"><summary>Add to Sileo</summary><div class="menu-list">
-            {{range .Suites}}<a class="menu-link" href="{{.SileoURL}}">{{.Label}}</a>
+            {{range .Suites}}<a class="menu-link" href="{{.SileoURL}}">{{.Label}}{{if not .Primary}} (overlay){{end}}</a>
             {{end}}</div></details>
         </div>
       </section>
@@ -219,7 +219,8 @@
       <section class="panel">
         <p class="label">Source lines</p>
         {{range .Suites}}<p class="code">deb {{.URL}} ./</p>
-        {{end}}
+        {{if not .Primary}}<p class="hint">{{.Label}} is an overlay carrying only its own packages. Add it alongside {{$.PrimaryLabel}}, not instead of it.</p>
+        {{end}}{{end}}
       </section>
 
       <section class="panel">

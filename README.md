@@ -78,8 +78,20 @@ Source lines:
 - Stable: `deb https://github.com/PlayDay-iOS/repo/releases/download/pool-stable/ ./`
 - Beta: `deb https://github.com/PlayDay-iOS/repo/releases/download/pool-beta/ ./`
 
-A suite's release carries a copy of every `.deb` its index lists, symlinked
-entries included, because a relative `Filename:` cannot reach across tags.
+## Suites
+
+The first entry of `metadata.suites` is the primary suite and carries the full
+catalogue. Every other suite is an overlay holding only the packages exclusive
+to it, so it is added alongside the primary source rather than instead of it.
+
+A relative `Filename:` cannot reach across release tags, so a suite's release
+has to carry a copy of every `.deb` its own index lists. That is why overlays
+do not mirror the primary suite: a mirrored package would be stored twice, once
+per release.
+
+`repotool publish-pool` deletes any `.deb` on a suite's release that the suite's
+pool no longer contains. Only `.deb` assets are pruned, which leaves the index
+files sharing that release untouched.
 
 ## Depictions
 

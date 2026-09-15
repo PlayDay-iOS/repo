@@ -89,4 +89,3 @@ func TestCopyFileExclusive_FailsIfExists(t *testing.T) {
 		t.Errorf("expected os.IsExist(err) to be true, got error: %v", err)
 	}
 }
-
