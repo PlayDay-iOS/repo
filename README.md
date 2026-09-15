@@ -1,6 +1,6 @@
 # PlayDay-iOS APT Repository
 
-Debian-style repository for iOS package managers (Cydia, Zebra, Sileo). Index files and `.deb` payloads are published together as GitHub Release assets; GitHub Pages carries the landing page and depictions.
+Debian-style repository for iOS package managers (Cydia, Zebra, Sileo). Index files and `.deb` payloads are published together to the `dist` branch and served from `raw.githubusercontent.com`; GitHub Pages carries the landing page and depictions.
 
 Built as a single Go binary (`repotool`) with no external tool dependencies.
 
@@ -11,11 +11,12 @@ Built as a single Go binary (`repotool`) with no external tool dependencies.
 - `internal/page/templates/index.html.tmpl`: landing page template, embedded into `repotool` at build time. Override with `--template <path>`.
 - `resources/CydiaIcon.png`: source icon file (Made by [Evehly](https://www.deviantart.com/evehly/art/The-Last-Pringle-852158299))
 - `resources/source-moved/`: stub `.deb` advertised by the superseded Pages suite index (see "Two publish targets")
+- `dist` branch: the published tree, one directory per suite, rebuilt as a single orphan commit on every deploy. Never edit it by hand.
 
 Notes:
 
 - `repo.name` and `repo.url` are required in `repo.toml`. `repo.url` must use `https://`. `metadata.component` is a single string ("main" by default).
-- Published suite roots use `./` source style (`deb <source-url> ./`), where the source URL is the suite's release download path.
+- Published suite roots use `./` source style (`deb <source-url> ./`), where the source URL is the suite's directory on the `dist` branch.
 - Set `SOURCE_DATE_EPOCH` for reproducible builds (Unix timestamp). The build workflow derives this from the latest commit timestamp automatically. A non-empty but unparseable value is rejected.
 - Index files are hashed with MD5, SHA1, SHA256, and SHA512 for compatibility with older clients.
 
@@ -27,7 +28,7 @@ Notes:
 
 1. Add packages to `pool/<suite>/<component>/`, or use org import.
 2. Build: `go build -o repotool ./cmd/repotool && ./repotool build`
-3. GitHub Actions uploads the pool and the index to GitHub Releases, then deploys `_site/` to GitHub Pages.
+3. GitHub Actions force-pushes the built tree to the `dist` branch, then deploys `_site/` to GitHub Pages.
 
 Main workflow: `.github/workflows/build-and-deploy.yml`
 
@@ -43,26 +44,39 @@ Main workflow: `.github/workflows/build-and-deploy.yml`
 `Filename:` in a `Packages` stanza is resolved by APT and Cydia through plain
 concatenation onto the source base URI, so the index and the payloads it names
 must share an origin and path prefix. The pool is far larger than the 1 GB
-GitHub Pages cap, which leaves the release tag as the only place both can live.
+GitHub Pages cap, so both live on a git branch served by
+`raw.githubusercontent.com`, which returns file contents directly.
 
-`repotool build` therefore writes two trees:
+GitHub Releases was the earlier answer and does not work here: `github.com`
+answers an asset download with a 302 to a signed `release-assets` URL, and
+Cydia re-encodes the `%` escapes in that URL when it follows the redirect,
+which invalidates the signature. The blob store then rejects the request with
+`403 Server failed to authenticate the request`. A cache hit at the CDN edge
+masks this, so the failure looks intermittent.
 
-- `--index-output` (default `_index/`) holds the real index, uploaded to each
-  suite's release by `repotool publish-index`. This is what package managers
-  are pointed at.
+`repotool build` writes two trees:
+
+- `--dist-output` (default `_dist/`) holds the published tree: per suite, the
+  real index plus every `.deb` it lists. CI force-pushes this to the branch
+  named by `hosting.branch` as a single orphan commit. This is what package
+  managers are pointed at.
 - `--output` (default `_site/`) holds the Pages bundle: landing page,
   depictions, and a stand-in index per suite. Pages cannot redirect, so rather
   than leave anyone who subscribed to the old suite URL with downloads that
-  404, that index advertises a single stub package naming the release URL to
+  404, that index advertises a single stub package naming the source URL to
   add instead.
+
+The push is cheap despite the pool size: the `.deb` blobs are already in the
+repository under `pool/`, so git sends only the index files.
 
 Expected files after build:
 
-- `.repotool-output` — marker file written at the root of each output tree. `repotool build` refuses to wipe an existing output directory unless this marker is present, so an accidental `--output ~/important-stuff` is rejected.
-- In `_index/<suite>/`:
+- `.repotool-output` — marker file written at the root of each output tree. `repotool build` refuses to wipe an existing output directory unless this marker is present, so an accidental `--output ~/important-stuff` is rejected. It is excluded from the `dist` push.
+- In `_dist/<suite>/`:
   - `Packages` (+ `.gz`, `.xz`, `.bz2`)
   - `Release`, `Release.gpg`, `InRelease` (signed variants only when a key is supplied)
   - `CydiaIcon.png`
+  - every `.deb` the suite's index lists, flat in the suite directory
 - In `_site/`:
   - `CydiaIcon.png` (root)
   - `index.html` (root landing page)
@@ -75,8 +89,8 @@ Expected files after build:
 
 Source lines:
 
-- Stable: `deb https://github.com/PlayDay-iOS/repo/releases/download/pool-stable/ ./`
-- Beta: `deb https://github.com/PlayDay-iOS/repo/releases/download/pool-beta/ ./`
+- Stable: `deb https://raw.githubusercontent.com/PlayDay-iOS/repo/dist/stable/ ./`
+- Beta: `deb https://raw.githubusercontent.com/PlayDay-iOS/repo/dist/beta/ ./`
 
 ## Suites
 
@@ -84,14 +98,12 @@ The first entry of `metadata.suites` is the primary suite and carries the full
 catalogue. Every other suite is an overlay holding only the packages exclusive
 to it, so it is added alongside the primary source rather than instead of it.
 
-A relative `Filename:` cannot reach across release tags, so a suite's release
-has to carry a copy of every `.deb` its own index lists. That is why overlays
-do not mirror the primary suite: a mirrored package would be stored twice, once
-per release.
+A relative `Filename:` cannot reach across suite directories, so each suite
+carries a copy of every `.deb` its own index lists. That is why overlays do not
+mirror the primary suite: a mirrored package would be published twice.
 
-`repotool publish-pool` deletes any `.deb` on a suite's release that the suite's
-pool no longer contains. Only `.deb` assets are pruned, which leaves the index
-files sharing that release untouched.
+Nothing needs pruning: the `dist` branch is rebuilt from scratch on every
+deploy, so a package dropped from `pool/` disappears with the next push.
 
 ## Depictions
 
@@ -104,10 +116,8 @@ files sharing that release untouched.
 ## CLI
 
 ```sh
-repotool build  [--output _site] [--index-output _index] [--config repo.toml] [--template <path>] [--depiction-template <path>] [--depiction-style <path>]
+repotool build  [--output _site] [--dist-output _dist] [--config repo.toml] [--template <path>] [--depiction-template <path>] [--depiction-style <path>]
 repotool import [--config repo.toml] [--allowlist org-import-allowlist.txt] [--suite <name>] [--include-prereleases] [--timeout 30m]
-repotool publish-pool [--config repo.toml]
-repotool publish-index [--index-output _index] [--config repo.toml]
 repotool render [--output _site] [--config repo.toml] [--template <path>]
 repotool --version
 ```
@@ -115,7 +125,7 @@ repotool --version
 Flag defaults:
 
 - `--output` defaults to `<cwd>/_site`
-- `--index-output` defaults to `<cwd>/_index`
+- `--dist-output` defaults to `<cwd>/_dist`
 - `--config` defaults to `<cwd>/repo.toml`
 - `--template` is empty by default — `repotool` renders the embedded template. Pass a file path to override.
 - `--depiction-template` is empty by default — `repotool` uses the embedded depiction HTML template. Pass a file path to override.
@@ -131,7 +141,7 @@ The `--suite` flag on `import` defaults to the first entry of `metadata.suites` 
 | `SOURCE_DATE_EPOCH`         | Pins `Date:` and landing-page timestamp for reproducible builds.          |
 | `GPG_PRIVATE_KEY`           | Armored signing key. Empty = signing skipped (no error).                  |
 | `GPG_PASSPHRASE`            | Passphrase for `GPG_PRIVATE_KEY` when required.                           |
-| `GH_TOKEN` / `GITHUB_TOKEN` | GitHub API token for `import`, `publish-pool` and `publish-index`; `GH_TOKEN` takes precedence. |
+| `GH_TOKEN` / `GITHUB_TOKEN` | GitHub API token for `import`; `GH_TOKEN` takes precedence.              |
 | `GITHUB_API_BASE`           | Alternate GitHub API endpoint (e.g. GitHub Enterprise).                   |
 | `ORG_NAME`                  | Overrides `github.org_name` from `repo.toml`.                             |
 | `TARGET_SUITE`              | Default target suite for `import` when `--suite` is not passed.           |
@@ -158,8 +168,8 @@ org_name = "PlayDay-iOS"  # required only for `import`
 
 [hosting]
 # owner defaults to github.org_name; repo defaults to cwd basename
-# The release tag is also the APT source base: index and payloads share it.
-tag_prefix = "pool-"    # release tag = tag_prefix + suite name; default: "pool-"
+# The branch is also the APT source base: index and payloads share it.
+branch = "dist"         # branch the built tree is force-pushed to; default: "dist"
 ```
 
 ## Signing (optional)
