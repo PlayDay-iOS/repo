@@ -40,6 +40,7 @@ type SuiteInfo struct {
 	CydiaURL template.URL // trusted deeplink, e.g. "cydia://..."
 	ZebraURL template.URL // trusted deeplink, e.g. "zbra://..."
 	SileoURL template.URL // trusted deeplink, e.g. "sileo://..."
+	Primary  bool         // carries the full catalogue rather than an overlay
 }
 
 // TemplateData holds all values injected into the landing page template.
@@ -47,6 +48,7 @@ type TemplateData struct {
 	RepoName     string
 	RepoURL      string
 	Suites       []SuiteInfo
+	PrimaryLabel string // label of the suite the overlays are added alongside
 	GeneratedAt  string
 	Signed       bool
 	HasPublicKey bool
@@ -85,13 +87,16 @@ func RenderLandingPage(ctx context.Context, outputDir string, cfg *config.RepoCo
 	repoURL := cfg.URL
 
 	var suites []SuiteInfo
-	for _, s := range cfg.Suites {
+	for i, s := range cfg.Suites {
 		// Index and payloads share the release URL, so that is the source a
 		// package manager must be given; the Pages site is only the gateway.
 		suiteURL := cfg.Hosting.SourceURL(s)
 		suites = append(suites, SuiteInfo{
-			Name:     s,
-			Label:    TitleCase(s),
+			Name:  s,
+			Label: TitleCase(s),
+			// Suites[0] is the primary suite. The rest hold only what is
+			// exclusive to them, so they are added alongside it, not instead.
+			Primary:  i == 0,
 			URL:      suiteURL,
 			CydiaURL: template.URL(CydiaDeeplink(suiteURL)),
 			ZebraURL: template.URL(ZebraDeeplink(suiteURL)),
@@ -99,10 +104,16 @@ func RenderLandingPage(ctx context.Context, outputDir string, cfg *config.RepoCo
 		})
 	}
 
+	primaryLabel := ""
+	if len(suites) > 0 {
+		primaryLabel = suites[0].Label
+	}
+
 	data := TemplateData{
 		RepoName:     cfg.Name,
 		RepoURL:      repoURL,
 		Suites:       suites,
+		PrimaryLabel: primaryLabel,
 		GeneratedAt:  buildTime.UTC().Format("2006-01-02 15:04 UTC"),
 		Signed:       signed,
 		HasPublicKey: hasPublicKey,

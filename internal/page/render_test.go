@@ -140,3 +140,55 @@ func TestDefaultTemplate_OmitsInReleaseWhenUnsigned(t *testing.T) {
 		t.Error("repo-public.key link should be omitted when HasPublicKey is false")
 	}
 }
+
+func TestDefaultTemplate_MarksNonPrimarySuiteAsOverlay(t *testing.T) {
+	t.Parallel()
+	dir := t.TempDir()
+
+	cfg := &config.RepoConfig{
+		Name:   "Test Repo",
+		URL:    "https://example.com/repo/",
+		Suites: []string{"stable", "beta"},
+	}
+
+	outDir := filepath.Join(dir, "out")
+	if err := RenderLandingPage(context.Background(), outDir, cfg, "", time.Now(), false, false); err != nil {
+		t.Fatal(err)
+	}
+	data, err := os.ReadFile(filepath.Join(outDir, "index.html"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	html := string(data)
+
+	// A non-primary suite no longer mirrors the primary one, so adding it on
+	// its own would cost a subscriber the full catalogue.
+	for _, check := range []string{"Beta is an overlay", "alongside Stable"} {
+		if !strings.Contains(html, check) {
+			t.Errorf("missing overlay note %q", check)
+		}
+	}
+}
+
+func TestDefaultTemplate_OmitsOverlayNoteForSingleSuite(t *testing.T) {
+	t.Parallel()
+	dir := t.TempDir()
+
+	cfg := &config.RepoConfig{
+		Name:   "Test Repo",
+		URL:    "https://example.com/repo/",
+		Suites: []string{"stable"},
+	}
+
+	outDir := filepath.Join(dir, "out")
+	if err := RenderLandingPage(context.Background(), outDir, cfg, "", time.Now(), false, false); err != nil {
+		t.Fatal(err)
+	}
+	data, err := os.ReadFile(filepath.Join(outDir, "index.html"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(data), "overlay") {
+		t.Error("single-suite repo should have nothing to add alongside")
+	}
+}
