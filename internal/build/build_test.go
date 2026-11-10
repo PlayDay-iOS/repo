@@ -502,7 +502,7 @@ func TestRun_LegacySiteIndexAdvertisesOnlyTheStub(t *testing.T) {
 	if !strings.Contains(site, "Filename: dev.playday3008.source-moved_1.0.0_all.deb") {
 		t.Errorf("stub Filename should be relative to the Pages suite dir:\n%s", site)
 	}
-	if !strings.Contains(site, "https://raw.githubusercontent.com/TestOrg/testrepo/dist/stable/") {
+	if !strings.Contains(site, "https://github.com/TestOrg/testrepo/raw/dist/stable/") {
 		t.Errorf("stub should name the new source URL:\n%s", site)
 	}
 

@@ -1,6 +1,6 @@
 # PlayDay-iOS APT Repository
 
-Debian-style repository for iOS package managers (Cydia, Zebra, Sileo). Index files and `.deb` payloads are published together to the `dist` branch and served from `raw.githubusercontent.com`; GitHub Pages carries the landing page and depictions.
+Debian-style repository for iOS package managers (Cydia, Zebra, Sileo). Index files and `.deb` payloads are published together to the `dist` branch and served through `github.com/<owner>/<repo>/raw/`; GitHub Pages carries the landing page and depictions.
 
 Built as a single Go binary (`repotool`) with no external tool dependencies.
 
@@ -44,8 +44,15 @@ Main workflow: `.github/workflows/build-and-deploy.yml`
 `Filename:` in a `Packages` stanza is resolved by APT and Cydia through plain
 concatenation onto the source base URI, so the index and the payloads it names
 must share an origin and path prefix. The pool is far larger than the 1 GB
-GitHub Pages cap, so both live on a git branch served by
-`raw.githubusercontent.com`, which returns file contents directly.
+GitHub Pages cap, so both live on a git branch served through
+`github.com/<owner>/<repo>/raw/<branch>/`.
+
+That prefix and not `raw.githubusercontent.com` directly, because Cydia adds
+sources with dist `./` and therefore requests every file as `<base>/./<file>`.
+Its APT fork follows only 301 and 302 redirects. `raw.githubusercontent.com`
+answers a `/./` path with a 307, which Cydia reports as a failure, including
+for `Release` and `Packages`. `github.com/.../raw/` answers with a 302 to the
+normalized raw URL, which Cydia follows.
 
 GitHub Releases was the earlier answer and does not work here: `github.com`
 answers an asset download with a 302 to a signed `release-assets` URL, and
@@ -89,8 +96,8 @@ Expected files after build:
 
 Source lines:
 
-- Stable: `deb https://raw.githubusercontent.com/PlayDay-iOS/repo/dist/stable/ ./`
-- Beta: `deb https://raw.githubusercontent.com/PlayDay-iOS/repo/dist/beta/ ./`
+- Stable: `deb https://github.com/PlayDay-iOS/repo/raw/dist/stable/ ./`
+- Beta: `deb https://github.com/PlayDay-iOS/repo/raw/dist/beta/ ./`
 
 ## Suites
 

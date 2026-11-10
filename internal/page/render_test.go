@@ -45,8 +45,8 @@ func TestRenderLandingPage_FileTemplate(t *testing.T) {
 
 	for _, want := range []string{
 		"<title>Test Repo</title>",
-		"deb https://raw.githubusercontent.com/TestOrg/testrepo/dist/stable/ ./",
-		"deb https://raw.githubusercontent.com/TestOrg/testrepo/dist/beta/ ./",
+		"deb https://github.com/TestOrg/testrepo/raw/dist/stable/ ./",
+		"deb https://github.com/TestOrg/testrepo/raw/dist/beta/ ./",
 		"cydia://",
 		"zbra://",
 		"sileo://",
@@ -60,7 +60,7 @@ func TestRenderLandingPage_FileTemplate(t *testing.T) {
 func TestWriteSuiteIndexHTML(t *testing.T) {
 	t.Parallel()
 	dir := t.TempDir()
-	source := "https://raw.githubusercontent.com/TestOrg/testrepo/dist/stable/"
+	source := "https://github.com/TestOrg/testrepo/raw/dist/stable/"
 	if err := WriteSuiteIndexHTML(dir, "stable", source); err != nil {
 		t.Fatal(err)
 	}

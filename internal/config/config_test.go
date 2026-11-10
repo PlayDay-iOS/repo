@@ -405,7 +405,7 @@ func TestHostingConfig_SourceURL(t *testing.T) {
 	t.Parallel()
 	h := HostingConfig{Owner: "PlayDay-iOS", Repo: "repo", Branch: "dist"}
 	got := h.SourceURL("stable")
-	want := "https://raw.githubusercontent.com/PlayDay-iOS/repo/dist/stable/"
+	want := "https://github.com/PlayDay-iOS/repo/raw/dist/stable/"
 	if got != want {
 		t.Errorf("SourceURL = %q, want %q", got, want)
 	}

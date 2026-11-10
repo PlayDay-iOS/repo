@@ -18,11 +18,14 @@ type HostingConfig struct {
 
 // SourceURL returns the APT source base URI for a suite. The index and the
 // .debs it names are committed to the same branch directory, so that a Filename
-// relative to this base resolves to the payload. raw.githubusercontent.com
-// serves both directly, without the signed redirect that GitHub Releases
-// answers with and that Cydia cannot follow.
+// relative to this base resolves to the payload.
+//
+// Cydia adds sources with dist "./", so every request is <base>/./<file>, and
+// its APT fork follows only 301 and 302. raw.githubusercontent.com answers
+// "/./" with a 307, which Cydia treats as a failure; github.com/.../raw/
+// answers with a 302 to the normalized raw URL, which Cydia follows.
 func (h HostingConfig) SourceURL(suite string) string {
-	return fmt.Sprintf("https://raw.githubusercontent.com/%s/%s/%s/%s/",
+	return fmt.Sprintf("https://github.com/%s/%s/raw/%s/%s/",
 		h.Owner, h.Repo, h.Branch, suite)
 }
 

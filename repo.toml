@@ -16,7 +16,7 @@ org_name = "PlayDay-iOS"
 
 [hosting]
 # The APT index and the .deb payloads it names are committed together to this
-# branch, one directory per suite, and served from raw.githubusercontent.com.
+# branch, one directory per suite, and served through github.com/<owner>/<repo>/raw/.
 # A relative `Filename:` then resolves against the source base URI, and no
 # signed redirect stands between a package manager and the payload.
 # owner defaults to github.org_name; repo defaults to the cwd basename.
