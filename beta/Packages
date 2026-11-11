@@ -1,0 +1,39 @@
+Package: dev.playday3008.lowerinstall
+Name: LowerInstall
+Depends: mobilesubstrate, preferenceloader, firmware (>= 9.0)
+Conflicts: com.julioverne.lowerinstall
+Description: Install apps that require a newer iOS version. Hooks installd to skip device-family/thinning/metadata checks, and spoofs the App Store User-Agent (itunesstored on iOS 9, appstored on iOS 10+) so metadata servers return IPAs for a spoofed OS version. Inspired by julioverne/LowerInstall.
+Maintainer: PlayDay <18056374+playday3008@users.noreply.github.com>
+Author: PlayDay
+Section: Tweaks
+Architecture: iphoneos-arm
+Version: 1.0.0
+Installed-Size: 580
+Depiction: https://playday-ios.github.io/repo/depictions/dev.playday3008.lowerinstall_1.0.0_iphoneos-arm/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/dev.playday3008.lowerinstall_1.0.0_iphoneos-arm/sileo.json
+Filename: dev.playday3008.lowerinstall_1.0.0_iphoneos-arm.deb
+Size: 30156
+MD5sum: ca92b3e11086c084f7bc98fe84707679
+SHA1: ba91c0069632fe5b96f086e664bae31a0ac9f542
+SHA256: 6c41044abc19dfb0507072059b53f671e139e87992df11d00d7ba3a4fd9c5940
+SHA512: 1d315ca5a58fa368f23f747ad939678d6af21d79ba4bec02b4013d958c561d08eed121425eeb585a06230bdf555db4ec4c3af81a2fe0b2f0ce8bfaf8725c5e4e
+
+Package: dev.playday3008.lowerinstall
+Name: LowerInstall
+Depends: mobilesubstrate, preferenceloader, firmware (>= 9.0)
+Conflicts: com.julioverne.lowerinstall
+Description: Install apps that require a newer iOS version. Hooks installd to skip device-family/thinning/metadata checks, and spoofs the App Store User-Agent (itunesstored on iOS 9, appstored on iOS 10+) so metadata servers return IPAs for a spoofed OS version. Inspired by julioverne/LowerInstall.
+Maintainer: PlayDay <18056374+playday3008@users.noreply.github.com>
+Author: PlayDay
+Section: Tweaks
+Architecture: iphoneos-arm
+Version: 1.0.1
+Installed-Size: 580
+Depiction: https://playday-ios.github.io/repo/depictions/dev.playday3008.lowerinstall_1.0.1_iphoneos-arm/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/dev.playday3008.lowerinstall_1.0.1_iphoneos-arm/sileo.json
+Filename: dev.playday3008.lowerinstall_1.0.1_iphoneos-arm.deb
+Size: 30206
+MD5sum: 1db9e5394441d1b12bb2a2e5a4ef045e
+SHA1: 335bdbef4349a146f5e9c99393ba36412a56f865
+SHA256: 5e8b166f08242bd71a2c0379730f8c13ad41c7cf226c8f8483265d665f8e7671
+SHA512: 5cab603fe4e18c729e28a71ac09b4b4531cc9fad34845d9d8b77de93811b242e146d42791952f80e8d5c211b1329a0743e96a040347e8835d9fd1463ff58eb69

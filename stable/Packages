@@ -1,0 +1,3707 @@
+Homepage: http://beta.unlimapps.com/depiction/com.jamsoftonline.Provenance/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.Provenance-1.1.6-1/depiction.html
+Author: jasarien
+Maintainer: UnlimApps <support@unlimapps.com>
+Name: Provenance
+Package: com.jamsoftonline.Provenance
+Pre-Depends: firmware (>= 7.0)
+Section: Utilities
+Version: 1.1.6-1
+Architecture: iphoneos-arm
+Description: An iOS Frontend for multiple emulators, currently supporting Sega Genesis, Game Gear/Master System, Sega CD, SNES, NES, GB/GBC and GBA.
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.Provenance-1.1.6-1/sileo.json
+Filename: com.unlimapps.Provenance-1.1.6-1.deb
+Size: 77824
+MD5sum: 2f2ee3e41022381fd8c09f2e779b2db1
+SHA1: c8d9233c337fc0a493c667896db1d5a00efa662d
+SHA256: cea5d75dda661cff08bb900cd672d4d7429b7324b389230b095d5c6f53e835c2
+SHA512: 363fc3e620b46e788df9fc8d5c00dfc841037575e21936153dcb6718ab824acb2e9c74cb74aa13bec1d1211fa821e4c990e44e535b2dd98ae0ee2efaa5737083
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-260_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-86)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-260
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-260_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-260_iphoneos-arm.deb
+Size: 9510394
+MD5sum: 81d93253e52b977f3547d020799f003f
+SHA1: 83c06fd2b4600bb023c285e57f1416f09fa15e79
+SHA256: 4a8ea99b8d2e85f2882635f28e052bfe6851afb85c3dd73a190c552c27d2599c
+SHA512: 489507ee5a269c161abadd6b17dccc17604f3c7928055206d71e3198194504ff3aadfe9740938620c2637bc46f4c24aecc68cd494d5fad9863b873143514b55c
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-261_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-87)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-261
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-261_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-261_iphoneos-arm.deb
+Size: 9509294
+MD5sum: cdc490558c022de390e5a790549de56e
+SHA1: 3bc7b2823dcfd1017565209b4fa55e16246dbc2a
+SHA256: 4694199a75ada922e949330c5ff0db26b41b81bd24481d5bd2ea20726e13c911
+SHA512: 40709946b6de76041f5ddf1891ac430c27e732e575b79cd517f9189a3b5d799d75e1ffd593952fa68a55ff554f440659acb6cd0ab08c341d835e3c1079fb1b74
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-262_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-87)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-262
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-262_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-262_iphoneos-arm.deb
+Size: 9509328
+MD5sum: b8626f10a841b601caa7a6da325ed85a
+SHA1: 5d70a31af12b7b650dd535dbf4c878a6b2ade02d
+SHA256: f6be224eafdba5e6e49155d3fe802d0e3474004e57fef6b67f08e25631d16a79
+SHA512: 89aa7630ca4ca873a044496f7799b0d75fdf431efcf468f7fe887950abbae12c245130a00dc151723736ba1b079f8dade6533b03260e89062af275ab56a20cde
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-263_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-87)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-263
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-263_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-263_iphoneos-arm.deb
+Size: 9509378
+MD5sum: ef70fa0df751ef63ca03c4a2ff804bd6
+SHA1: ea8abf0c43baafbb897f0c2be073a0c36e8e0863
+SHA256: 1f078e7dc04ec4fa5a9e4679be90330adf2bc53b228783e3c06a0e772d079313
+SHA512: c25aa5421f123fc57dee853ced8084ba56ce4b2603329bc2619260e421983fccac66adb470cef754451cf822b22b3f6f74c0d5b55cd64b9ca6dc3af56b658295
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-265_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-87)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-265
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-265_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-265_iphoneos-arm.deb
+Size: 9509344
+MD5sum: 6167bc2d1353ec7252b0e89528692831
+SHA1: f2eacabfc7dbeaefc275be88ab79ad483d295c0c
+SHA256: ea2052ab37ac0e59b37dc0e4036d6306e4e2b2c651aa02faf2a4f6a7e62dccaa
+SHA512: 8c4bbc7be591c5f0091602ade349f6e82977c4d9835042e5352af6712a97e1c3921477d0ef7b663a377842faa56b734d42ee8bddc82f37bbe52dfb4175f25ef4
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-266_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-87)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-266
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-266_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-266_iphoneos-arm.deb
+Size: 9506588
+MD5sum: ffc473be97783f3a55c3d67f04182613
+SHA1: cf683734f36e6f43ded569e9f78dca5e43a49c90
+SHA256: fb254c546483f513e451fd28fe32c8a435607100bea87c9514fa8941603da211
+SHA512: 1dae474fea0daa311aa4337022b41c2091519fe38778729b87640df76cd496061d16e7a486ce4033a25d7cbf77583a9e37eb20672d6110e1aaeb85a0843865c2
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-267_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-87)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-267
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-267_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-267_iphoneos-arm.deb
+Size: 9509380
+MD5sum: 805dc5cc11f862195f85d03a867cec8b
+SHA1: d17d4b7a7e0ae518c662e9de1ff244f557d64592
+SHA256: 5f1bf795a6a8db28cc0f41b788e768c17f00a128f0a46e438d20f0e075dc2bfe
+SHA512: 43cb45dc1b9c68b59f48bfd0d4d867c72c18d32cc9680448c7298ade25f5a14e7304c943874abeb71141d5aea65bc27db596431184a798268f4165b4bb817715
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-268_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-87)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-268
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-268_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-268_iphoneos-arm.deb
+Size: 9509400
+MD5sum: 54f1fc915fb633f7fac0985ab5f136c8
+SHA1: ac34153ca9b5a0d7cc1d1d771f258ce4941c9b62
+SHA256: 1c2e8a49b30a051297a4b7dd46ba2bd4a85f01cd113b70b0b48148469b2d9314
+SHA512: 19177a298c8a3c75104c8e6acf06c5f5a31027fcc89fbb3d5f68678a6c1bf9c27dca47d984acfdc6fff3d6b89c084d843f5d34099040dfa32bb12fd1418945b5
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-269_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-87)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-269
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-269_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-269_iphoneos-arm.deb
+Size: 9511652
+MD5sum: 45d1e6d75ec655b1a412708cb6176568
+SHA1: 0ba12f5e5aaaa01bca3d32a4b563780f819e8c19
+SHA256: 9a1244eb2802ac5d0c6051f578a5e7b7631f96630753e51a0f65e4845965d463
+SHA512: 8bba190d416a8f7c568e6f313c0446810532db85c28a748093e43f3e888200a2aa019b1ca30ca09826766396117c5ac3887e250bb675e7af707d97bf5cb5a23a
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-270_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-87)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-270
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-270_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-270_iphoneos-arm.deb
+Size: 9511780
+MD5sum: 5953fcd54da5e4552f6d23babddbc7cf
+SHA1: 8808326d1e942f7173f9fcfafc2e567724e799a3
+SHA256: 1af149c8c16a6a6107d2d13ff213c841fef6610ff6a5dda4984d027afcf42eb8
+SHA512: bf21f0353011acedeb67eead5d123f87781e58d863e3b8c06e6db435a49d918acd5185a2a8a9331c165c8ee3ca61ae811004f6f3fabed74f6a32608921d79559
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-271_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-87)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-271
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-271_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-271_iphoneos-arm.deb
+Size: 9512038
+MD5sum: 007b210780c7982bc44096412be9a4fd
+SHA1: 7c46ee0253d0e82684424300276c8eb2efb0dd20
+SHA256: 0efb2b49056db826571da379f8dfd0dda8775ce20b35d1a4bd8ba3ed64797b4c
+SHA512: 9042397acf23951100b64aefe780e1d20e76abfc441ef57bb498b8da4908c63d34ccf86c2b5dc7a782bf371648dde61d9086a2bc2fd6c1157fefe41b851d4e26
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-272_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-87)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-272
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-272_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-272_iphoneos-arm.deb
+Size: 9533594
+MD5sum: c469baf8c8964de28f9adf5e80af9d1a
+SHA1: 0930bf8d47291a7b2341c6a40cf8d5864a6d6e35
+SHA256: 0a899600d3f25a69b47f2582b2218251232e332b840b96507ddbf3a3a3e547ba
+SHA512: 17cbc8452344b7d3def9da128cd237cc4fa5ec7b1d894313bab810dbe7bd374b1ff23d18957449fe698c813e95d54b59293895e62e1f90e6330176c286ec7b2b
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-273_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-87)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-273
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-273_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-273_iphoneos-arm.deb
+Size: 9533628
+MD5sum: 3920c75551e23c42b4f1a862ff98f538
+SHA1: 76d39da29302a1299bf43cb184f1ecb00d7a42d9
+SHA256: dd5953c65e66335517104c74a3efa9f4bb0a92ce60ef077477768c064944694a
+SHA512: 6b14366555cd90772ebbd41e991885a04980e192e2da52a55591b6f2b440e65a5b6934414c82cdbe7e1ece8bcfe7566bcd7226866b73ef754142bebbcbb82e24
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-274_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-87)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-274
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-274_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-274_iphoneos-arm.deb
+Size: 9533706
+MD5sum: 0c545c0ed6d4908a1adcb1de9e7f2905
+SHA1: 901b77818fddd60ab4935470ea3d36c4618b99ea
+SHA256: 503a3acfa13439975cc75bc947841387a9866cce4ce96ec5dcfcc7848e11b8f6
+SHA512: bf458f60294a6a7d6bc5ed73cf9ae84ebd4d9cc3874fd4d9933556a213672f65bdb7590a374456e95d9662ad0fc6f76732e4fd2705e445a7b2c464f71751e3cd
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-275_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-275
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-275_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-275_iphoneos-arm.deb
+Size: 9520620
+MD5sum: 05f021c85b7e5bb30fc179a9fcdb8db8
+SHA1: b1f1e559fced01cc601367f0a4dd7f3341c4cd01
+SHA256: 43a9ffbf2b72b968d7a0feaea1fac01e269c80e8647b015047461e5c73fb2541
+SHA512: 70fc2df25d0e9f18ba8247113a7efc2fb42b67c9a5a576fea79299b6d6d0600a1db89abb75b4b6859a23a4fd89187b64cc79c4c4f00555fd825173a024bfaaa7
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-276_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-276
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-276_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-276_iphoneos-arm.deb
+Size: 9525540
+MD5sum: 944486a5be029e735aacaea66e06a80a
+SHA1: 755b0e7b13aa832c1ee1a51924d1f97e7fec24e4
+SHA256: 4cf6200613af7b3740f66bd0654a0621be57c4f4f6f09063b621d67b7e3cad39
+SHA512: b6afb5f5d083ff055994dad7df5b616dcdcf0dfae9254f235b51841e056f2cbff448637ca56d7ec8fd9fb01eda7f28260d7208f6ac150d4fe63060806e82a9b8
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-277_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-277
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-277_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-277_iphoneos-arm.deb
+Size: 9528308
+MD5sum: 13421f21f75385f8539be7979289c943
+SHA1: 36707f74e16e5c384dcbfc4b6f8e3fba15d54324
+SHA256: 04b26b5efbc33686a358f1b647f724fc9ecd911f26f59d6ce7ba2920c2e96db4
+SHA512: 8667aa916c4f96b1356a915add4b4d01865440bdb3a9cfb984e824fa633ea300814fc08c952899f8605c609cee8895288ba99da25070a2816c4f9768566f39dc
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-278_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-278
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-278_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-278_iphoneos-arm.deb
+Size: 9528944
+MD5sum: 65e92f4f057dc8180ae3c4e8e1fb0197
+SHA1: 04d097f011742f8bceaac532532614a3b52ad969
+SHA256: 63fe13592ad4da5d896ef136a11c76d55b4baefc1f09418262cf57e7c37b7bc6
+SHA512: 374b08b9b4d4b71efe06c5c3228e77edfe13d6627cc019c8b814be4f24ab2a1066a626f4e44bae383c09eb5cd5db97d5df7970df5c377c4e86b084e46b8ebc5b
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-280_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-280
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-280_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-280_iphoneos-arm.deb
+Size: 9528848
+MD5sum: 173d521a1e3399e0fd1c18d4415780ee
+SHA1: f62f5ca7d7549525c5c5396d4e136746da7d5f69
+SHA256: 52172cbbf316c21456ef395e57b61204992335408275f716233e6076e5489f39
+SHA512: 155e96b729c86a7be48a872541c0c7c0c5606a69e1cd91d6f36dc19f92bfbc5db687a8db537693153fe03d6b26d33ec5d2cde3d9b4a4729102dc76ca06e3691f
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-281_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-281
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-281_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-281_iphoneos-arm.deb
+Size: 9528686
+MD5sum: e805e7ba0561e59e35a0165e8b4d8f65
+SHA1: 7f559680428520bd6d2610dc1b1c8a84ee969c85
+SHA256: 9bb3a3a19e2480e8e1b3fc26e1d279d1559bbe07451514d871dffea8e24a068d
+SHA512: 258d5372e2e9fefe7a8af13c73dfa4d28501502cfbe75e91bcdd264b6b69a0bf16c61037536e4e8f8f924bfb610c795ffeace335bce2d36bef15d6bb2f31f0f0
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-282_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-282
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-282_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-282_iphoneos-arm.deb
+Size: 9669462
+MD5sum: 4c3bea15015b88c31d81f148aa4d36f4
+SHA1: 9b1f4bd473ddc434343176c18ba8f7105bad91e4
+SHA256: fd2435ebef085960cbeb65a8ed5e8c376c701634190dbd343cbc40894c0a0338
+SHA512: c90584b34c1d059eaea2cd0656e6a3ccc5114e610feee6158a5c2c7f9bfff449f1984bee829feae9167522430dad5b632991dc81afc7b793df518aa6aeee27ac
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-283_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-283
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-283_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-283_iphoneos-arm.deb
+Size: 9669700
+MD5sum: 6530456162fb8391abd4bf6bf3bdfcfe
+SHA1: 78b4e7ebb8ca7b6de0d192d021385bdbe1ef0af2
+SHA256: 2fa6ebfb40e6150f07993844202f93818c0318da48f94cf663b6bd3fa3d9ebd7
+SHA512: 8936e0f5065d8eac7e6b532bd99b8604bfc0ea8e21264bdb816dbe8afda9c59b61dd6054a9c0bfa5ff20f9d8125e96e38db0c21f69f49b9e846e64aa3131d244
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-284_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-284
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-284_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-284_iphoneos-arm.deb
+Size: 9669660
+MD5sum: b13a4deb69a29505658f2267737e8063
+SHA1: f4c165af0286c97b13b1b0b8d502e4985cc50152
+SHA256: 2c7fa3e4efd17418c6d2ef9a4eca41c27e8393303c3920e694ff17070706917e
+SHA512: 69b04bd46a586a037f1676db80101690f4b5b7591465725ee7c2ae8f0853561137d8f9ab2660a020856797c8610feb1ae80d890d07aaa22c5a53685cee7e0252
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-285_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-285
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-285_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-285_iphoneos-arm.deb
+Size: 9669002
+MD5sum: 2e4c9b3b4065fe65da73cae311035dcc
+SHA1: 3650b5a0c1aa3a1c3c61e7f1f8f690d6a2c5c78c
+SHA256: 38ef3b1c4795188b03c49343b4cf65a782cdad73daa57f4b337fde9d503738a5
+SHA512: 296c77bc1455eb0e3a06733d622be570475c24f74c41b37095640ba2b2515df5964f7afb9a46ffd56bd44a62fb000bc374f227641884e1ed4478027b5e902614
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-287_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-287
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-287_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-287_iphoneos-arm.deb
+Size: 9669488
+MD5sum: ad6e885ca27a48b2f76506204eb24da3
+SHA1: b59289bb4b16c1b6268a155ae820ab0cbb7cbf61
+SHA256: 06ed6bc48dedbbab685197f5f72843bc57eba2cdde5fca4b1222a3a5ed0361f2
+SHA512: 4b8805d17b3ea68e2a010bf7867bf162b429abc642dd5c1839fa30d5aaa5e7c956a3dffd0beddfcbc5f60be96ec3fe6b19c05a19c961a7e832333915a10150b3
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-294_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-294
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-294_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-294_iphoneos-arm.deb
+Size: 9672174
+MD5sum: 72b65d4742b570b141f9b66762e9e656
+SHA1: 6a55d706aa25eb03f7e1db5e558c7f5b7c1d2081
+SHA256: ea8885a3f950e2b3b353906fdbd91e7b94d0d268dd2f0d76ec6bf465f5be6529
+SHA512: 8abf78d5602cb272ab62da5d007e928bd7278ed8796f837cbfc46b22d26fa9665d95ce934de96d9540eaa33c01a0523f0fcf1fb0ddecab40c12f2a2b5cfbe17b
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-295_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-295
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-295_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-295_iphoneos-arm.deb
+Size: 9672336
+MD5sum: 6e23fc89655aef770fc532a81f368d70
+SHA1: d5be18a587c42128f9a725ff7b2ea18d6ee59856
+SHA256: 5a95923dedfe8cd8a7e7cb1ca458916ceeb5d016a607445afd4bf34947517013
+SHA512: 388c60546305da0c36f6261b0ba852c7a8fbd3f13c84ecca09c4e5e0d92227afcbca1206fc51401e9917e592e8bf67b3e59822c7ac0c1b5bb8e7c164f8721715
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-296_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-296
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-296_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-296_iphoneos-arm.deb
+Size: 9673906
+MD5sum: d2d83f0d5eb1159503ffd450c3e03f00
+SHA1: fa63f61caac0478359bd9c40d2c6292160aaa0e1
+SHA256: 09ce6d012fcb6d989b0250c1bb87daf97ffb8cd0f7d83c64d87197ba90132f4b
+SHA512: 583cb799849055e8eec2a3064cae176a23a57c19cbbc3b88f721c9ab56b5591ef76cc7cd3073689a4e7612f36d1e92c6a54ad038b93e298726a917f10c348647
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-298_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-298
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-298_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-298_iphoneos-arm.deb
+Size: 9674012
+MD5sum: 5d3c3b46a06a3846a0ae7bf45e24d315
+SHA1: 8b10a3b40c4918cf3b6ce09af433b76fce3e68fb
+SHA256: 7cebc448ce609e95183aae6314f06173eb760b7fa146861082eb774097b2bbe4
+SHA512: a6f03d63213ce90b69e35d7a16d1a63c3c69fe33c52736fdc2bb3eb0fd3ee7c120389689562a622766a9809a23ba53c1d78deb97727f8e92c9dee18f321750c3
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-299_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-299
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-299_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-299_iphoneos-arm.deb
+Size: 9674410
+MD5sum: 27d3fd456668b86df88ea3e424cc40d5
+SHA1: 8d71c22fbb2d532c5f90127ea1ca798048894122
+SHA256: 651e2223bcd0d21165a71c713f8f7fd34b8124176895cba77a6c80cfd35efbc9
+SHA512: 0039710f8dc21dd645bda8a7dcc4121682204e6c8a6e653dada5217f48df5930cc9a8ead082588cb9cccf66777f72c107882b5d52da0525013efaa37f9685c79
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-301_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-301
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-301_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-301_iphoneos-arm.deb
+Size: 9792170
+MD5sum: af834ceb133c53421e321d2d8b9b3103
+SHA1: 9e0711bfa8e12957f2c54d936d5ae6116c83214b
+SHA256: 5916f9d9902be2bdff7e0a9d1e58bc32f4173bc703fd6e9f9cb42b79837f2191
+SHA512: 59c51e66be0391bbbcfe717088fdfda525de91728cb60070cb36194f580bd963c81f958f8a2418a5364931036b61836b58b1d8197663ee840daba809a7c3be83
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-302_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-302
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-302_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-302_iphoneos-arm.deb
+Size: 9794716
+MD5sum: 65bacf2fb628ca783fcc1602b984ed56
+SHA1: 085784b1df929d9ce734ec2a4f539ccc963eef81
+SHA256: c5dfa0f67b5925188841f3190ede476a41039268a778468925ab7ddae5bb4b2a
+SHA512: 94e558eaa2599574858a7b3e47b93c18b06bdde799241bb3ff558ece675d0d2e2bcbc93bd4e85f4ff1b3ab3a02bfdaae1b5e415f163963602fea8f508722023e
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-304_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-304
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-304_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-304_iphoneos-arm.deb
+Size: 9794672
+MD5sum: 1e6da7a3333c83ccfd69a49d43334f7c
+SHA1: 4c505147e23bc0907ce80a316499d18fe1cd738a
+SHA256: 30a51d9346a6d38e2e9810433e6a7355424feebd5e80fec0037faa12c01c1e89
+SHA512: 1549924ac0e34faa2dc135ad4f0242fc66bbc181e2c2b07f92d3278fe35964135fa55fc28b8acbe44e46022d2749ce516a4b8ae240105999dbe2f00f3e29f030
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-305_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-305
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-305_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-305_iphoneos-arm.deb
+Size: 9795224
+MD5sum: 2bd1f911c0e177a5aacc37f9c4ba99be
+SHA1: d9729972d811df5f0f46523ea4f9a493fa59fde3
+SHA256: 2735195d9d6a619fe4bb82b55075d74617153941f541f13c5f124ab7ad3a971e
+SHA512: a0d2c5a874d229e474bf83f94324400cf958f5e59cd49f31359f7ff5e38af79023c267c353445fe9ae58c796160ab32f480d8a99416eedccf9aa18c11cae3a62
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-306_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-306
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-306_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-306_iphoneos-arm.deb
+Size: 9794304
+MD5sum: c60ebdcaf7b7a114076e1a8be037c16e
+SHA1: de99c84c8fba4ee0758996e49c6cc741fd359f85
+SHA256: bb46ecabc888872518684f58b100f251fa678f157e2891dc2cd786097493e8a3
+SHA512: 797cb02713677ed60ecb9c8d01edcb5df13649244d23f5bc085036660b3da697b81bc7a4c2e4eccae852a1eef6d2c888ad585467cdcff6c7acd1d5dedd55cd4f
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-307_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-307
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-307_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-307_iphoneos-arm.deb
+Size: 9794940
+MD5sum: f1a229afccc303bb50955d48b13d9b17
+SHA1: de290416dcb8106eb2dc211e018d670a821c0af0
+SHA256: 41f65bad95e6b24b69f9ee2dae4cf2742dc4bff11a55af966769e156f083f3c5
+SHA512: 1b011e90350b97d4d7990587225d924c25c9c2e221bc0c17c643097775c7513bfc04a87cbbda146f6c79e34e781cab141771af231a50e3049cc3e9d02dcc3c84
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-308_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-308
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-308_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-308_iphoneos-arm.deb
+Size: 9795384
+MD5sum: 9ef9e5c480dbeea65542ee9e0cbd7018
+SHA1: de9b40fe927f7dd89af96677f3c685a4e472d969
+SHA256: 919612c08ade309e61c9ca831715a6daed09611145dad3dfb49951ac660ac7ab
+SHA512: 975c33894ff16aa335843faf5da41597094e135c86def09bc6c437a39ce6862ff5b7b9a9f790c356a5af061b54e07f397981ea093af9a70e97518d9fc0a943a1
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-310_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-310
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-310_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-310_iphoneos-arm.deb
+Size: 9753728
+MD5sum: 638a0af54057bd6fd483b76a21a5db39
+SHA1: 79f79b44eed4e23e2b6f0e6f4bd5dabd110c7c85
+SHA256: 52a66e20d09960f7fe0daf9f477a84ebf356f5fc26dc43da5ff3dcb6d422751b
+SHA512: e20067edd87024972daed88324567e539d0668a7cf35f04f72e097cabb505a24f184bf41c6d0d7d4004229ea0d13a7080394391a0a7f2184e9e50285f8fe973c
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-311_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-311
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-311_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-311_iphoneos-arm.deb
+Size: 9754606
+MD5sum: b9141b536c5812295c45826b74d0fc0e
+SHA1: 893de0dcf94083307baacc28b568677b07c907f0
+SHA256: d2ff75f5a4cb9c8546f6bca30a62937e76063dab46abd57a47a36c5277b188dd
+SHA512: e297b42910e4361e432e06e390c62eed987f738131cafa23cc5c930ab816952424eacec931d7f1fee3994ee28510676aeec4f4bf0e33dbc3c30a33ef196c8bb9
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-312_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-312
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-312_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-312_iphoneos-arm.deb
+Size: 9730140
+MD5sum: 343a461fe8149a01fb7e7223cc7077ca
+SHA1: 0ebe0a6e12745bf1b9818b0b1e84bcb5d43f740e
+SHA256: c54e1f8b79fc536839e3150737fab9d406f453561f636bfd65de6a346d103b08
+SHA512: 634a4be831904eaa6dd093d30cf1750aad97cc38d41ffed1d39687337608eb7777787feedf3683d9b585f3ae9195743d6c4032b16c93b41e45d82479f6b43c8b
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-313_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-313
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-313_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-313_iphoneos-arm.deb
+Size: 9666944
+MD5sum: 6f03f95b0aba5d21bf5fa836c6c487b8
+SHA1: 9f3bbbe6d533c71d1c8d2ca7159b81a38df25a99
+SHA256: fd64152144b6f0d362add721f2d8969a930f495aa5da08c903caa2d90518bc3d
+SHA512: b63bedfa79e6b40f3e16c1b797e620a864f144c4bbde9cbe6c4efde417697c110ceb253bd325349731733826d22c53170afeebe9a85527d2ef6891c99af9c20c
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-315_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-315
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-315_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-315_iphoneos-arm.deb
+Size: 2309752
+MD5sum: a3940915c9aebb61fdaa44a074604c62
+SHA1: 65e18d05e702407ae9e736a46f5673bb285331e9
+SHA256: a6469e8542dc151e2d5fc2deda6da8bb793f0c1230082a1a87fe68764e9ee525
+SHA512: 2fe76032951d07ffaa76c2f9db65e47765ad3d2b61dffe3f8523c7aea9214747d337d0f5e062709e69babcf8a2ef1c2302af92ce030338ecec084fbfd5dc2189
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-317_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-317
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-317_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-317_iphoneos-arm.deb
+Size: 9601188
+MD5sum: fd76f80fc19633632ca4a3e6e692d9e2
+SHA1: 17ad9bd8c5f61532d2c71ea8d41c63d180e14c9d
+SHA256: 849cf422c2bf5ac2e7b7ee436a4e99be4281acff57a21c1cf6f143e888554372
+SHA512: 88e6c61008a6f19312f9bc16f6492b3b3dbfd6e18eb1e0025487d6c037885ff9644a8bf4bc0829f033af98747f40ca5812134be13b0b0e4d6fb5d9f0e2fa294f
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-318_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-318
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-318_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-318_iphoneos-arm.deb
+Size: 9601184
+MD5sum: b933a0c382b542f51986ab7394f75922
+SHA1: e413ed8ceb941f9a81b4c88d25509a028bce249d
+SHA256: fbe0d5cd5f08b3c7b01ceb4cd1fb032e70759093defa2abc13dc9df0b6809e5a
+SHA512: 2a2cc1c26a65995f7c857fe4123753c1de82d1b52069248db2880a0be1de295c235103c8d68ebc730a39c9797234ec5a1fa73f02878e1dedd537e4d9d7e3d9f0
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-320_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-320
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-320_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-320_iphoneos-arm.deb
+Size: 9601136
+MD5sum: 01e146927c15a78b93e5385bafb0aa53
+SHA1: 502dad56c0a669c4aadf3758d9a60f09f397ea02
+SHA256: d816ac6def4556b0f577925b1b56c779e5edd32e2437a7d44e852a2969916ee9
+SHA512: 4ebdd6815e2cc66559e4d230f12d85e96ea76a0527f08ceb5676f1f004e4efcb3eae8ba96a14b0dd7c20e7ba3f1eb18325636b839534edcca6eab86380c50cc5
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-321_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-321
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-321_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-321_iphoneos-arm.deb
+Size: 9601136
+MD5sum: 13c17d87caeb721f60739c81d029fe57
+SHA1: cee1f0f81748aaf8e29f42b4ddd762818fb15955
+SHA256: 8b4d259798c2d406493b51acf69d36a0e76235e224a718acaabdbf0234d0cd26
+SHA512: 6794e7ed1d18e8f9ba531d9639d16af6098e942ee5d64722ee0ff1c580cbcff4aada50f95edfb2a38bf291bc0ab5c54dc5faba99c7d0c9112bea3cc810d45697
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-322_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-322
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-322_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-322_iphoneos-arm.deb
+Size: 9601146
+MD5sum: daca9551ebf3c767327d75324ca1f09d
+SHA1: 1489edf18936ed08b92fbe43e3f90e28bf0d82cf
+SHA256: 5b2a5569fda6f776e8183f303f47406b240f08a4406ef28db8e2a2146d1532e9
+SHA512: 6eb11e5e2253100e644f009551334a5442d452248e851c82c80327d7218cfa4cc09a14a8a6c704c2e26a58f9743b1f31d838bf3dc1f68518ecbd8456384fe2f9
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-323_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-323
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-323_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-323_iphoneos-arm.deb
+Size: 9601132
+MD5sum: 09150589ed9312f181fab356ff713bb0
+SHA1: e0a383b437f0637cdd3f1ffae026be20bac467b0
+SHA256: 13a1b6c7c5f8e9b03f0a64a5d079c993af101d7e65d85016bbcb2b75ee554b3b
+SHA512: 233c7dfcd5c8286402a665d3c9d259cfc48c8b99de30dded9c4669af87fa083ca8be905ed12997d59c551ceb4c5e40a89012e549a147ff3d5e72f1f72d74820a
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-324_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-324
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-324_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-324_iphoneos-arm.deb
+Size: 9601154
+MD5sum: b9ba80ec96957593a60faa1e97b8d812
+SHA1: 2f74f84b5630bd414c6aceec89c821b0e1d62909
+SHA256: e453d640d2a1dbaa6d10c15e2e82c717c435f9d259ba668912d20963ceee3f48
+SHA512: d8657f9924b9882e686694a642e63441e474a4b915bb64da5f31da851b599e66a355fa6e9ee2229b718d4e1d653f9a1aa5f0e0043cbb152edadc338670333ced
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-325_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-325
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-325_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-325_iphoneos-arm.deb
+Size: 9601136
+MD5sum: 4b07389641af6c46bd51321ac6c823ee
+SHA1: d309cfaaaa67f80868ccbd02b02528e3d21bc007
+SHA256: 23a4fa635077e627978b29746eb4ae3e7b9cf71f9debed6c587cf3149573a176
+SHA512: 4dfe99ba72ec5b1b57221d1c0170ed8133a9376cd9b6350935e50f8432e15cbf85b8f4054c76dc476d0dc938a8700ad21eabef6d5be084c0ed111e2bf852c3ee
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-326_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-326
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-326_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-326_iphoneos-arm.deb
+Size: 9601078
+MD5sum: 9815fecc81949390163e9a1f25cd3255
+SHA1: 863802122e64617af224114fa6730ce06d4fcc25
+SHA256: ee7f99d30c0bafbd9a3c5250067a150ec95a499ff4d6324bc9a53bd9cdca598c
+SHA512: b7407573e035bd7d37aa3139712569e98d4d89388e70ec44282e7677f29b90f9768c08d30b66970e098be113ca72a9a7a1bcc4412910d80a38857ef55766437d
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-327_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-327
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-327_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-327_iphoneos-arm.deb
+Size: 9601060
+MD5sum: b51349dc774e2ae8a4d634c3ce19e09c
+SHA1: 6f72e294cc392704811a1cf3c244e32a48fd622f
+SHA256: 9d529c775a8101355558cbc6d54f64fd02568da94d762e40158cb6be99969077
+SHA512: 536eeb27bd9be68bcacf66766efa9ac04a553ae5ecbf251a6114f1840aeb73662ff8528901363177d947afbebd27d3afd719f984eb35ae8b71b4aaf8798c8a23
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-328_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-328
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-328_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-328_iphoneos-arm.deb
+Size: 9601902
+MD5sum: 3c035c062cfb8260017c9601dacf91fc
+SHA1: 0f04c1452bbf84d9faa596a4aac2236303d7b167
+SHA256: 8855387aae0ea74ee072756822cb51be04331c653ff7614c5608391e6905f32d
+SHA512: 96f84bd5c88d7484b13313ee4e441395f8a2cd23f46702c57fb2a4fed0337feee81a7fedf71bbbd745a12903413e87ad38b71de910d393df4a393c1932f43e19
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-329_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-329
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-329_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-329_iphoneos-arm.deb
+Size: 9601140
+MD5sum: dcd2197fe83a8966cb4e567acc5403ed
+SHA1: ca18ce2e8a63357ce780bb789f6a5f901f87ad00
+SHA256: 95e291d8c30521bab0ac4d2a7a2e63e3f286bf75b8cc3c01f513c744e5fe11e7
+SHA512: 9b4a0aaf9d6bd30c822877babb1fc7b6f84becb7229b30bf9515377f64bd6b04793b39023783f859648bb0f9e6e76330df09e55578828973f6582fc3434584b4
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-330_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-330
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-330_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-330_iphoneos-arm.deb
+Size: 9602816
+MD5sum: 9e5eee7185bfa96c06149d4159aae9f8
+SHA1: 425c48093e2f2751cdc1621fc3587e601a1190bb
+SHA256: 0b220bd95d09b1af792bb04a9edc5048d1fddc516b741104dd1041c80055c03d
+SHA512: 22faf85ef957df306364be733695c24f1ca7c8bdf457abc0722674703abf8ef0b3e5fd4784990e0581d3b53f832ece86376876ca1000c0328526c1c8beaf90af
+
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.gramplus/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-331_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Instagram ++
+Package: com.unlimapps.gramplus
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: repo.biteyourapple.net.pluscrack, repo.biteyourapple.net.gramplus, com.jake0oo0.instabetter, com.insanj.savegram
+Section: Tweaks
+Version: 1.8r-331
+Architecture: iphoneos-arm
+Description: Download & Copy Instagram media
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.gramplus_1.8r-331_iphoneos-arm/sileo.json
+Filename: com.unlimapps.gramplus_1.8r-331_iphoneos-arm.deb
+Size: 9603216
+MD5sum: f5540c2189bed84eef6daa28adae9da7
+SHA1: d09da3e91af211705d89779fa71d5ed2d36b9236
+SHA256: 7c0e2c3ff98bfa53763660b6595cc96e150a7d9f64ba4a736713725d7e39066a
+SHA512: 319fab094928a26daea4a4a1089730316e7b4a790f492477940992ed020d7ef0cd3d93c051924274fc0348ee8ccfb03e6695a67cb39de8748288f61818326ed6
+
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.telpp_1.0r-4_iphoneos-arm/depiction.html
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.telpp/
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Telegram ++
+Package: com.unlimapps.telpp
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.0r-45)
+Section: Tweaks
+Version: 1.0r-4
+Architecture: iphoneos-arm
+Description: Most-requested tweaks for Telegram.
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.telpp_1.0r-4_iphoneos-arm/sileo.json
+Filename: com.unlimapps.telpp_1.0r-4_iphoneos-arm.deb
+Size: 955868
+MD5sum: 6a03e39e1bc0de3055655feca044688e
+SHA1: b1825f6d0600fc37f8ef34d389cdd3bd0bd01fb0
+SHA256: e2cebbe8823af65a29de7d082ff896ad2ccf16a434af49e11918544679e48ef4
+SHA512: f42547174f0e414f6045e74b9de598ba0415d500c50927e64bd96c6776a9d15db744f64141f66f5a7d5cb2ec3354aee71eef1b8c87fe05812bb07d92e53a7e94
+
+Package: com.unlimapps.toneenabler
+Name: ToneEnabler
+Depends: mobilesubstrate
+Version: 1.1-6
+Architecture: iphoneos-arm
+Description: In iOS 7.x/8.x apple uses a plist in order to load ringtones in settings instead of simply iterating through the /Library/Ringtones directory. This tweak enables the old behavior that was present before 7.x and reads the tones from the directory so tones that you download from cydia or UnlimTones will now show in settings.
+Maintainer: UnlimApps Inc.
+Author: UnlimApps Inc.
+Section: Tweaks
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.toneenabler_1.1-6_iphoneos-arm/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.toneenabler_1.1-6_iphoneos-arm/sileo.json
+Filename: com.unlimapps.toneenabler_1.1-6_iphoneos-arm.deb
+Size: 28574
+MD5sum: 4c1138f6edf169f1a437f837ddf7323a
+SHA1: c08df84d9f297da1a037fcc94235b4c7eaf92a9f
+SHA256: 6b667544822e2f895a0427c460edf6d5b44166b13f34f5493b1eabd7578b0dbf
+SHA512: 07865dda48c8839de4a306daca405049c061837423167564a2c56db999307fc3153043768fc3de0b0cf3a4266004678e44d109b878ed8d7f9e47ec852f460c59
+
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.twitchpp_1.0r-13_iphoneos-arm/depiction.html
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.twitchpp/
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: Twitch ++
+Package: com.unlimapps.twitchpp
+Depends: mobilesubstrate, firmware (>= 7.0), com.unlimapps.uasharedtools (>= 2.0r-54)
+Section: Tweaks
+Version: 1.0r-13
+Architecture: iphoneos-arm
+Description: Most-requested tweaks for Twitch.
+dev: i4iphones
+Tag: purpose::extension, ios7support::1, ios8support::1
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.twitchpp_1.0r-13_iphoneos-arm/sileo.json
+Filename: com.unlimapps.twitchpp_1.0r-13_iphoneos-arm.deb
+Size: 1176188
+MD5sum: d0a979941af7b9a03060952f1f5979f9
+SHA1: 107a3fe04de5adb77bda241c5316aee7e9036a4b
+SHA256: 5094c9bc779cd8dc017b4251064d708ccbc4f32e9b97a3f7772e768b33aca161
+SHA512: 80c0af724c30aa5462f7772c786743594adfe3f71b2611cbc3ba58f5ea30e0a19212c95c39f0382cdd1e6372c6699482fb43ec945817f19b930f8a724c9afad7
+
+Author: UnlimApps Inc <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Package: com.unlimapps.twitterpp
+Name: Twitter ++
+Version: 1.2r-82
+Description: The Twitter tweak that give you more sharing options, long tweets and much more!
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.twitterpp_1.2r-82_iphoneos-arm/depiction.html
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.twitterpp
+Depends: firmware (>= 5.0), mobilesubstrate, com.unlimapps.uasharedtools (>= 2.2r-61)
+Priority: optional
+Architecture: iphoneos-arm
+dev: i4iphones
+Tag: purpose::extension, role::enduser
+Section: Tweaks
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.twitterpp_1.2r-82_iphoneos-arm/sileo.json
+Filename: com.unlimapps.twitterpp_1.2r-82_iphoneos-arm.deb
+Size: 882910
+MD5sum: 59a9d196f0107f67b188ee5659d95639
+SHA1: a64897b287d5fc6724b3e3bda8d2bf19ed01cdc3
+SHA256: f27c001e195fc84ec1bec6a0408cf90921d40f094e0189fcdc93ce62a046c679
+SHA512: f54602e3aef68d677ac7c835df42305e6a62df0767c339f65acee497570adfee434774ce9365dd5ba48044e7a15fd260133d739cf252cca915da924869d8c328
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-59_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (nostash)
+Package: com.unlimapps.uasharedtools.nostash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (>= 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-59
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, cydia::obsolete, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-59_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.nostash_2.2r-59_iphoneos-arm.deb
+Size: 22786466
+MD5sum: fc765da43c2db13a172d4b349cfa3f80
+SHA1: cd37e356ad0a977bd2f418f82868ec0a2fefcc8d
+SHA256: a48660e5dcc767824a3f7ad7a9d66f1e1c27f304f2e4c1f769fb1e89d326d397
+SHA512: dc8b6304ae53567a6319ad34afe2e1ac9e0d8794775b3a35a2e4c4c832ccce03a08652871eb452218e5cc735d5af59b4c29c8587ab3a87c5641f6d8be70ec1f0
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-61_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 11)
+Package: com.unlimapps.uasharedtools.nostash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (>= 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-61
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, cydia::obsolete, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-61_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.nostash_2.2r-61_iphoneos-arm.deb
+Size: 22785424
+MD5sum: 57aee2d915780a062b05e95279402e61
+SHA1: b016a60349118f5c3cd6a81b0ad92c434e7a1ec5
+SHA256: 85927a443666d0c51e64d953974e0f87361f5ababe0a30795dcbadd910c858d6
+SHA512: fbacf363a538da1e5e53aa330ccfe01cff910fcf034837b63036429c7cddd82141acabe48ef49886bdc475bea62d89d722a1b317f4471d8653641688b349bf64
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-62_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 11)
+Package: com.unlimapps.uasharedtools.nostash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (>= 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-62
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, cydia::obsolete, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-62_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.nostash_2.2r-62_iphoneos-arm.deb
+Size: 22771928
+MD5sum: d47c465f880c66ec9c80673c0b5d5e10
+SHA1: c3ce3558973f40d449efb46450c60bf7eb9f7858
+SHA256: a311c6baabfa80ad9e281fed87441f5fbc774ff3f3c5b56dc78276880ad881f5
+SHA512: afbd53394666e4dd6fcaa3062204bfccbc0cf01c0ffbe1daf26ae5a8d68dde7f3c5d3d09414d514ee9bda0215c73692a174d1608d72120a8a63adea0d6217c5b
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-71_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 11)
+Package: com.unlimapps.uasharedtools.nostash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (>= 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-71
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, cydia::obsolete, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-71_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.nostash_2.2r-71_iphoneos-arm.deb
+Size: 23412738
+MD5sum: ea77db088ca5060ec0793d9cae3ce7d1
+SHA1: 876143435dc40617184162b2f733e01cedbfadf8
+SHA256: 06c7afe5b040b3395e3e24e4103ddbfd81318227a8128fc91c316de82085421b
+SHA512: 276054416477600d2ec8de6ee69581c3c623f09684854892d39da82ef9f1bc6c4584f017dc7badc00a19c90928c2a32295da4edea7e43894a93ae624fcef97c6
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-76_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 11)
+Package: com.unlimapps.uasharedtools.nostash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (>= 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-76
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-76_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.nostash_2.2r-76_iphoneos-arm.deb
+Size: 23624784
+MD5sum: 4220a2be422555a937ae039848b787da
+SHA1: 5e492b7c004b7ad6787979f302da768daba47fc2
+SHA256: ff946f1234667cff05e34e26cfc2fa64bc1a1aff4221a2b17a476c0ca3eb83cb
+SHA512: 93dc9f939531175ecd4dd5eb2477dac0fafa74a7ad817db45291a28ec84bc97d2aebe9006cc34c303f84213dbaec398b228069b8db1670b94ce3c99b125d34f2
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-77_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 11)
+Package: com.unlimapps.uasharedtools.nostash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (>= 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-77
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-77_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.nostash_2.2r-77_iphoneos-arm.deb
+Size: 27290944
+MD5sum: c3ce43778539dc9416674bbd4892470d
+SHA1: 7852c5a3b0cce1a8e066882216e07e60b0e06389
+SHA256: cbcef20ad1083beb597eab6a624d84d5eaf453a2f953637566038594fd9046ca
+SHA512: cffcfaecbfc849eb37a9ac476013829687189b3de8beb225100716ecc5d97cf0cc15a0508b360eadd25109d640cd2ccda6267cf9df5d4dfeb571265c98b10bc7
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-80_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 11)
+Package: com.unlimapps.uasharedtools.nostash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (>= 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-80
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-80_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.nostash_2.2r-80_iphoneos-arm.deb
+Size: 22719754
+MD5sum: 98c8b3dd1dc079620f93be4cc610d605
+SHA1: eb7811cd534a250f6dd663ad867faa5d27942f02
+SHA256: bb79d25c29e6d6fa37fbe83b98aa0af913afd7019802423d2bb31be231d08c09
+SHA512: 15d89735448cda0a34662dbd1a057dc411517942d70af7a3dfe152a56c3417f969be7dca6acf1edb84d9b78b57c27724efcca1eb44822eacc3a233e885a278df
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-86_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 11)
+Package: com.unlimapps.uasharedtools.nostash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (>= 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-86
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-86_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.nostash_2.2r-86_iphoneos-arm.deb
+Size: 22719728
+MD5sum: df594598db518303a4e3cd5c5f6db64c
+SHA1: a3e662e307e61dfed70a1d621d97a3a2533f0cc8
+SHA256: 4069a42f86ea1a8a10190e1b7a7242cd866d3df2dbb26e6dff78027f473f62e4
+SHA512: e79249c0fe49ba875f7927cf0b4566ffd54f8b32ae930c85c85028907fd9423d47edc6ddf090bb27985f824d7a9239586af91a8d1a7b5d37a5ceef11125c1d26
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-87_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 11)
+Package: com.unlimapps.uasharedtools.nostash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (>= 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-87
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-87_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.nostash_2.2r-87_iphoneos-arm.deb
+Size: 22719486
+MD5sum: 01bba87353970a61bf9f1f83a3a3dda3
+SHA1: a0b4ec66051de01b8521eefcc5490ad438a6602e
+SHA256: 59872a0445846c5fa757a1e11c5066ba76af7484d1316ee16e2cdc5cb1234936
+SHA512: ceed4954d80169924d256b0296602ab7316c2b002caf29144ef805d885180cfee33ad8fc02ae9de434ff44f98fe37f42e86d18e88529264cdc65a3d217716436
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-88_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 11)
+Package: com.unlimapps.uasharedtools.nostash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (>= 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-88
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-88_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.nostash_2.2r-88_iphoneos-arm.deb
+Size: 22720644
+MD5sum: 565ec070f32233e52ad5effa98202f06
+SHA1: b4039ba0440315ed05dc61712628cac659afa35d
+SHA256: c90a0d5277a8db9e8476d5dac20055f9d73dea30b9e6492149ef761f2cd0b67f
+SHA512: 2a52831aca98d21a18a42ee755b7edaf0e9a4c6578fb0364adf57dc7cc4a56e6cb43565a81322ff9227c8a0ce8cf47d8b70141b85dde1fad5e2d4fc822e7473b
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-89_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 11)
+Package: com.unlimapps.uasharedtools.nostash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (>= 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-89
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-89_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.nostash_2.2r-89_iphoneos-arm.deb
+Size: 22720778
+MD5sum: 3bad0b7787b61c7f868d262b3cc48725
+SHA1: cd8d531f5cfdb81919ba489feba7333f2d83590e
+SHA256: 4e777ad40e7fa4a63111cd0504b2678f0d170fea7b650534d8cc40ebcfc25f93
+SHA512: 19b58f91d823cccc4b35b6f33674277db7a6394ea0b1d5103fad7e0cd8a9bd188600816d726e413e3921e3ad0bf85f493a5dd94a09c1f652b6b814bcbfcecc94
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-91_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 11)
+Package: com.unlimapps.uasharedtools.nostash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (>= 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-91
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-91_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.nostash_2.2r-91_iphoneos-arm.deb
+Size: 22720612
+MD5sum: f20617d19f6edbb3269eeee289d031e1
+SHA1: d5152efe2482aeec60bdd5544cd9fc3f8c4ddaac
+SHA256: 927081a7968dc1c0475233419dc6928a1e05ac29906bc5ad6704e34e62af56c0
+SHA512: 7aec0924d5870f29bbf90fb5c60776d2a9f69b7380e426dd5d4fa34a06e970343d320cd28d172340707cf48ce42603107defe1f3738f30ff640b6472d3639afa
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-92_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 11)
+Package: com.unlimapps.uasharedtools.nostash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (>= 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-92
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-92_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.nostash_2.2r-92_iphoneos-arm.deb
+Size: 22713058
+MD5sum: 7c9f327cd083d2abb1e14ae40e23bcb4
+SHA1: 036ef6092cbb203c57ae870244ac9da6e99e7a80
+SHA256: c5e85875e1f61a09ca17904dc3cf9e4f7e766465ebfa0e4126c8bf063998edbe
+SHA512: beb1cf594e5db3e62bd1a1af941d0bf5c3436b24ea3ec0616266271cc70638c6b4410d1a587cfa568b4b80e89c2acc057355193ead065d1727f313ddb6964793
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-93_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 11)
+Package: com.unlimapps.uasharedtools.nostash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (>= 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-93
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-93_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.nostash_2.2r-93_iphoneos-arm.deb
+Size: 19819356
+MD5sum: 094c31f38823df75ed2077be8872331c
+SHA1: d7fc8170f7bae9efd76ae51c0fc8acab1af06bba
+SHA256: 19e1a646c7e4e2c0545b8e90d5de811e4524ae37bc8e24744407c7dd8813f523
+SHA512: f51b6c5aef7220ff9f14022040b1f6f2e17c7888ba2dd24100289c27bea2734b93b28acc94e6c75c6d5d16645161ffd8185c35953459674098e7de638f4fa1a1
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-94_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 11)
+Package: com.unlimapps.uasharedtools.nostash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (>= 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.stash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-94
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.nostash_2.2r-94_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.nostash_2.2r-94_iphoneos-arm.deb
+Size: 19862136
+MD5sum: 77fe0e2f8ae8c223bf4e355005962968
+SHA1: 88d1120f6269d69fd151cd14008631769fd2d373
+SHA256: d76c3dae69ddcb5f60e2033f588cf8f8194cf54889392a9fc0b2fed65d088157
+SHA512: 299c887a8d101ac5c37b4fc8cd9e164d24771d9cf855d0e98d6781004f1349ad3fd9a6ce1565a166bddf27f5ecf7362263a2c1c526c465c1482ff9ce1dee2a0d
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-61_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 7-10)
+Package: com.unlimapps.uasharedtools.stash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (<< 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-61
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, cydia::obsolete, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-61_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.stash_2.2r-61_iphoneos-arm.deb
+Size: 22784848
+MD5sum: ee5095b2b731adb1d42ea29bbe6696c6
+SHA1: 3f3b808031edd5b3bed55a7386528b2b285f454b
+SHA256: 9b911db34373ffb5ad152b17f2a3049051b4ae9afdfc56d214df92db94152f76
+SHA512: 09f8e525f47de16f465e0f7cdb795d072ee1c333ab515a08cf74f597025a86e535d2b2dcdc764575fef6c58f0038ad5bd0d499d0b8d240cf456e67e874aa7bc8
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-77_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 7-10)
+Package: com.unlimapps.uasharedtools.stash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (<< 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-77
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-77_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.stash_2.2r-77_iphoneos-arm.deb
+Size: 27290238
+MD5sum: f03f1c0fd78e3822c47d902770b3d348
+SHA1: b7b09366e0be1212678aa87a0f0a4931d108effc
+SHA256: 076f446e0a7c24b9d919046d187c27a6ab746f35e20d0feaa87a59dcb2666553
+SHA512: fac167424890dd7aa36c896aad1a2c479e3d928a61c9ad9d8aa60a7f8b20fda757d7677ffb08b3dc6577c8310bacf9f24dbebfd540381fd038cf91e1678a7694
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-80_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 7-10)
+Package: com.unlimapps.uasharedtools.stash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (<< 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-80
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-80_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.stash_2.2r-80_iphoneos-arm.deb
+Size: 27290348
+MD5sum: 632cdfb87d720afb7eb316f6c2977325
+SHA1: 3ad7532016d06dc5b025101aed8a33ea84df5738
+SHA256: 2ab7304cfa500ef0b0b6417fa3f04a0b8380befcc107423585b03361aebfd47d
+SHA512: 20b99c4f30917beaaa355137d6913661a4cdb5c18ce4293693c93bc932c79bd2fca4405c5bef9f1ba9099edaefc1d585a4ec1d0bd31499c1a3dbd1b108cf63e9
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-86_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 7-10)
+Package: com.unlimapps.uasharedtools.stash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (<< 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-86
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-86_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.stash_2.2r-86_iphoneos-arm.deb
+Size: 27290214
+MD5sum: 548df2c2a5f1492aab74781071914c85
+SHA1: 180a060fe2e8195e6aa4afad7d3e50630d4cec66
+SHA256: 9ef3a7297af5201367b917dea277809980e805cd7760938d3c95dc02a438c0c0
+SHA512: 684b29afee8d8097c87ce8b6298820845913eac3735d9325f58427c9bf6d3e7ada6a937f84ed57907750332b380c661c4a7380e23ff8fc5b65c35977b22d4fea
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-87_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 7-10)
+Package: com.unlimapps.uasharedtools.stash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (<< 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-87
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-87_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.stash_2.2r-87_iphoneos-arm.deb
+Size: 27290760
+MD5sum: 8b2f5de841dc6b172d315485fc2e615e
+SHA1: c6eb0656f49612ab21c63b5db00a2bcff09aa424
+SHA256: f213352497b73a9d3014d3c51007f3299939ff21e10d06b2fb328f3f52a3ee7e
+SHA512: eeee53f8c9de7c79097eacbd666c203ddfeabe5fde8caf7ba43e5608c6f840da12d8916d2aad55c6f45f55897bc161c03d1451cf4374d9eefd8dbe1e845f812a
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-88_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 7-10)
+Package: com.unlimapps.uasharedtools.stash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (<< 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-88
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-88_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.stash_2.2r-88_iphoneos-arm.deb
+Size: 108746
+MD5sum: ca7fee77af9fe5c85a0a37e1b195d9af
+SHA1: fbac2883fb61084fcad0b9220de245a2cb3b53d4
+SHA256: 5dc61749c1103e0c1e14568d04b5727a1b3fe7c5f92b18298e146fbcc2127b71
+SHA512: 284656db4fe67b1277e9c092f9f8b279fd1a717b91d2dc4d4e1ad96deb73c45a9ab6d98cabea76866a768f9df0d89d970d0cb3b1f7b6252dc7a4d6f31d765716
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-89_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 7-10)
+Package: com.unlimapps.uasharedtools.stash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (<< 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-89
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-89_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.stash_2.2r-89_iphoneos-arm.deb
+Size: 108720
+MD5sum: 0d5eb7b87b0e54a98a7252631d689e51
+SHA1: 7da155d5100191ebf0b2fb0f857a63920e12ad9e
+SHA256: cffa6cee3a22b8e98178ce7d153147168ef046781e9877386828ff8f63d43fef
+SHA512: 55c4c8b576ce4899c64729d6df005d387201a4deffdea3e0fbd443cb4ec9ef3e6afd92c1a3ef308840dab38925af8c8990e5f0efbe4267431a0a23ae6849f105
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-91_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 7-10)
+Package: com.unlimapps.uasharedtools.stash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (<< 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-91
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-91_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.stash_2.2r-91_iphoneos-arm.deb
+Size: 22720126
+MD5sum: 323943fb47393a439e4387abcb98efa0
+SHA1: a278be95fcac127622b921b8c39e16b85cccc6a0
+SHA256: d4df4f7fb00814f02b18ac2b09fd0c44ba1b53432a4b655f4d7e98212604d13e
+SHA512: 93dbb4ac7cb1e12d5bcb50c24bec269b9b0ac8b2065221ae736156955801b7bb06cd6bc7aaead4f6175c30113cdd3c1cfdb22f0371e750572aa8b69af11d6e21
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-92_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 7-10)
+Package: com.unlimapps.uasharedtools.stash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (<< 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-92
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-92_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.stash_2.2r-92_iphoneos-arm.deb
+Size: 22712488
+MD5sum: 2cc2e710104d904dab5b29766e8f3de6
+SHA1: 0a60e490b2796bfbd2257b4e8fca608e766cf002
+SHA256: b38a8789c8c19dd73cbe0dc088a5d35cc3279bf34c312d129c525912c6e5722c
+SHA512: 979a8f8ae088caf5dc7068dac25d2d8abe62f011208715353a5c1caddcf5d07304128791836e6d554d6ce2eaf48b87bbddc422f54bf6e3c64dd3a37705393a47
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-93_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 7-10)
+Package: com.unlimapps.uasharedtools.stash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (<< 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-93
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-93_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.stash_2.2r-93_iphoneos-arm.deb
+Size: 19818910
+MD5sum: 6d15a8952633dfc5237b633a5765faa5
+SHA1: 7f551a126ca0779e6928e9aa74efe77a9b5fa680
+SHA256: 2a912b73918eb299bd6f228a1bf6951ea2c5345a7041b1ecde2cb72c2db3e62c
+SHA512: e38d331ac76ed934f01a208b5d885fb6a5f6fd0c92172b0b215e1db3a73e27fca41875e34e8c82c93b98df3da42ce3c9ecddbc90866d8cdd7b75d33fe80112dd
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-94_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools (iOS 7-10)
+Package: com.unlimapps.uasharedtools.stash
+Provides: com.unlimapps.uasharedtools.virtual
+Depends: mobilesubstrate, firmware (<< 11.0)
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools, com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Section: Development
+Replaces: com.unlimapps.uasharedtools.nostash, com.unlimapps.uasharedtools (<< 2.2r-36)
+Version: 2.2r-94
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools.stash_2.2r-94_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools.stash_2.2r-94_iphoneos-arm.deb
+Size: 19861660
+MD5sum: d986cd19bc7f4266e5f1e7bdb70959a8
+SHA1: 146db18f88fa8f4f9006dced575004b566f576ad
+SHA256: 44f06117f154e2de21809b9d65f9fe5a59b8a042407a4b735466a37085822ede
+SHA512: 7061703eb2d6c78d872479f1a30c32f3e584bb20552d4cca69160a4dbde3a84c4d607bab1b146348b926886295c6f3911c8d406e9c45c846de27c9fead4c36dd
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-71_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools
+Package: com.unlimapps.uasharedtools
+Depends: com.unlimapps.uasharedtools.virtual
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools
+Section: Development
+Version: 2.2r-71
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, cydia::obsolete, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-71_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools_2.2r-71_iphoneos-arm.deb
+Size: 676
+MD5sum: 3c81f88c9a72deff8884d0b0bedfa537
+SHA1: 13553b6bd25e1ae4a96a91e35cebc5f0c785e041
+SHA256: 5d1b171ef8aaafd7d8e62a700ca11be939fcf6b42087541121d62fee8536b076
+SHA512: b605ec716bba1d7129016e381827c54e4b03489da265db898767b97864f3dce39cca16d116535dcb0b741c21e642282c2147348edce99082aad5810caad5c8da
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-76_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools
+Package: com.unlimapps.uasharedtools
+Depends: com.unlimapps.uasharedtools.nostash | com.unlimapps.uasharedtools.stash
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools
+Section: Development
+Version: 2.2r-76
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-76_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools_2.2r-76_iphoneos-arm.deb
+Size: 672
+MD5sum: e9634f66f0978dd63a2ccb8c725bb05b
+SHA1: 45b37869121612430d73720feb48b4ad30435597
+SHA256: cbf1b44dca0743d3c33903ca68b4ec26c56adfb8c207b6375be63fda29857bef
+SHA512: 8b21818fa847bf88120387028116f4a73855c6c03d72e4810d2fe7befd5afe4294b4a92e080a94e0f975568b1dd92b07041b2281d0358f92a73751becc99c941
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-77_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools
+Package: com.unlimapps.uasharedtools
+Depends: com.unlimapps.uasharedtools.nostash | com.unlimapps.uasharedtools.stash
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools
+Section: Development
+Version: 2.2r-77
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-77_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools_2.2r-77_iphoneos-arm.deb
+Size: 670
+MD5sum: 780554aa35b045c7c2aa88a66e8cc775
+SHA1: 311a44edecfca4787208a054d6b6f2f201305801
+SHA256: 1585036c4edffc124429d50235d86a38fdc63364170416f45372e00b6ca2eac0
+SHA512: 07deaf68771a0ee4937b09e66b73f70f52c50666aff63178a7cb74280f9658233899fda149e4ba39f16a39036f0b1204807f5ce86b00447cab995b12d1d54c89
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-80_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools
+Package: com.unlimapps.uasharedtools
+Depends: com.unlimapps.uasharedtools.nostash | com.unlimapps.uasharedtools.stash
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools
+Section: Development
+Version: 2.2r-80
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-80_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools_2.2r-80_iphoneos-arm.deb
+Size: 670
+MD5sum: 9dbdd867b2272711e1c0d5e2a77de8c2
+SHA1: bb483d0ebe7fd19997054d48a77aff51a224f9b3
+SHA256: a78ec37fda60742b05a4c15ebbc76fe4b2fe16597e9e2b79bea0be2d1c6f6869
+SHA512: 31eed34400ea243ae04e50db0d7f8753fd6f309486642759c5d8497910799ae58d2c8a3222c5e10588a47e2d90e24cbf346acb901d374746a67b5d75e2068206
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-86_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools
+Package: com.unlimapps.uasharedtools
+Depends: com.unlimapps.uasharedtools.nostash | com.unlimapps.uasharedtools.stash
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools
+Section: Development
+Version: 2.2r-86
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-86_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools_2.2r-86_iphoneos-arm.deb
+Size: 670
+MD5sum: 010811a3c3915c00e48b3fde722b40bb
+SHA1: c9ade0fd3f25aa239f389a30293e24c9ba47a079
+SHA256: 081c196d589de5620ab14bba0ac362a4cfe8ec1d7f16cb649d568432fb0e6640
+SHA512: 7d3c8bd20a1fc47ab935ce53071a497624144eb498e06313e41dac90e3f8eebec677fdcb9326558952ec1a678978fa6af04f2e91560a86b0be79422f8e9819d9
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-87_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools
+Package: com.unlimapps.uasharedtools
+Depends: com.unlimapps.uasharedtools.nostash | com.unlimapps.uasharedtools.stash
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools
+Section: Development
+Version: 2.2r-87
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-87_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools_2.2r-87_iphoneos-arm.deb
+Size: 670
+MD5sum: a23dbce0499eba0724f8148b6c3e88cf
+SHA1: 45ea70595738970f9a8e3dee8306d12c0f3e1280
+SHA256: e75b61bf410a3cbb314bf2b442b62b4a6d1a8bbbd706089f5c185dda08acb2d2
+SHA512: 618ea3a504787a6fad59fda11e0a402996fb0fcaad501383808b4056799e5945b8ad91c5772e34e1e90b3537fcb67cc91ff59262dffd943d1e8e562c147ce739
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-88_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools
+Package: com.unlimapps.uasharedtools
+Depends: com.unlimapps.uasharedtools.nostash | com.unlimapps.uasharedtools.stash
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools
+Section: Development
+Version: 2.2r-88
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-88_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools_2.2r-88_iphoneos-arm.deb
+Size: 672
+MD5sum: 6460ee524174089e48ab125588fcb2d7
+SHA1: 3972086718cb2a6566a03678ab8d045ff5486875
+SHA256: d4b4ae1548e9239320a528d93b2ee24c85d74d565e439983d052554f6bb9d9f7
+SHA512: 85b12faee4714cfead7aca9b536e2096e439a89a214a7b16a7b9698939f3b031d7807587ac1cb45709614ba0c74642aee34ac9416c93eece867e428bd027674f
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-89_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools
+Package: com.unlimapps.uasharedtools
+Depends: com.unlimapps.uasharedtools.nostash | com.unlimapps.uasharedtools.stash
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools
+Section: Development
+Version: 2.2r-89
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-89_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools_2.2r-89_iphoneos-arm.deb
+Size: 672
+MD5sum: 50d2be4a73d8ed4741c2bd7a0b2ccae8
+SHA1: f1b574e31f8ecce8775ec73ac7abbc4c89d72930
+SHA256: b467b4ecfc384d657a5c14baaccb32d07ac552407cae094030d6351d6f652448
+SHA512: 37df5180231850569322beb79f0d7973123a4018422c515eef62a53be75f9bf2f7f5edd61aa6a73d134f715f7102a0236a825b0a426cb5b3977f6cadf3d8d39b
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-91_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools
+Package: com.unlimapps.uasharedtools
+Depends: com.unlimapps.uasharedtools.nostash | com.unlimapps.uasharedtools.stash
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools
+Section: Development
+Version: 2.2r-91
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-91_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools_2.2r-91_iphoneos-arm.deb
+Size: 672
+MD5sum: ca7467690a80aa346891f505df675c58
+SHA1: 2e772100fa708e5a3e332216c78d6cf4c936be10
+SHA256: 96a1b0ed4abd300273b97edc5d44df3c9c6269dced1894bd6128cae005546272
+SHA512: b56d2ebd1cdd99aa4c5a199e110c368bca60c5e72369b8a0d8d0b04a6052bdac903bebc33d56c8c023f0e9de0ffd67cc1b71ad76116cde1d3c1d1a13b7b9d3c3
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-92_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools
+Package: com.unlimapps.uasharedtools
+Depends: com.unlimapps.uasharedtools.nostash | com.unlimapps.uasharedtools.stash
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools
+Section: Development
+Version: 2.2r-92
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-92_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools_2.2r-92_iphoneos-arm.deb
+Size: 672
+MD5sum: 773cb6fe0cf7010ce923f7fdcc33e6c7
+SHA1: 3fa53cdc31274e21ec26488c648d1f00a9a2f96a
+SHA256: e5df7e1239085a05c95f1a5a8c19b396c079ae9ea93e3dd5985e867633bbf8dd
+SHA512: 86c89442cd8261cacace8e4a83876e4e698686702180c93dc29fc35b11b819d9481ced95a10481a5fb131f9882d0fafd1efd8662d22ee2f70308eaa34b16940b
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-93_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools
+Package: com.unlimapps.uasharedtools
+Depends: com.unlimapps.uasharedtools.nostash | com.unlimapps.uasharedtools.stash
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools
+Section: Development
+Version: 2.2r-93
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-93_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools_2.2r-93_iphoneos-arm.deb
+Size: 672
+MD5sum: dbeebd06c250a43acc95cdbfcd69a2c6
+SHA1: 43d50eb66751cef668e189fe2ec1299527c94ef8
+SHA256: 099dbc60e333234563f7a4cfa36cf7a1100cb405088973b90add85a54c916a56
+SHA512: 11c67645a5e94893e9962dfcbd4ea0d6ab792561823172fb0c97619e952e932c3ad154a4c37d404390085a3ff3bef601f552a291417b58410f04750d8fa65007
+
+Homepage: https://beta.unlimapps.com/depiction/com.unlimapps.uasharedtools/
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-94_iphoneos-arm/depiction.html
+Author: UnlimApps Inc. <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Name: uasharedtools
+Package: com.unlimapps.uasharedtools
+Depends: com.unlimapps.uasharedtools.nostash | com.unlimapps.uasharedtools.stash
+Conflicts: com.yourepo.abo1bs.uasharedtoolsno-ads, com.hackyouriphone.uasharedtools
+Section: Development
+Version: 2.2r-94
+Architecture: iphoneos-arm
+Description: shared tools for unlimapps tweaks
+dev: i4iphones
+Tag: purpose::library, role::developer
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uasharedtools_2.2r-94_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uasharedtools_2.2r-94_iphoneos-arm.deb
+Size: 672
+MD5sum: 61343b122411318868863f20160f0af0
+SHA1: 88614137ffa452d0afc8e726b8996f0d0603dec7
+SHA256: 2e60afd7ba17f1ed88bce107c0e5a8ba00b12335d9fdbd7b850802e9734c2a1d
+SHA512: d584053a48505d05d89a7005bffd9cef030513227453a0b8ac15a58560ae1fbae91eca8bf2c5fbdbfceb0009c90ac56d763c19a70867b6f887a6d1b241e54018
+
+Package: com.unlimapps.uaupdatetools
+Name: App Admin
+Version: 1.0r-101
+Description: Downgrade iOS apps to any previous version! No AppSync needed!!!
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uaupdatetools_1.0r-101_iphoneos-arm/depiction.html
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.uaupdatetools/
+Section: System
+Depends: firmware (>= 7.0), mobilesubstrate
+Conflicts: it.marcocristalli.asupdatehider
+Priority: optional
+Architecture: iphoneos-arm
+Author: UnlimApps Inc.
+Maintainer: UnlimApps Inc.
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uaupdatetools_1.0r-101_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uaupdatetools_1.0r-101_iphoneos-arm.deb
+Size: 875008
+MD5sum: 4ab9f1fc10827990402c4a3cbbdeb46a
+SHA1: d576761d3f85f34c7eb5236a26f18df3d943dd85
+SHA256: 58a6f8e2875c78615ec6eb5637d2cccb1747d472d8cac963ac0ba82dc189b2bb
+SHA512: 80c6c28bdab5aac35c159e9e9eab43f89f878ea114d4c4f8bbf64c839cb7147dbfbd4bbc3fd1c023b766315d3af65e71d4c019ecc01fc8484ad39205196a6ef3
+
+Package: com.unlimapps.uaupdatetools
+Name: App Admin
+Version: 1.0r-102
+Description: Downgrade iOS apps to any previous version! No AppSync needed!!!
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uaupdatetools_1.0r-102_iphoneos-arm/depiction.html
+Homepage: http://beta.unlimapps.com/depiction/com.unlimapps.uaupdatetools/
+Section: System
+Depends: firmware (>= 7.0), mobilesubstrate
+Conflicts: it.marcocristalli.asupdatehider
+Priority: optional
+Architecture: iphoneos-arm
+Author: UnlimApps Inc.
+Maintainer: UnlimApps Inc.
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.uaupdatetools_1.0r-102_iphoneos-arm/sileo.json
+Filename: com.unlimapps.uaupdatetools_1.0r-102_iphoneos-arm.deb
+Size: 863628
+MD5sum: 6d7f076eb541e5bbec3e3629f152d16d
+SHA1: 058a98b3da7197c1c767c71a6db420b392a460d2
+SHA256: 8a251edeb458547686060caa4545800061b5d6d465b34982c1e76580474180c1
+SHA512: 0966a0975d0cce26ce83f7ef78c3e2b62b92d24b59436d1915faeea78ed443d019e146d7d6d8b7477bbd06148a6c028d4e717132c06e2668bfba40260a10c8c2
+
+Author: UnlimApps Inc <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Package: com.unlimapps.ytpp
+Name: YT ++ for YouTube
+Version: 1.4r-100
+Description: Download all YouTube Videos! Continue background playback and much more!!!
+Depends: mobilesubstrate, firmware (>= 7.0),com.unlimapps.uamediaexporthelper (>= 1.0r-15) | firmware (>= 10.0), com.unlimapps.uasharedtools (>= 2.2r-87)
+Conflicts: me.freemanrepo.cercube, com.cydia00.ytpp, com.unlimapps.jodeboxlib
+Priority: optional
+Architecture: iphoneos-arm
+dev: i4iphones
+Tag: purpose::extension, role::enduser
+Section: Tweaks
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.ytpp_1.4r-100_iphoneos-arm/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.ytpp_1.4r-100_iphoneos-arm/sileo.json
+Filename: com.unlimapps.ytpp_1.4r-100_iphoneos-arm.deb
+Size: 6788916
+MD5sum: eaaadcd13ab7cb0775884b7270015447
+SHA1: 40a90576058977f4341d62317176a3668b25b5dc
+SHA256: 335aa57860fa82d79ad74f37fd60cc3d44dd5ae1357e2f3daf43b264978f7e2a
+SHA512: a951dc14dbd6a081ed6ce4fda7eec8b1ad789d2216aa4d2188dbd7b97a97c9e29cc171bf5e7ade374304c3bf540fe47dd6cd0b72d165fff37e63d730985afda4
+
+Author: UnlimApps Inc <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Package: com.unlimapps.ytpp
+Name: YT ++ for YouTube
+Version: 1.4r-101
+Description: Download all YouTube Videos! Continue background playback and much more!!!
+Depends: mobilesubstrate, firmware (>= 7.0),com.unlimapps.uamediaexporthelper (>= 1.0r-15) | firmware (>= 10.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: me.freemanrepo.cercube, com.cydia00.ytpp, com.unlimapps.jodeboxlib
+Priority: optional
+Architecture: iphoneos-arm
+dev: i4iphones
+Tag: purpose::extension, role::enduser
+Section: Tweaks
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.ytpp_1.4r-101_iphoneos-arm/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.ytpp_1.4r-101_iphoneos-arm/sileo.json
+Filename: com.unlimapps.ytpp_1.4r-101_iphoneos-arm.deb
+Size: 6789256
+MD5sum: 29e2ffb2354e8740673cbb11b150f4f9
+SHA1: 9fd4a2a83b076febd9c70995ad525f6d5f3c107d
+SHA256: 25bb0b83d1409eaecab7dc8ef721f3b27cf8090e0972283f49331ce2dfa3efb6
+SHA512: b4e44711e68bea7c7d9f71cd9e890d98ead2f43d1a1e748963f88320893b88c30b7736c063c387e0d167a868fe87b1439eae713fdf08ccca0bbcacf6e3048dbb
+
+Author: UnlimApps Inc <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Package: com.unlimapps.ytpp
+Name: YT ++ for YouTube
+Version: 1.4r-102
+Description: Download all YouTube Videos! Continue background playback and much more!!!
+Depends: mobilesubstrate, firmware (>= 7.0),com.unlimapps.uamediaexporthelper (>= 1.0r-15) | firmware (>= 10.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: me.freemanrepo.cercube, com.cydia00.ytpp, com.unlimapps.jodeboxlib
+Priority: optional
+Architecture: iphoneos-arm
+dev: i4iphones
+Tag: purpose::extension, role::enduser
+Section: Tweaks
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.ytpp_1.4r-102_iphoneos-arm/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.ytpp_1.4r-102_iphoneos-arm/sileo.json
+Filename: com.unlimapps.ytpp_1.4r-102_iphoneos-arm.deb
+Size: 6789374
+MD5sum: 4b3d8235df10211311fdc085c0d32663
+SHA1: b31452c6d65dd945402d8c9ac86cfe21c3db6cd6
+SHA256: ece3fb4ec14046e69afb708e1596183740d60f5a13ec3541ca79f9e6071afa6d
+SHA512: cb53331f58b3f22636aad7467ce4d6f6e693217a16be33e443ebb200495da6f2754f15af6b9fd3b7accc4af026a7e6a7b8cfd584ec206e0dc65aba7407bc04e2
+
+Author: UnlimApps Inc <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Package: com.unlimapps.ytpp
+Name: YT ++ for YouTube
+Version: 1.4r-103
+Description: Download all YouTube Videos! Continue background playback and much more!!!
+Depends: mobilesubstrate, firmware (>= 7.0),com.unlimapps.uamediaexporthelper (>= 1.0r-15) | firmware (>= 10.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: me.freemanrepo.cercube, com.cydia00.ytpp, com.unlimapps.jodeboxlib
+Priority: optional
+Architecture: iphoneos-arm
+dev: i4iphones
+Tag: purpose::extension, role::enduser
+Section: Tweaks
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.ytpp_1.4r-103_iphoneos-arm/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.ytpp_1.4r-103_iphoneos-arm/sileo.json
+Filename: com.unlimapps.ytpp_1.4r-103_iphoneos-arm.deb
+Size: 6790798
+MD5sum: b4446be7fee75afb88ec9519afaed3a8
+SHA1: b9060687209942a9a58eab506ca627c0d906a1bf
+SHA256: da42e6da33e388cef1d445ea28f0d4ee284f0e82aa2b4e7788b2e0b45de6cb95
+SHA512: cf5852ede72e76ec23741182a4eea29e31354f8c65e5a335fb3c5eb0b6158e276645e921d795530d48534400edcacad5b1e147253de0a255f868ca3b93e7b945
+
+Author: UnlimApps Inc <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Package: com.unlimapps.ytpp
+Name: YT ++ for YouTube
+Version: 1.4r-104
+Description: Download all YouTube Videos! Continue background playback and much more!!!
+Depends: mobilesubstrate, firmware (>= 7.0),com.unlimapps.uamediaexporthelper (>= 1.0r-15) | firmware (>= 10.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: me.freemanrepo.cercube, com.cydia00.ytpp, com.unlimapps.jodeboxlib
+Priority: optional
+Architecture: iphoneos-arm
+dev: i4iphones
+Tag: purpose::extension, role::enduser
+Section: Tweaks
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.ytpp_1.4r-104_iphoneos-arm/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.ytpp_1.4r-104_iphoneos-arm/sileo.json
+Filename: com.unlimapps.ytpp_1.4r-104_iphoneos-arm.deb
+Size: 6805524
+MD5sum: 35bd24c2ab61a05af50885e343444128
+SHA1: 2ab6069231ebe18d6d08895ef5a2cccb44adc7cf
+SHA256: 3ba922ddef52e2fb1e6ff94805f80d9e8b1807193381808a2686e2526f23628e
+SHA512: caadcca75c7047b2640453c0e48be7639cf5ddfaed93ca21fcb89f8bc4001c58830ab101f41621df5e65a2a9f1f9a763addbddd87a21bca7cf25156f171bf6e8
+
+Author: UnlimApps Inc <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Package: com.unlimapps.ytpp
+Name: YT ++ for YouTube
+Version: 1.4r-105
+Description: Download all YouTube Videos! Continue background playback and much more!!!
+Depends: mobilesubstrate, firmware (>= 7.0),com.unlimapps.uamediaexporthelper (>= 1.0r-15) | firmware (>= 10.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: me.freemanrepo.cercube, com.cydia00.ytpp, com.unlimapps.jodeboxlib
+Priority: optional
+Architecture: iphoneos-arm
+dev: i4iphones
+Tag: purpose::extension, role::enduser
+Section: Tweaks
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.ytpp_1.4r-105_iphoneos-arm/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.ytpp_1.4r-105_iphoneos-arm/sileo.json
+Filename: com.unlimapps.ytpp_1.4r-105_iphoneos-arm.deb
+Size: 6805582
+MD5sum: 7c906324409fc06fb03495214eacad13
+SHA1: e274ceccef5349a7865246db07898faa91cce6a8
+SHA256: e315f33d626bb17835ce8bb87895bcb1fa2e7bfcd31c0c03ed4a62db43db1053
+SHA512: fad16054f2154fc8419f055889510382d40d5763ac39fa715e1b16408b1dfa65565941ef08af9e85817b7c2ec10f757a3de2805ccd736d412518b416b0b555ed
+
+Author: UnlimApps Inc <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Package: com.unlimapps.ytpp
+Name: YT ++ for YouTube
+Version: 1.4r-106
+Description: Download all YouTube Videos! Continue background playback and much more!!!
+Depends: mobilesubstrate, firmware (>= 7.0),com.unlimapps.uamediaexporthelper (>= 1.0r-15) | firmware (>= 10.0), com.unlimapps.uasharedtools (>= 2.2r-94)
+Conflicts: me.freemanrepo.cercube, com.cydia00.ytpp, com.unlimapps.jodeboxlib
+Priority: optional
+Architecture: iphoneos-arm
+dev: i4iphones
+Tag: purpose::extension, role::enduser
+Section: Tweaks
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.ytpp_1.4r-106_iphoneos-arm/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.ytpp_1.4r-106_iphoneos-arm/sileo.json
+Filename: com.unlimapps.ytpp_1.4r-106_iphoneos-arm.deb
+Size: 6776442
+MD5sum: 7a1b3897fbcf99aff01b16d8424d0b0e
+SHA1: 5bbb32b099c5267fae8f3995aaa3989a7005a0ef
+SHA256: 2d5d5de59c181574e7cc4fa95db956789a8ffde6401ec17d7ec7a6257def26f2
+SHA512: 62052d050f55e1490931ed0662be129b14dd1fd21d38cb513e621d83f41f0f1cb09478761b148edd93f772e8b23e8c9eb4999aa51cc8adc6a808720e2a537d1c
+
+Author: UnlimApps Inc <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Package: com.unlimapps.ytpp
+Name: YT ++ for YouTube
+Version: 1.4r-96
+Description: Download all YouTube Videos! Continue background playback and much more!!!
+Depends: mobilesubstrate, firmware (>= 7.0),com.unlimapps.uamediaexporthelper (>= 1.0r-15) | firmware (>= 10.0), com.unlimapps.uasharedtools (>= 2.2r-76)
+Conflicts: me.freemanrepo.cercube, com.cydia00.ytpp, com.unlimapps.jodeboxlib
+Priority: optional
+Architecture: iphoneos-arm
+dev: i4iphones
+Tag: purpose::extension, role::enduser
+Section: Tweaks
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.ytpp_1.4r-96_iphoneos-arm/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.ytpp_1.4r-96_iphoneos-arm/sileo.json
+Filename: com.unlimapps.ytpp_1.4r-96_iphoneos-arm.deb
+Size: 6909598
+MD5sum: a602ce86d6f469a12af82cda78ad38c7
+SHA1: 0004f58af0437cdee97ebd227183f52d042548e6
+SHA256: 4d3792c4d42ffec863cd3e06bf42521026c216dca9bf0861cf63a59b61c9e08d
+SHA512: 30f6f4a61535282ab335c6297d954d0af1234e31eea67480447a6e1cd993678c89b90fc7405ae846d26991c27a4a7e69ba1026582ce102755e77f9717a0699ff
+
+Author: UnlimApps Inc <support@unlimapps.com>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Package: com.unlimapps.ytpp
+Name: YT ++ for YouTube
+Version: 1.4r-99
+Description: Download all YouTube Videos! Continue background playback and much more!!!
+Depends: mobilesubstrate, firmware (>= 7.0),com.unlimapps.uamediaexporthelper (>= 1.0r-15) | firmware (>= 10.0), com.unlimapps.uasharedtools (>= 2.2r-87)
+Conflicts: me.freemanrepo.cercube, com.cydia00.ytpp, com.unlimapps.jodeboxlib
+Priority: optional
+Architecture: iphoneos-arm
+dev: i4iphones
+Tag: purpose::extension, role::enduser
+Section: Tweaks
+Depiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.ytpp_1.4r-99_iphoneos-arm/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/com.unlimapps.ytpp_1.4r-99_iphoneos-arm/sileo.json
+Filename: com.unlimapps.ytpp_1.4r-99_iphoneos-arm.deb
+Size: 6917034
+MD5sum: 402473527150dcc85017db34d2047fb6
+SHA1: bc37e3c04c9b0cc1c36badbe2151b3f6993f3cc1
+SHA256: 7f1d5425ca01154ed27e0e68c5a4ba7306aa1518b8cb1914611dffd558923dde
+SHA512: 95d1581fad769f8b50048654c77316782029b8605a2bd59241a33803a654beaa27b475647eccfb43d6fa80a3adfadec0ba15a5c469911e19fb2add407796edca
+
+Package: dev.playday3008.legacywififix
+Name: Legacy WiFi Fix
+Description: Fixes the RSN IE AKM-selection bug on iOS 3.x-12.x: strips AKM suites outside the range the OS supports (1..2 on iOS 3-5, 1..4 on iOS 6-7, 1..6 on iOS 8+) from IE_KEY_RSN_AUTHSELS so the AKM selector picks a supported AKM instead of being poisoned by a later unknown one (e.g. SAE=8). Restores association with WPA2/WPA3 transitional networks.
+Maintainer: PlayDay
+Author: PlayDay
+Section: Tweaks
+Depends: mobilesubstrate (>= 0.9.3367)
+Architecture: iphoneos-arm
+Version: 0.2.0
+Installed-Size: 228
+Depiction: https://playday-ios.github.io/repo/depictions/dev.playday3008.legacywififix_0.2.0_iphoneos-arm/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/dev.playday3008.legacywififix_0.2.0_iphoneos-arm/sileo.json
+Filename: dev.playday3008.legacywififix_0.2.0_iphoneos-arm.deb
+Size: 10242
+MD5sum: a86c80bea53a8bb13e0bec4790941580
+SHA1: e95a2c31581a228f4a9f7d295bff7a6bd1c724a4
+SHA256: 9706a5800f5f2da3bcce697149669b7f2fff23ea3486b92dc060fa085e0e62b7
+SHA512: 968cae0fd7bd63b216deb284e900abfc489bf10e2c7df806cbaffac6e0ad694a1aa7e311673ea95b0a8b92baad99a18d3e22b9ff647bd0b1709a47b906190e81
+
+Package: dev.playday3008.legacywififix
+Name: Legacy WiFi Fix
+Description: Fixes the RSN IE AKM-selection bug on iOS 3.x-12.x: strips AKM suites outside the range the OS supports (1..2 on iOS 3-5, 1..4 on iOS 6-7, 1..6 on iOS 8+) from IE_KEY_RSN_AUTHSELS so the AKM selector picks a supported AKM instead of being poisoned by a later unknown one (e.g. SAE=8). Restores association with WPA2/WPA3 transitional networks.
+Maintainer: PlayDay
+Author: PlayDay
+Section: Tweaks
+Depends: mobilesubstrate (>= 0.9.3367)
+Architecture: iphoneos-arm
+Version: 0.2.1
+Installed-Size: 228
+Depiction: https://playday-ios.github.io/repo/depictions/dev.playday3008.legacywififix_0.2.1_iphoneos-arm/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/dev.playday3008.legacywififix_0.2.1_iphoneos-arm/sileo.json
+Filename: dev.playday3008.legacywififix_0.2.1_iphoneos-arm.deb
+Size: 10228
+MD5sum: 5c47eb909414056f2192fc466b84de01
+SHA1: 641813ccccc9dc1f2090bec8b65624efc86df1f3
+SHA256: 9c338d0a889433d29954263341fa3e25bdc78639394c6ae1a669e7519de3f6dd
+SHA512: fc6c701451596f24440a5d541f78f5b610ff9a6b2bfb404b08504c50e0ecf2b73e60a9477a6f906ee5016d50e0a8fb674954644c5bd7ecebc86fa0fdec146a8b
+
+Package: dev.playday3008.legacywififix
+Name: Legacy WiFi Fix
+Description: Fixes the RSN IE AKM-selection bug on iOS 3.x-12.x: strips AKM suites outside the range the OS supports (1..2 on iOS 3-5, 1..4 on iOS 6-7, 1..6 on iOS 8+) from IE_KEY_RSN_AUTHSELS so the AKM selector picks a supported AKM instead of being poisoned by a later unknown one (e.g. SAE=8). Restores association with WPA2/WPA3 transitional networks.
+Maintainer: PlayDay
+Author: PlayDay
+Section: Tweaks
+Depends: mobilesubstrate (>= 0.9.3367)
+Architecture: iphoneos-arm
+Version: 0.2.2
+Installed-Size: 228
+Depiction: https://playday-ios.github.io/repo/depictions/dev.playday3008.legacywififix_0.2.2_iphoneos-arm/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/dev.playday3008.legacywififix_0.2.2_iphoneos-arm/sileo.json
+Filename: dev.playday3008.legacywififix_0.2.2_iphoneos-arm.deb
+Size: 9794
+MD5sum: 26da74980bfd953b4891ad698b414f05
+SHA1: 9eb84f40ade89d1167e633743a222315398ed0a4
+SHA256: 8ef471823ebbeb1fbc8e9221220b8d2980950c50515cd418089ff263146acbe7
+SHA512: 8a754df8a25342a529b8080d25112e946e0f5761b737527a3ba87ba51be8c4f741d78652464d59a9257bd1555236d1113df5694127899f70eebf4b9854a1660f
+
+Package: dev.playday3008.legacywififix
+Name: Legacy WiFi Fix
+Description: Fixes the RSN IE AKM-selection bug on iOS 3.x-12.x: strips AKM suites outside the range the OS supports (1..2 on iOS 3-5, 1..4 on iOS 6-7, 1..6 on iOS 8+) from IE_KEY_RSN_AUTHSELS so the AKM selector picks a supported AKM instead of being poisoned by a later unknown one (e.g. SAE=8). Restores association with WPA2/WPA3 transitional networks.
+Maintainer: PlayDay
+Author: PlayDay
+Section: Tweaks
+Depends: mobilesubstrate (>= 0.9.3367)
+Architecture: iphoneos-arm
+Version: 0.2.3
+Installed-Size: 224
+Depiction: https://playday-ios.github.io/repo/depictions/dev.playday3008.legacywififix_0.2.3_iphoneos-arm/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/dev.playday3008.legacywififix_0.2.3_iphoneos-arm/sileo.json
+Filename: dev.playday3008.legacywififix_0.2.3_iphoneos-arm.deb
+Size: 9462
+MD5sum: cc16b346b967c2b9a45b62d35d342c10
+SHA1: dfea9794a5944db943d6b9bacc0dfd0a465ffe29
+SHA256: 4ec8e3ed0e8c6dbd464f4bb00ee2f87a54f26dff0bb04432f5b03ac4bdf135d6
+SHA512: ccf0ebe02ba41587639031307a9a3e9a41c95838ff91d7906416d54cab186ee82a832405933efa7dc5183d2c8c50e4fb479e523da3867922132fc60a95699c7b
+
+Package: dev.playday3008.lowerinstall
+Name: LowerInstall
+Depends: mobilesubstrate, preferenceloader, firmware (>= 9.0)
+Conflicts: com.julioverne.lowerinstall
+Description: Install apps that require a newer iOS version. Hooks installd to skip device-family/thinning/metadata checks, and spoofs the App Store User-Agent (itunesstored on iOS 9, appstored on iOS 10+) so metadata servers return IPAs for a spoofed OS version. Inspired by julioverne/LowerInstall.
+Maintainer: PlayDay <18056374+playday3008@users.noreply.github.com>
+Author: PlayDay
+Section: Tweaks
+Architecture: iphoneos-arm
+Version: 1.1.0
+Installed-Size: 592
+Depiction: https://playday-ios.github.io/repo/depictions/dev.playday3008.lowerinstall_1.1.0_iphoneos-arm/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/dev.playday3008.lowerinstall_1.1.0_iphoneos-arm/sileo.json
+Filename: dev.playday3008.lowerinstall_1.1.0_iphoneos-arm.deb
+Size: 32040
+MD5sum: 7f9b241a5d7d0e7791c676ac42755b5c
+SHA1: e789c4650fcca6bf6d6a7965d4208da7eff30a5d
+SHA256: 8fbd5b9aed70ca6d833acf597e918801fd0b36b67cddedbcb3789c032953f90a
+SHA512: 68d0f19c322b6e619bae93e29784e14312529454b2b01453f761f59ec5c1a28f3c787f632726fe1595e92a43dbd8932bd34d329a2b83d0a5149324cba61c32b7
+
+Package: dev.playday3008.lowerinstall
+Name: LowerInstall
+Depends: mobilesubstrate, preferenceloader, firmware (>= 9.0)
+Conflicts: com.julioverne.lowerinstall
+Description: Install apps that require a newer iOS version. Hooks installd to skip device-family/thinning/metadata checks, and spoofs the App Store User-Agent (itunesstored on iOS 9, appstored on iOS 10+) so metadata servers return IPAs for a spoofed OS version. Inspired by julioverne/LowerInstall.
+Maintainer: PlayDay <18056374+playday3008@users.noreply.github.com>
+Author: PlayDay
+Section: Tweaks
+Architecture: iphoneos-arm
+Version: 1.1.1
+Installed-Size: 592
+Depiction: https://playday-ios.github.io/repo/depictions/dev.playday3008.lowerinstall_1.1.1_iphoneos-arm/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/dev.playday3008.lowerinstall_1.1.1_iphoneos-arm/sileo.json
+Filename: dev.playday3008.lowerinstall_1.1.1_iphoneos-arm.deb
+Size: 32064
+MD5sum: 802ea09f55cd8d4b7af2c72a13b0c8e6
+SHA1: 32429e94e4be889e7e7193fe9eb3e66d756fa46e
+SHA256: eca8145189aa6cf03cb431ad3f83f79d2caa6918f2abe4ec532ae041c7382506
+SHA512: 01f91076c5f4eaeee48220ede7ca1609461f1cd3b6a675514e1540a51267202f81f00655abdceec104b5708687d9d7612f9ac4376fd82146a83bd6db21e06c46
+
+Package: dev.playday3008.lowerinstall
+Name: LowerInstall
+Depends: mobilesubstrate, preferenceloader, firmware (>= 5.0)
+Conflicts: com.julioverne.lowerinstall
+Description: Install apps requiring a newer iOS version on older devices. Hooks installd to skip device-family/thinning/metadata checks and spoofs the App Store User-Agent so metadata servers return IPAs for a spoofed OS version. Supports iOS 5.0+. Inspired by julioverne/LowerInstall.
+Maintainer: PlayDay <18056374+playday3008@users.noreply.github.com>
+Author: PlayDay
+Section: Tweaks
+Architecture: iphoneos-arm
+Version: 1.4.0
+Installed-Size: 496
+Depiction: https://playday-ios.github.io/repo/depictions/dev.playday3008.lowerinstall_1.4.0_iphoneos-arm/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/dev.playday3008.lowerinstall_1.4.0_iphoneos-arm/sileo.json
+Filename: dev.playday3008.lowerinstall_1.4.0_iphoneos-arm.deb
+Size: 38230
+MD5sum: 987879e0d9e5f28d4ad42a2b6f11dde6
+SHA1: 2c52cbf0e9876dedb1429eb8b168458cc41c9abf
+SHA256: ddf675b625c0f9f27792d0151cc7de6df4280b9423ec51b8a30b48b4beb7d40c
+SHA512: 594f383c0660466b2ec0c0413d00595d27a5651de1c2eedd320f9855ab2986919039dfdf2191aa862496a8565fce9ba4d135836dcd2abdd4a1e7da34eba1e075
+
+Package: dev.playday3008.stashunified
+Name: Stashing for iOS 9.2 - 10.3.4
+Depends: firmware (>= 9.2), firmware (<= 10.3.4), org.coolstar.cctools
+Conflicts: org.coolstar.stash933, org.coolstar.stash935
+Description: Stash 3rd party components to make more space for them! Unified version supporting all iOS 9.2 - 10.3.4.
+Maintainer: PlayDay <18056374+playday3008@users.noreply.github.com>
+Author: PlayDay <18056374+playday3008@users.noreply.github.com>
+Section: System
+Architecture: iphoneos-arm
+Version: 2.1.0
+Installed-Size: 120
+Depiction: https://playday-ios.github.io/repo/depictions/dev.playday3008.stashunified_2.1.0_iphoneos-arm/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/dev.playday3008.stashunified_2.1.0_iphoneos-arm/sileo.json
+Filename: dev.playday3008.stashunified_2.1.0_iphoneos-arm.deb
+Size: 49380
+MD5sum: 0fd3d80a6d6a1879ce624ba6329a3d83
+SHA1: 9fd9181ef229e9e79233c68468f525a3a7884bf2
+SHA256: be320dd6a8a95f2c9d71fc5a13c1a4c0b76e6ae3a3c24e669cac939e521a1701
+SHA512: ca84c25e6c447a362aac9dee475cf6b87ad787f79e7c61d2314c5d3c22e20c018474183252501f45c69033f01c1fe06277750a3c153aff726bcc72938088f8e6
+
+Package: us.hackulo.appsync31
+Name: AppSync for OS 3.1
+Version: 1.0.1
+Priority: standard
+Depends: com.hackulo.us.sourcegui
+Pre-Depends: firmware (= 3.1) | firmware (= 3.1.1) | firmware (= 3.1.2) | firmware (= 3.1.3) | firmware (= 3.1.4)
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Genius Blog <appsync@hackulo.us>
+Author: Reilly <appsync@hackulo.us>
+Description: AppSync patches the installd file on your device
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync31-1.0.1/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync31-1.0.1/sileo.json
+Homepage: http://hackulo.us/depict/appsync31/
+Filename: us.hackulo.appsync31-1.0.1.deb
+Size: 296542
+MD5sum: 534080636c26e40d3efbdf195f3bfdfb
+SHA1: 2e3be3668f26c9d4ac7b796042aa7b05184fe4ae
+SHA256: c0975018be2f1fe73eaeadce9a3c4ead17ab01b08eb41bd11a82b2f83c60fb70
+SHA512: 2f35954f0cb4f8b68d1573b34503b1bd5e67953db6ff89fe2798ada2b73d1243e1781395152929140960c90175122581bc2fbbcd4710fdf40d1b9b6f9d8e195e
+
+Package: us.hackulo.appsync31
+Name: AppSync for OS 3.1
+Version: 1.0.2
+Priority: standard
+Provides: appsync
+Depends: com.hackulo.us.sourcegui
+Pre-Depends: firmware (= 3.1) | firmware (= 3.1.1) | firmware (= 3.1.2) | firmware (= 3.1.3) | firmware (= 3.1.4)
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Genius Blog <appsync@hackulo.us>
+Author: Reilly <appsync@hackulo.us>
+Description: AppSync patches the installd file on your device
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync31-1.0.2/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync31-1.0.2/sileo.json
+Homepage: http://hackulo.us/depict/appsync31/
+Filename: us.hackulo.appsync31-1.0.2.deb
+Size: 296564
+MD5sum: 78c9291797041703656194d2faa704d5
+SHA1: c25c2708c8ae6557d0154eb08ae5622c3f2ed90b
+SHA256: 648058977902b6da3dfcfa751036edc0c91557c9446045237be7d2572ce39dc0
+SHA512: 5a1d8ee52085ccf55a982ad6ff0854ef23363dbe8f9ef2fd7058a20055ebcbe96453281137e60b93e6910e7a4605f68a0d83e07df493930aa96740e5f7033254
+
+Package: us.hackulo.appsync32
+Name: AppSync for OS 3.2
+Version: 1.0.1-3
+Priority: standard
+Depends: com.hackulo.us.sourcegui
+Pre-Depends: firmware (= 3.2) | firmware (= 3.2.1) | firmware (= 3.2.2)
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: Dissident <apps@hackulo.us>
+Description: AppSync patches the installd file on your device
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync32-1.0.1-3/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync32-1.0.1-3/sileo.json
+Homepage: http://hackulo.us/depict/appsync32/
+Filename: us.hackulo.appsync32-1.0.1-3.deb
+Size: 274594
+MD5sum: 0a8fa6363baa0e9eee6381cf84b16c77
+SHA1: b1afb4c3c0c83c0dde8eb0d53602b5c7cdfb10fe
+SHA256: 29b84ed428c5f024b4362f65e25d2645b38bf385365748b0ba4a8aafaf3dafbb
+SHA512: 23c7a4a17fb4d38fb537c8869326841ef7e0826f3ccf1e63c2923fd80cc739da1bc9179369e136258931cc34e46aa7f69838739b58c8182461449aa13450dcbb
+
+Package: us.hackulo.appsync32
+Name: AppSync for OS 3.2
+Version: 1.0.2
+Priority: standard
+Provides: appsync
+Depends: com.hackulo.us.sourcegui
+Pre-Depends: firmware (= 3.2) | firmware (= 3.2.1) | firmware (= 3.2.2)
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: Dissident <apps@hackulo.us>
+Description: AppSync patches the installd file on your device
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync32-1.0.2/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync32-1.0.2/sileo.json
+Homepage: http://hackulo.us/depict/appsync32/
+Filename: us.hackulo.appsync32-1.0.2.deb
+Size: 274604
+MD5sum: b929f7ee7178df882e31cb34f78c99db
+SHA1: 9e45cce1063f42f2907544ef15d05037108d8354
+SHA256: d2125434b2bcc895cf2c65e7cf0d9d89d7c4143ffccdbf09466e77f7f89b86d8
+SHA512: 25bbc14cff4d8cc3cbe1c1c5dd238599a3423362d7d4a0e9c4a082d209b89517976e8f66e5b5ed7bce860621ea1d539dfed5975a70eaf6d0989b7148fbb438ef
+
+Package: us.hackulo.appsync40
+Name: AppSync for OS 4.0
+Version: 1.0.2
+Priority: standard
+Depends: com.hackulo.us.sourcegui
+Pre-Depends: firmware (= 4.0) | firmware (= 4.0.1) | firmware (= 4.0.2)
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <appsync@hackulo.us>
+Author: Reilly <appsync@hackulo.us>
+Description: AppSync patches the installd file on your device
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync40-1.0.2/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync40-1.0.2/sileo.json
+Homepage: http://hackulo.us/depict/appsync40/
+Filename: us.hackulo.appsync40-1.0.2.deb
+Size: 285514
+MD5sum: 2f5d1dcdf9ca5173efd501ab2e88761f
+SHA1: b19d074b59ecda3d95a00620b4fd1699d11bc72c
+SHA256: 7009e14f630ae4ddcbea4d7c8723d1050e4301b5dd433cf17077578ea9811031
+SHA512: 679774507f281f967cab2be96c012b4088a8065ec0b4757bd7b7c0157e2d72bf3c69fd1d19d94f6f2f58c50b7780df5a504ad4ee0504972afc2cf83b8f290e90
+
+Package: us.hackulo.appsync40plus
+Version: 1.0
+Priority: standard
+Section: Hackulo.us
+Maintainer: Genius Blog <apps@hackulo.us>
+Pre-Depends: firmware (>= 4.0)
+Provides: appsync, us.hackulo.appsync40, us.hackulo.appsync41, us.hackulo.appsync42
+Architecture: iphoneos-arm
+Name: AppSync for 4.0+
+Author: Dissident <apps@hackulo.us>
+Sponsor: Hackulo.us <http://hackulo.us>
+Description: AppSync allows you to sync and install cracked iOS applications.
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync40plus-1.0/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync40plus-1.0/sileo.json
+Filename: us.hackulo.appsync40plus-1.0.deb
+Size: 772
+MD5sum: b012cb430cbb35287346cccd77fa621d
+SHA1: fb91777a12430703231b82953c8b8ba47ac8f1f2
+SHA256: ceaaa46057e2b757d74862b210ce4f5a06ac14f28052b3dd03dac5314306d6a7
+SHA512: aeeb42b414310645af51285a18106e73ec71cc54fe795e047030557de120ab693ecf77986dfa25c78d318de3a5f89fddda14c3a93cad5559b56b63715633a93f
+
+Package: us.hackulo.appsync40plus
+Version: 1.1-3
+Priority: standard
+Section: Hackulo.us
+Maintainer: Genius Blog <apps@hackulo.us>
+Pre-Depends: firmware (>= 4.0)
+Provides: appsync, us.hackulo.appsync40, us.hackulo.appsync41, us.hackulo.appsync42
+Architecture: iphoneos-arm
+Name: AppSync for 4.0+
+Author: Dissident <apps@hackulo.us>
+Sponsor: Hackulo.us <http://hackulo.us>
+Description: AppSync allows you to sync and install cracked iOS applications.
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync40plus-1.1-3/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync40plus-1.1-3/sileo.json
+Filename: us.hackulo.appsync40plus-1.1-3.deb
+Size: 8390
+MD5sum: 6cfcb83dae0ffb9c6b7ca859f34dd89d
+SHA1: 5462ee29f044470830593d0e2db89efa4e9aa22d
+SHA256: d6cdca5717698f7aa6f74c783ea507e5099842bd664a4302d975e2e11598b4c3
+SHA512: f6c325b3e7a6fbe1e472d27a6d52e05066370b53156be5b73e85750621e60e24489648290da5ab254ebd47f098ee4fa4638e55a44790101bc0906d59fa8ec066
+
+Package: us.hackulo.appsync40plus
+Version: 1.1-4
+Priority: standard
+Section: Hackulo.us
+Maintainer: Genius Blog <apps@hackulo.us>
+Pre-Depends: firmware (>= 4.0)
+Provides: appsync, us.hackulo.appsync40, us.hackulo.appsync41, us.hackulo.appsync42
+Architecture: iphoneos-arm
+Name: AppSync for 4.0+
+Author: Dissident <apps@hackulo.us>
+Sponsor: Hackulo.us <http://hackulo.us>
+Description: AppSync allows you to sync and install cracked iOS applications.
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync40plus-1.1-4/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync40plus-1.1-4/sileo.json
+Filename: us.hackulo.appsync40plus-1.1-4.deb
+Size: 8390
+MD5sum: c7cd64b35e1e22b5fd41e0edad9d1d63
+SHA1: cb2b430016bf59fc2a2cd5e329a8550424bef69e
+SHA256: 81ceab7d80d7102fe45978582b61f9f581e414532020e0018fee2451cf0bba68
+SHA512: 3cd3587ebf53c66081e9807463faa54d528280398927c2985c94cae0d93500dfd6e6caf2a48eeef7bc3c2218faa1c8e4f2f92121fdbb6130b796d0e98c5a5ac3
+
+Package: us.hackulo.appsync40plus
+Version: 1.1-5
+Priority: standard
+Section: Hackulo.us
+Maintainer: Genius Blog <apps@hackulo.us>
+Pre-Depends: firmware (>= 4.0)
+Provides: appsync, us.hackulo.appsync40, us.hackulo.appsync41, us.hackulo.appsync42
+Architecture: iphoneos-arm
+Name: AppSync for 4.0+
+Author: Dissident <apps@hackulo.us>
+Sponsor: Hackulo.us <http://hackulo.us>
+Description: AppSync allows you to sync and install cracked iOS applications.
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync40plus-1.1-5/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync40plus-1.1-5/sileo.json
+Filename: us.hackulo.appsync40plus-1.1-5.deb
+Size: 9170
+MD5sum: 98ae1b0c0b1539aa9df041df05cb0911
+SHA1: b300b00bd5395166df38f2d55837c6202345dc8f
+SHA256: 98258f9fa14668bb014903936c78e73b1efb5ef1a84caf4d2317d21e074be133
+SHA512: 24d9ccabd1242f3e9900fab0ba819ff6d794d8fbe3f82d6ff792139bb4437cccf23f920e9dc1cecc013d565d0d6a57044b383b10c853541f957ef02bba69c81c
+
+Package: us.hackulo.appsync40plus
+Version: 1.1-6
+Priority: standard
+Section: Hackulo.us
+Maintainer: Genius Blog <apps@hackulo.us>
+Pre-Depends: firmware (>= 4.0), firmware (<< 5.0)
+Provides: appsync, us.hackulo.appsync40, us.hackulo.appsync41, us.hackulo.appsync42
+Architecture: iphoneos-arm
+Name: AppSync for 4.0+
+Author: Dissident <apps@hackulo.us>
+Sponsor: Hackulo.us <http://hackulo.us>
+Description: AppSync allows you to sync and install cracked iOS applications.
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync40plus-1.1-6/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync40plus-1.1-6/sileo.json
+Filename: us.hackulo.appsync40plus-1.1-6.deb
+Size: 9164
+MD5sum: b11e63072ed194b26033ec84ff440798
+SHA1: affc7f842a0bf2ffbfb7b2509dff0b0d9d713a5e
+SHA256: faeed4152d7909e696e1c905f9386d90a1e14036882f61356ce7847c24e9ec74
+SHA512: 4fa996b993a9abd01c4f30ad33ec165a6ada4fa5ec67c36b7af59ca1a52cd8e99479d1081cfab009284a7c8d6cfa196c5860579a816c778bc0567fa31391d036
+
+Package: us.hackulo.appsync41
+Name: AppSync for OS 4.1
+Version: 1.0.1
+Priority: standard
+Depends: com.hackulo.us.sourcegui
+Pre-Depends: firmware (= 4.1)
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <appsync@hackulo.us>
+Author: Reilly <appsync@hackulo.us>
+Description: AppSync patches the installd file on your device
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync41-1.0.1/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync41-1.0.1/sileo.json
+Homepage: http://hackulo.us/depict/appsync41/
+Filename: us.hackulo.appsync41-1.0.1.deb
+Size: 270612
+MD5sum: d48daa3a36e9a9e9ae245a2aadff9b95
+SHA1: 41b10155db8eaacd8e5d84c10df6af60752ecdaa
+SHA256: ac4f84fbb6ca9544d29f4d9dd308f28bdd0e5991085d483e825d7986a6d9858f
+SHA512: fe85a5162c40fc57a8505fe969897d1b999261fbb0738af6fabdad3b76079c37c8997f66866f379acfe0a8a704f2996ffd74ddd328bbb8174d6a2695922628ae
+
+Package: us.hackulo.appsync42
+Name: AppSync for OS 4.2
+Version: 1.0-1
+Priority: standard
+Depends: com.hackulo.us.sourcegui
+Pre-Depends: firmware (= 4.2) | firmware (= 4.2.1)
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <appsync@hackulo.us>
+Author: Reilly <appsync@hackulo.us>
+Description: AppSync patches the installd file on your device
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync42-1.0-1/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync42-1.0-1/sileo.json
+Homepage: http://hackulo.us/depict/appsync42/
+Filename: us.hackulo.appsync42-1.0-1.deb
+Size: 242292
+MD5sum: 9b4fafbdb1771c96f483dba2c7a6d1e3
+SHA1: 9106ad4a4458eb621b8a4b58010e0389956de85c
+SHA256: a9cfd3393c68a3ac9962a6ec15c8015621a8ed2988a260af9c9d7e9ec9d831c8
+SHA512: bc049bd498eb4e0de02eaa7f48459e332702eb1fae5b7bd3dcc81287b4b98e872e03438e5c6f745b609a037d130be9468dab4bd3769c60fa5b313b06496cf5a2
+
+Package: us.hackulo.appsync50
+Name: AppSync for OS 5
+Version: 1.0.0
+Priority: standard
+Provides: appsync
+Depends: com.hackulo.us.sourcegui
+Pre-Depends: firmware (>= 5.0)
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: Dissident <apps@hackulo.us>
+Description: AppSync patches the installd file on your device
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync50-1.0.0/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync50-1.0.0/sileo.json
+Homepage: http://hackulo.us/depict/appsync50/
+Filename: us.hackulo.appsync50-1.0.0.deb
+Size: 239464
+MD5sum: d692fe350bc62742e985f1252fec9328
+SHA1: b3b831217ae562514a16962dfdd97dc58386df57
+SHA256: 3506517086b057cb03568b2325b3a24d814b02a4e53f08e7c42f92fb46231f56
+SHA512: 8c8473b92906ff56d02b55ea25697a370dfd6b749dec09740f0796fe81d41a7144585ebca18dcf33b45163610804ab4a48b75fc62bec7af2ef8c8b34707299c8
+
+Package: us.hackulo.appsync50
+Name: AppSync for OS 5
+Version: 1.0.1
+Priority: standard
+Provides: appsync
+Depends: com.hackulo.us.sourcegui
+Pre-Depends: firmware (>= 5.0)
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: Dissident <apps@hackulo.us>
+Description: AppSync patches the installd file on your device
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync50-1.0.1/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync50-1.0.1/sileo.json
+Homepage: http://hackulo.us/depict/appsync50/
+Filename: us.hackulo.appsync50-1.0.1.deb
+Size: 239640
+MD5sum: 1c094a97c34965e899b486ece2cbe1f8
+SHA1: 28913ddb0db06aba1d376fe5ee8a7a2a23293918
+SHA256: fdc3181b4390fbc4c96809c427409f52f13f1f6353c26af5bc676bf984ff5cfd
+SHA512: c524a69127ae3fa79f83658f2695d3910243d1cb8a4f90990f45ad485d0b3d0a4b6b5e413bd41429aaf56320cfd1bc9c9165c74fbd477ded63eb2afe4f9262c7
+
+Package: us.hackulo.appsync50
+Name: AppSync for OS 5
+Version: 1.0.2
+Priority: standard
+Provides: appsync
+Depends: com.hackulo.us.sourcegui
+Pre-Depends: firmware (>= 5.0)
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: Dissident <apps@hackulo.us>
+Description: AppSync patches the installd file on your device
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync50-1.0.2/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync50-1.0.2/sileo.json
+Homepage: http://hackulo.us/depict/appsync50/
+Filename: us.hackulo.appsync50-1.0.2.deb
+Size: 239684
+MD5sum: f25b166b060ee7c4a855519cf059c511
+SHA1: 7e982d9e7b78def67d1d87616d8c3ee3398acaf3
+SHA256: 42ef25b4cf99623486cd47587f462b28570da7303de57d30072ebeab9764d05a
+SHA512: d270472484609900719d696f082ef6cdabe22373ede217623499287e5a40e7881836ae98857970af06f707bcad93f9655d91a37004b2abaad93804562e642ae4
+
+Package: us.hackulo.appsync50plus
+Version: 1.0
+Priority: standard
+Section: Hackulo.us
+Maintainer: Genius Blog <apps@hackulo.us>
+Pre-Depends: firmware (>= 5.0), ldone
+Conflicts: us.hackulo.appsync50
+Replaces: us.hackulo.appsync50
+Provides: appsync
+Architecture: iphoneos-arm
+Name: AppSync for iOS 5.0+
+Author: Dissident <apps@hackulo.us>
+Sponsor: Hackulo.us <http://hackulo.us>
+Description: AppSync allows you to sync and install cracked iOS applications.
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync50plus-1.0/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync50plus-1.0/sileo.json
+Filename: us.hackulo.appsync50plus-1.0.deb
+Size: 11300
+MD5sum: f1982f3f660e91556d13612ab75393b7
+SHA1: 2b1d8936b515e489f5e8e393e494f246bcb28f26
+SHA256: c0b92473c9fab968f850fac8879b9f59d6a238c95472e3e4bf79ec0e87c4b906
+SHA512: f10ac5440fda1ef4d9221c15e74618ad73ccff6b3932b5ac52eaa5a5c9b127035def8fad1c74235a4b46a8efede1acf07ece460ca1855dd978205753fb429037
+
+Package: us.hackulo.appsync50plus
+Version: 2.0-1
+Priority: standard
+Section: Hackulo.us
+Maintainer: Genius Blog <apps@hackulo.us>
+Pre-Depends: firmware (>= 5.0), mobilesubstrate (<< 0.9.3990)
+Conflicts: us.hackulo.appsync50
+Replaces: us.hackulo.appsync50
+Provides: appsync
+Architecture: iphoneos-arm
+Name: AppSync for iOS 5.0+
+Author: Dissident <apps@hackulo.us>
+Sponsor: Hackulo.us <http://hackulo.us>
+Description: AppSync allows you to sync and install cracked iOS applications.
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync50plus-2.0-1/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync50plus-2.0-1/sileo.json
+Filename: us.hackulo.appsync50plus-2.0-1.deb
+Size: 4376
+MD5sum: 77f4a7bc9ee4922906eba9f4a19ce7fc
+SHA1: bc5f66aa4c6d15d3b99afec4410c4762c2036ebd
+SHA256: 43a88df9c4a9822db43fea0136c95ba2111c51daec8da0965ada8c73b50a8f6f
+SHA512: 16cce4ac960ca7a9ca524dbefa22d8cbfe2a08acba207a4022065af444532e69b6ca16527d68d6c72b4cac034819a4985a7e235b914c56a1037df425240deb4b
+
+Package: us.hackulo.appsync50plus
+Version: 2.0
+Priority: standard
+Section: Hackulo.us
+Maintainer: Genius Blog <apps@hackulo.us>
+Pre-Depends: firmware (>= 5.0), mobilesubstrate
+Conflicts: us.hackulo.appsync50
+Replaces: us.hackulo.appsync50
+Provides: appsync
+Architecture: iphoneos-arm
+Name: AppSync for iOS 5.0+
+Author: Dissident <apps@hackulo.us>
+Sponsor: Hackulo.us <http://hackulo.us>
+Description: AppSync allows you to sync and install cracked iOS applications.
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync50plus-2.0/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync50plus-2.0/sileo.json
+Filename: us.hackulo.appsync50plus-2.0.deb
+Size: 4364
+MD5sum: 70f987dc1df18efc7fff0c8eabb59f45
+SHA1: ad1379b4363a8a851428149ef7a3b4abdd8679c0
+SHA256: 1d5b04713af90ffa1774fc8571c0499578b3cb7172c12e7a7cdaec9de42f8f6d
+SHA512: a4c95f6e73f2616c00d2f7e08ee07d81ab5a3d990de34e84b89d89b300d787ae151b1af61f2c0ca9bcceedc46c0b71094d782cdea9ee998ff6df51c2f027eb36
+
+Package: us.hackulo.appsync50plus
+Version: 2.1
+Priority: standard
+Section: Hackulo.us
+Maintainer: Genius Blog <apps@hackulo.us>
+Pre-Depends: firmware (>= 5.0)
+Depends: mobilesubstrate (<< 0.9.3990)
+Conflicts: us.hackulo.appsync50, semitether
+Replaces: us.hackulo.appsync50
+Provides: appsync
+Architecture: iphoneos-arm
+Name: AppSync for iOS 5.0+
+Author: Dissident <apps@hackulo.us>
+Sponsor: Hackulo.us <http://hackulo.us>
+Description: AppSync allows you to sync and install cracked iOS applications.
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync50plus-2.1-legacy/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync50plus-2.1-legacy/sileo.json
+Filename: us.hackulo.appsync50plus-2.1-legacy.deb
+Size: 4384
+MD5sum: 1452c7f3998f18f0c6f138bf0654a424
+SHA1: 769628c6e77558964bdd50b222dd1e03b2968460
+SHA256: 52642810cc7bd890aac7e1d16a5871d483e2a3cc7494cd137008228f64cabb6e
+SHA512: 0105275804f24b674b50c6e94f8eb6f21b24bc8a7d63566feba2bab4e9df75fa59f9f87801c2c08dcfbfff0ff6764d5af6bd1b5aaecc26c20a2009ff3727319f
+
+Package: us.hackulo.appsync50plus
+Version: 2.1
+Priority: standard
+Section: Hackulo.us
+Maintainer: Genius Blog <apps@hackulo.us>
+Pre-Depends: firmware (>= 5.0)
+Depends: mobilesubstrate (>= 0.9.3990)
+Conflicts: us.hackulo.appsync50
+Replaces: us.hackulo.appsync50
+Provides: appsync
+Architecture: iphoneos-arm
+Name: AppSync for iOS 5.0+
+Author: Dissident <apps@hackulo.us>
+Sponsor: Hackulo.us <http://hackulo.us>
+Description: AppSync allows you to sync and install cracked iOS applications.
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync50plus-2.1/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync50plus-2.1/sileo.json
+Filename: us.hackulo.appsync50plus-2.1.deb
+Size: 4486
+MD5sum: 7da99b36f31882ba6d4ecb3c80d66e84
+SHA1: d0d63b4e48dfda2418bf9b06c859f5beaad6d033
+SHA256: 97ca267699d6522b79a5b49c9ae935767028814ca2998fbd9a894a70fbd5840c
+SHA512: 034c5d44fdc94fd1e58a7850ea4243e0b9e851b41d2cb2075abb2f6d91fe32b0e348c7bc0f65f67e9e18af642adad70a4a1d72e125321f3a34db067747850308
+
+Package: us.hackulo.appsync50plus
+Version: 2.2
+Priority: standard
+Section: Hackulo.us
+Maintainer: Genius Blog <apps@hackulo.us>
+Pre-Depends: firmware (>= 5.0), mobilesubstrate
+Conflicts: us.hackulo.appsync50
+Replaces: us.hackulo.appsync50
+Provides: appsync
+Architecture: iphoneos-arm
+Name: AppSync for iOS 5.0+
+Author: Dissident <apps@hackulo.us>
+Sponsor: Hackulo.us <http://hackulo.us>
+Description: AppSync allows you to sync and install cracked iOS applications.
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync50plus-2.2/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.appsync50plus-2.2/sileo.json
+Filename: us.hackulo.appsync50plus-2.2.deb
+Size: 4454
+MD5sum: 8240e5ee73e8d0855a2e0add176bc6d6
+SHA1: cda5c1e471a14aa12262e2daed27431c58fc97ee
+SHA256: 732cbe80f290121cd9502a06fc8be401cdc4c6152000ddb7f3d712d052ff00e9
+SHA512: 1ebc17e22d9ca629df8ecaf8e6afd552ea35476b0777d46cf9e2a6855dfdc9dcd1f649a4c21dce40c5813a48b68b8dfa242e5cc7034d4d898103547ddc84fb53
+
+Package: us.hackulo.crackulous
+Name: Crackulous
+Version: 1.0.0.5
+Priority: standard
+Pre-Depends: firmware (>= 4.0)
+Depends: zip, com.hackulo.us.sourcegui
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: Docmorelli <apps@hackulo.us>
+Description: Crackulous is an easy-to-use cracking utility.
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.crackulous-1.0.0.5/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.crackulous-1.0.0.5/sileo.json
+Homepage: http://hackulo.us/depict/crackulous/
+Filename: us.hackulo.crackulous-1.0.0.5.deb
+Size: 1189192
+MD5sum: 4acea10c97360993eec91620fd9ff8fc
+SHA1: 137666551011f72b4888f60671e8f463065146cd
+SHA256: bf48b5c6bc2ca709c1ad7fdb3bb0c57568d6508d882184e9c100e986c7bfc898
+SHA512: c1572c1d72c1a93cb835e597c36bd0209c566a51d4d2886beade908bfaac68670a7188c8b1f87cc5f528e2a3b84662555b22cfeba130c0cc41c3762d875bd65a
+
+Package: us.hackulo.resources
+Name: Hackulous Resources
+Version: 1.0
+Priority: standard
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: docmorelli <apps@hackulo.us>
+Description: Hackulous resource files for Installous.
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.hresources-1.0/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.hresources-1.0/sileo.json
+Filename: us.hackulo.hresources-1.0.deb
+Size: 1046
+MD5sum: ec0e175eb6a8195345cbcf0ebc8ec930
+SHA1: c221918284dac110c73d437b28c8806291260651
+SHA256: b5874ba04f65c3bfea724d17aaa88da0bb5021ae2e3258c54a66b8cf2679807a
+SHA512: 8083e0a53366b4c8fc85dcf6b3ecb9686293216d6f0f253ae374252a7d8e5230ad7074cc56e5a7339d91426a5bff04243fe411e2a04e0b35b207d43ea0f8b5aa
+
+Package: us.hackulo.resources
+Name: Hackulous Resources
+Version: 1.1
+Priority: standard
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: docmorelli <apps@hackulo.us>
+Description: Hackulous resource files for Installous.
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.hresources-1.1/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.hresources-1.1/sileo.json
+Filename: us.hackulo.hresources-1.1.deb
+Size: 1092
+MD5sum: 5874a15458fafd1a310eb307dca97948
+SHA1: bbc4482dad5f04bf44ed614ab48091e930d4342d
+SHA256: e3e15484d800725428ef70d4310deb039b28c4a34090f961b8ffe408cee8a510
+SHA512: bc052d6c96087f5a3493702672702556aa9e4ed95741785f95eda573ab7d4fbd635cd7a42bc1d255a5798b1852523a56670e1215a084b1e367e5db47580e1ac2
+
+Package: us.hackulo.resources
+Name: Hackulous Resources
+Version: 1.2
+Priority: standard
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: docmorelli <apps@hackulo.us>
+Description: Hackulous resource files for Installous.
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.hresources-1.2/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.hresources-1.2/sileo.json
+Filename: us.hackulo.hresources-1.2.deb
+Size: 1092
+MD5sum: 9a4974f29a9b8ca8a982f2731064f912
+SHA1: 5573be76d7408db7f431d0280c596cd096ba8717
+SHA256: e87610f3bb9734c8a0d519282bb3d427dc56985901898dacb70e60fb3e0e256d
+SHA512: 3506d4dac126310fd4245c5be839b6e71c200b47bccfab0d8963ade8c4a9d04cbf05050e329eb912f06e2bafddbf80d72367a0446966fe6a6d5a685fe1ac64a0
+
+Package: us.hackulo.resources
+Name: Hackulous Resources
+Version: 1.3.1
+Priority: standard
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: docmorelli <apps@hackulo.us>
+Description: Hackulous resource files for Installous.
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.hresources-1.3.1/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.hresources-1.3.1/sileo.json
+Filename: us.hackulo.hresources-1.3.1.deb
+Size: 1162
+MD5sum: fc2cb6e041bf35b1c50548cf0106fac9
+SHA1: 42c775eea7a372c13318ca845b08b7ff6ef405b5
+SHA256: 265f87eb6b419c09b89c94f677defdbc6aaa0b6ecc2c4969fc32abe8c317f786
+SHA512: ebd41eb415adabb7f4d73cc87534fdb412c0d95618ea2c412ce65dad4d7c4bcbfe82df6a1e39f6af5ac95ff5cdff037ca49ba28580f3ddf330dede77aade89e7
+
+Package: us.hackulo.resources
+Name: Hackulous Resources
+Version: 1.3
+Priority: standard
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: docmorelli <apps@hackulo.us>
+Description: Hackulous resource files for Installous.
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.hresources-1.3/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.hresources-1.3/sileo.json
+Filename: us.hackulo.hresources-1.3.deb
+Size: 1142
+MD5sum: d1518fccb7b8eb2fc88e4ad605059b73
+SHA1: 7d611740f83f57df3693594d87afb5897243fb5b
+SHA256: d490bbf1707d6ff18b25308fb3c0b8ee9b047d23e7e080029aacca616efcb13a
+SHA512: d35e1ba126b1f12eee6c32e07d37d359c06493ddf77123b39c0c21cfeef748944b1cb76fa98cc9c0574810aec7501f4567996bdebb9538d67fd08c239a0cf462
+
+Package: us.hackulo.resources
+Name: Hackulous Resources
+Version: 1.4
+Priority: standard
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: docmorelli <apps@hackulo.us>
+Description: Hackulous resource files for Installous.
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.hresources-1.4/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.hresources-1.4/sileo.json
+Filename: us.hackulo.hresources-1.4.deb
+Size: 1162
+MD5sum: c7b03d949aff15822dea1239bc271394
+SHA1: bbcdb7943b181212719837be09d2534352907565
+SHA256: d05733e58b914fa1a56db8cb6d42762933fa359d0ad000f3c7844d5dccd5a498
+SHA512: 9beb0b13a317ea0906f3363e08dd0c0a420ba18ce53edd6d9e98831335bcef292428e3486f5c4611b1c216e9cb1e5a7d80510b2a07f7fcb9d99daa3196a20474
+
+Package: com.hackulo.us.installous
+Name: Installous 4
+Version: 4.0.0.10
+Priority: standard
+Pre-Depends: firmware (>= 3.1)
+Depends: us.hackulo.appsync31 | us.hackulo.appsync32 | us.hackulo.appsync40 | us.hackulo.appsync41 | us.hackulo.appsync42, com.hackulo.us.sourcegui
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: docmorelli <apps@hackulo.us>
+Description: Installous is the perfect app to install your IPAs
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-4.0.0.10/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-4.0.0.10/sileo.json
+Homepage: http://hackulo.us/depict/installous4/
+Filename: us.hackulo.installous-4.0.0.10.deb
+Size: 2515886
+MD5sum: fc2da034e9c9d4413739fb103d899483
+SHA1: ed6d38087fcc148b1aa9f78d6bc89b5501c15f33
+SHA256: bf0f5a6bb7b4fbc519db6b51fab03e1b2c2aa98bd50b933955018cec415bf37c
+SHA512: 66bd320f788d3eb5a812d5fe353afe486de68b74a1a23795bde64883183285221cd04d4ed7196430899e7d54e3a3b10ca8ce83d651cd87e95c6ba834511284cd
+
+Package: com.hackulo.us.installous
+Name: Installous 4
+Version: 4.1
+Priority: standard
+Pre-Depends: firmware (>= 3.1)
+Depends: us.hackulo.resources, appsync, com.hackulo.us.sourcegui
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: docmorelli <apps@hackulo.us>
+Description: Installous is the perfect app to install your IPAs
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-4.1/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-4.1/sileo.json
+Homepage: http://hackulo.us/depict/installous4/
+Filename: us.hackulo.installous-4.1.deb
+Size: 2327832
+MD5sum: c786535300999fce4d7ee5132933502a
+SHA1: 2d5032a1f4548f1c8b430d3015bce1ec9f3386a2
+SHA256: d3403c24efd7b4947d1c5a1a1b6f5e5624fae5d3a85d33d440cfa56efa8b8600
+SHA512: 5505805f240cdf046ab89fe2653dd55182ca0d00dd048300bedf0202c0310b1fe557bcb652620871379754ddb59ea1d48faa4a2e5bb75ad1cde506c7d1d7f2fc
+
+Package: com.hackulo.us.installous
+Name: Installous 4
+Version: 4.2
+Priority: standard
+Pre-Depends: firmware (>= 3.1)
+Depends: us.hackulo.resources, appsync, com.hackulo.us.sourcegui
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: docmorelli <apps@hackulo.us>
+Description: Installous is the perfect app to install your IPAs
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-4.2-1/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-4.2-1/sileo.json
+Homepage: http://hackulo.us/depict/installous4/
+Filename: us.hackulo.installous-4.2-1.deb
+Size: 2613230
+MD5sum: b10eb95bbacf8dfe8dcdebfb4be67354
+SHA1: ce1f843ce36fa239e0f95c8e080a3c80681887ba
+SHA256: dba1bdaef498a34730393512ec3708b79c8e53d6055be8944d44f00b2d3a1c33
+SHA512: a2c1dd446dd4ab9a7fae7fadd39b93efc961b5a70c9a07f9e13e32ac6217e3f62a516858c46e6c57a2852e95fae153362dc59b53582b65fd29974f02c018e9d4
+
+Package: com.hackulo.us.installous
+Name: Installous 4
+Version: 4.2
+Priority: standard
+Pre-Depends: firmware (>= 3.1)
+Depends: us.hackulo.resources, appsync, com.hackulo.us.sourcegui
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: docmorelli <apps@hackulo.us>
+Description: Installous is the perfect app to install your IPAs
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-4.2/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-4.2/sileo.json
+Homepage: http://hackulo.us/depict/installous4/
+Filename: us.hackulo.installous-4.2.deb
+Size: 2613228
+MD5sum: 0ac123bd18b0c28ba443ea96462610bc
+SHA1: a43bc6d92693a0607e91dad3483430cfe29b86a7
+SHA256: c0a44c8c3e7acd51a65af9d5fe670c2c0475d5e0cd870628778e9813d8fd467c
+SHA512: 9e95f4fd5ea028a1896ee87d32164b78f093ae8cce21c7378dcabc719df1931524439cdfe7ad927e4b4f26391b7fea8c1218c790788a27b53fb0c8789a42fe5c
+
+Package: com.hackulo.us.installous
+Name: Installous 4
+Version: 4.3-1
+Priority: standard
+Pre-Depends: firmware (>= 3.1)
+Depends: us.hackulo.resources, appsync, com.hackulo.us.sourcegui
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: docmorelli <apps@hackulo.us>
+Description: Installous is the perfect app to install your IPAs
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-4.3-1/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-4.3-1/sileo.json
+Homepage: http://hackulo.us/depict/installous4/
+Filename: us.hackulo.installous-4.3-1.deb
+Size: 3646804
+MD5sum: 71447e0fc98cceaf780c3fcfb1f9dc1d
+SHA1: 588fe69091124d31dfb954ae42ec98e4340015db
+SHA256: 96c2a885961d533284132da1b0a35c97810ab55857db2d9ea348f41d86526a35
+SHA512: bf239d907e36e83f43e1813d0f3436c40456a222de93a2428e023ddd1886f4a94dd7b739d54dcf7dfcfe68582d109f78be0dc17322b8be85f47051f522da3331
+
+Package: com.hackulo.us.installous
+Name: Installous 4
+Version: 4.3
+Priority: standard
+Pre-Depends: firmware (>= 3.1)
+Depends: us.hackulo.resources, appsync, com.hackulo.us.sourcegui
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: docmorelli <apps@hackulo.us>
+Description: Installous is the perfect app to install your IPAs
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-4.3/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-4.3/sileo.json
+Homepage: http://hackulo.us/depict/installous4/
+Filename: us.hackulo.installous-4.3.deb
+Size: 3674780
+MD5sum: 906b002dc5638b75e825819d47500a04
+SHA1: 4b14714fd2a71f963f7dc1a18fa590203178970e
+SHA256: 9c6e82ccd43b095ba7855560d13e208d2dc83c1710c40bc298d33375904d108e
+SHA512: 5fe603281a3f1b69db6fe80d0e75a7c8007a8caeb18063247520910af1cb06441abbedadb2a19ba7df868d3a5ee99be340c23c30802a1ee22ccb77e4b0dff7f1
+
+Package: com.hackulo.us.installous
+Name: Installous 4
+Version: 4.4.1
+Priority: standard
+Pre-Depends: firmware (>= 3.1)
+Depends: us.hackulo.resources, appsync, com.hackulo.us.sourcegui
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: docmorelli <apps@hackulo.us>
+Description: Installous is the perfect app to install your IPAs
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-4.4.1/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-4.4.1/sileo.json
+Homepage: http://hackulo.us/depict/installous4/
+Filename: us.hackulo.installous-4.4.1.deb
+Size: 3754126
+MD5sum: ec6dffebd628a202809d6ac57575bdc7
+SHA1: b72a01977e1a2c5e16acef776ebb6e911badb6a4
+SHA256: f823ac9b6bcd632e25a48ce196ef8fa65fa735141b1f4e2e21fa428ccc00b650
+SHA512: 6642d9fa5553ad241b30344e724f792665d5e80949a0011432f9858b26e711588b3fd8a1c77556c1a9415928074b55ac94b19153a29ccf6603049dfbe266727e
+
+Package: com.hackulo.us.installous
+Name: Installous 4
+Version: 4.4.2
+Priority: standard
+Pre-Depends: firmware (>= 3.1)
+Depends: us.hackulo.resources, appsync, com.hackulo.us.sourcegui
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: docmorelli <apps@hackulo.us>
+Description: Installous is the perfect app to install your IPAs
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-4.4.2/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-4.4.2/sileo.json
+Homepage: http://hackulo.us/depict/installous4/
+Filename: us.hackulo.installous-4.4.2.deb
+Size: 3754546
+MD5sum: 8449a76af73f71d576bddb2cdac9a994
+SHA1: 4d37cc7b3fef6ddd4af19be9caad62e9e21ea6fc
+SHA256: 39e49feb1628432efd0888e7065e52cab57dfc3af0b8af3047fb40c7fa77f26d
+SHA512: 35baa509ac64360fec04ee911daf2f1daacb302f09d31057bb86247bd3b0ec891862f67681cc189cb28f0b21d83e6d40eb565255db9ad1a124a2536c4897c97f
+
+Package: com.hackulo.us.installous
+Name: Installous 4
+Version: 4.4
+Priority: standard
+Pre-Depends: firmware (>= 3.1)
+Depends: us.hackulo.resources, appsync, com.hackulo.us.sourcegui
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: docmorelli <apps@hackulo.us>
+Description: Installous is the perfect app to install your IPAs
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-4.4/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-4.4/sileo.json
+Homepage: http://hackulo.us/depict/installous4/
+Filename: us.hackulo.installous-4.4.deb
+Size: 11397910
+MD5sum: 6c06c74fc5f1bdc8779005d92285cd02
+SHA1: f470e10e335418d195cfcd64358dadb66c5dbebd
+SHA256: 231bfd7a6bbeb6b247d90c986089dfacd0db99540990a94db470423d04b5f094
+SHA512: 17e255e2bcdcc4bd1f4bfd7f0639335d531ee27952e178e0fe0c237923f8e24ed79e457f2c88869ace3260e9bbfd1173cff79f139fc1109ea1993638aeacacd6
+
+Package: com.hackulo.us.installous
+Name: Installous 5
+Version: 5.0-10
+Priority: standard
+Pre-Depends: firmware (>= 4.0)
+Depends: us.hackulo.resources, appsync, com.hackulo.us.sourcegui, com.chpwn.weeloader (>= 1.1) | firmware (<< 5.0)
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: docmorelli <apps@hackulo.us>
+Description: Installous is the perfect app to install your IPAs
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-5.0-10/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-5.0-10/sileo.json
+Homepage: http://hackulo.us/depict/installous5/
+Filename: us.hackulo.installous-5.0-10.deb
+Size: 5317786
+MD5sum: 5220a2028bd94f536913b29e8b2037be
+SHA1: 5aff12155ebe9f09e178197fdac3b7cb5438a973
+SHA256: 28fc3baa4af0f4d5d971bc13bbe537ae24bae0beb8d45b376566a22fd620ef3c
+SHA512: 22a1a6ca828d5e3cb5e9db9788f9bdc2a6e7002d88dcab26d237045ef0e6226c87eb0314b2c8f0333d67180c5e0729902fc56b5ef451690435a0a19a2be63988
+
+Package: com.hackulo.us.installous
+Name: Installous 5
+Version: 5.0-9
+Priority: standard
+Pre-Depends: firmware (>= 4.0)
+Depends: us.hackulo.resources, appsync, com.hackulo.us.sourcegui, com.chpwn.weeloader (>= 1.1) | firmware (<< 5.0)
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: docmorelli <apps@hackulo.us>
+Description: Installous is the perfect app to install your IPAs
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-5.0-9/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-5.0-9/sileo.json
+Homepage: http://hackulo.us/depict/installous5/
+Filename: us.hackulo.installous-5.0-9.deb
+Size: 5313450
+MD5sum: 8a2570eb62a5a77d72f30941cd55c01f
+SHA1: d5c3b702adb69661b26cda658c3db30a0aa719a2
+SHA256: 3f516a5d8c38cae1f73f98568500f39c1ce8f8260781c19fb6a7279e14c6ac43
+SHA512: da437eed3a8da9cd1ee5f6c1c153857ff7693857bb81cbbb9658b07fdde3fa9a93c868038b241e39daec6abb41aaf2ae267d1b22ff55355a1b3f2fe7ff8dc7d2
+
+Package: com.hackulo.us.installous
+Name: Installous 5
+Version: 5.0.1-1
+Priority: standard
+Pre-Depends: firmware (>= 4.0)
+Depends: us.hackulo.resources, appsync, com.hackulo.us.sourcegui, com.chpwn.weeloader (>= 1.1) | firmware (<< 5.0)
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: docmorelli <apps@hackulo.us>
+Description: Installous is the perfect app to install your IPAs
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-5.0.1-1/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-5.0.1-1/sileo.json
+Homepage: http://hackulo.us/depict/installous5/
+Filename: us.hackulo.installous-5.0.1-1.deb
+Size: 5327346
+MD5sum: 17987749c9da3564e19477b5f006dd78
+SHA1: 06950bccc593f416f0a63c4a2402b1f8dd864f45
+SHA256: e8d110dfef5d589c957d1464bfea742344d4900d33bfe3f5d8ae686a74cf7c4d
+SHA512: 672f0b735e9ebc416c79042c95c24a184187fbc80735966dcd3bd9e9460f290f69e10bab4a00983c3375b084b04e300541390c7a840f0bd029cc592649ad4117
+
+Package: com.hackulo.us.installous
+Name: Installous 5
+Version: 5.0.2-1
+Priority: standard
+Pre-Depends: firmware (>= 4.0)
+Depends: us.hackulo.resources, appsync, com.hackulo.us.sourcegui, com.chpwn.weeloader (>= 1.1) | firmware (<< 5.0)
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: docmorelli <apps@hackulo.us>
+Description: Installous is the perfect app to install your IPAs
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-5.0.2-1/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-5.0.2-1/sileo.json
+Homepage: http://hackulo.us/depict/installous5/
+Filename: us.hackulo.installous-5.0.2-1.deb
+Size: 5328192
+MD5sum: f0b182b3fbb340d4e58f1304d890abce
+SHA1: 2c2aed45863b37283bd9bede08163662d44a853e
+SHA256: fcf07e1d1ac882341c85cadc9d59bf9d99ba8a16b5937887e69027fed4e1dadf
+SHA512: 4af6c3145c3ab03f4978903dff500a6987683bfe127b9c9bd2acdd03a3096bb0527901104372e880238e54887fa4be7a6ec529ad8a1645fbf386c6011ee1ce8a
+
+Package: com.hackulo.us.installous
+Name: Installous 5
+Version: 5.0.2-2
+Priority: standard
+Pre-Depends: firmware (>= 4.0)
+Depends: us.hackulo.resources, appsync, com.hackulo.us.sourcegui, com.chpwn.weeloader (>= 1.1) | firmware (<< 5.0)
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: docmorelli <apps@hackulo.us>
+Description: Installous is the perfect app to install your IPAs
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-5.0.2-2/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-5.0.2-2/sileo.json
+Homepage: http://hackulo.us/depict/installous5/
+Filename: us.hackulo.installous-5.0.2-2.deb
+Size: 5328190
+MD5sum: 0c6646c9a0231ba28b79f3b41c187245
+SHA1: 48e77e7a080503d474a87550a9cecc06d91476b6
+SHA256: e02e171f5b683c6e9ce392136a25967d043f54c690fc99349adb0272c1bfba4a
+SHA512: 0e4b7c508c5eb65e0e7668076572c0ce9b3772deec1e9e47ce68162d78dca2e29cbb0e4084fea99c6423cd2af2f2945c630128ea52e54c23548d05f6215f4b6b
+
+Package: com.hackulo.us.installous
+Name: Installous 5
+Version: 5.0.3-1
+Priority: standard
+Pre-Depends: firmware (>= 4.0)
+Depends: us.hackulo.resources, appsync, com.hackulo.us.sourcegui, com.chpwn.weeloader (>= 1.1) | firmware (<< 5.0)
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: docmorelli <apps@hackulo.us>
+Description: Installous is the perfect app to install your IPAs
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-5.0.3-1/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.installous-5.0.3-1/sileo.json
+Homepage: http://hackulo.us/depict/installous5/
+Filename: us.hackulo.installous-5.0.3-1.deb
+Size: 5326030
+MD5sum: 42e48c376dcedbefd0c5bc6876310e45
+SHA1: 14cc8f1ffb1e625bb57020f764f4e518b6d709f5
+SHA256: 4baf768abe97799850d5e5ffb53e9cd052ea5d413d7441f0cd57b4b1ae4dcf32
+SHA512: f39fdd9c51eef84b1df844181dc3107b7bad3cf68c8198ad250f9bad433b2a95220008def796cba4a3605a430a41117aea2c1e4460a03bc0ced92286595441c9
+
+Package: ldone
+Priority: optional
+Section: Development
+Maintainer: Dissident <apps@hackulo.us>
+Author: Dissident <apps@hackulo.us>
+Architecture: iphoneos-arm
+Version: 0.1-2
+Description: Quick Mach-O binary utility
+Name: ldone
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.ldone-0.1-2/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.ldone-0.1-2/sileo.json
+Filename: us.hackulo.ldone-0.1-2.deb
+Size: 7576
+MD5sum: 3b959c04d95e78519013ae82bdeb5dec
+SHA1: 6376f2bdb0011386f97da129f53b015298efb200
+SHA256: 3b6565894c42b944ee1301d14f57f39c18d77fab79f3272597c4970d01a9e914
+SHA512: 8346c7b272bd082975a292c0639f608ec42813fb7e373b935927b2682c4261c0efa3db37b0df89b999c15636059f777eb3d003e12aa457eafb014e0227175758
+
+Package: ldone
+Priority: optional
+Section: Development
+Maintainer: Dissident <apps@hackulo.us>
+Author: Dissident <apps@hackulo.us>
+Architecture: iphoneos-arm
+Version: 0.2
+Description: Quick Mach-O binary utility
+Name: ldone
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.ldone-0.2/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.ldone-0.2/sileo.json
+Filename: us.hackulo.ldone-0.2.deb
+Size: 7666
+MD5sum: 5718d81e78a7544e3a0c3ac2918468b4
+SHA1: 1f4768f1b63820a8f849f5cb0a93fdb6b25207c0
+SHA256: 6d62d7b01eb3d9389032d3d104e01553194aa03015cd8917d7cbcf8b31e7557d
+SHA512: 70e49dc65151e3918e5a7d54853dee7441994d5649d6178e72d365c3f2c610cd1fc9ed661868291af6ca83ddeabf0da398c41e8d5f39c9c8192e71034318ab95
+
+Package: us.hackulo.metadataremovr
+Name: MetadataRemovr
+Version: 1.6
+Priority: standard
+Pre-Depends: firmware (>= 3.1)
+Depends: us.hackulo.security, com.hackulo.us.sourcegui
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Dissident <apps@hackulo.us>
+Author: Neon <apps@hackulo.us>
+Description: MetadataRemovr is a utility which cleans cracked metadata files to remove AppStore updates for cracked apps.
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.metadataremovr-1.6/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.metadataremovr-1.6/sileo.json
+Homepage: http://hackulo.us/depict/metadataremovr/
+Filename: us.hackulo.metadataremovr-1.6.deb
+Size: 336878
+MD5sum: 09fb48e38adb6049ffea8e6909378987
+SHA1: 1b6a952f22a10abdcd0737f08f351b5dbcc84c1f
+SHA256: 25838bb4d81356066c56bd9e6fa586921fab17eb4586774b59f10597b2f43a61
+SHA512: 5ecce8d112772374a1b6c4f05c0d7d7dc84e6c777637b98d528b9c5713675e81ca965d4d7120152a89865a0dd9110ce757adb40a75e5dc23ea4276f217db5b86
+
+Package: us.hackulo.security
+Name: Hackulous Security
+Version: 1.2.1
+Priority: standard
+Depends: com.hackulo.us.sourcegui, coreutils, openssl, curl, sed
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Genius Blog <admin@hackulo.us>
+Author: Kyek <hackulous_security@hackulo.us>
+Description: Protects you and your device from malicious websites
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.security/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.security/sileo.json
+Homepage: http://hackulo.us/depict/security
+Filename: us.hackulo.security.deb
+Size: 2784
+MD5sum: df221ff7bb2f4baf1503b9693b1ca298
+SHA1: 1f588f64db3c9e2599350f7a25856ed03eee22a0
+SHA256: df6a4bd2e8a06608de72d6b0a4ce7a620def7b0104c361123f878b1031528d90
+SHA512: 63ac273eff8cfb3e8f9fdee4617d0862ee06609b209706ce3d11c7e12fba1c8f17920cfadbffa3f2223ecd90e0d446454756a2f816f45f9915d4ff6b68b8c294
+
+Package: com.hackulo.us.sourcegui
+Name: Source GUI
+Version: 1.2
+Priority: standard
+Architecture: iphoneos-arm
+Section: Hackulo.us
+Maintainer: Genius Blog <admin@hackulo.us
+Author: Genius Blog <admin@hackulo.us>
+Description: Hackulo.us Source GUI adds the source icons
+Sponsor: Hackulo.us <http://hackulo.us>
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.sourcegui-1.2/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.sourcegui-1.2/sileo.json
+Homepage: http://hackulo.us/depict/sourcegui
+Filename: us.hackulo.sourcegui-1.2.deb
+Size: 8518
+MD5sum: c60b66d9fc23710ddb5a149a535951fd
+SHA1: 66c7a0233dcdae976c169b483e790a7e92bb1de3
+SHA256: ab54749833ed2e9c16754a3fdf692e94004b3495ab7a08d11c2085e6e21130fb
+SHA512: 64c96bbde7dd447d887a730b1401de3b9bc34fb28a8fac60b414b26a2c4bd6bfe0224741ae1886b880ae62f2a5e9fd54e4f6bead543e3a8c379a66f30f335cc6
+
+Package: installous.translations
+Priority: standard
+Section: Development
+Depends: com.hackulo.us.installous
+Maintainer: Dissident <apps@hackulo.us>
+Author: Dissident <apps@hackulo.us>
+Architecture: iphoneos-arm
+Version: 1.0-1
+Description: Installous foreign translations
+Name: Installous Translations
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.translations-1.0-1/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.translations-1.0-1/sileo.json
+Filename: us.hackulo.translations-1.0-1.deb
+Size: 17276464
+MD5sum: c6220fe5f645a3902b323328c50807cd
+SHA1: 8cd3e26fd472ce38e52d8c32c0577d4e54ec0a6b
+SHA256: 0d6220d81d1c22e9144eae04a98f6324c4f336e01e1a8f05a8f66fdaf5c197ea
+SHA512: 2e01a65a5463f131856ff442178abac26979408a29bb3480e7fc7fc0a8af39aaddf4113b1e9c9f4328b3c7f3e195a35b37c7496e118e1a6ec510017d7c7d65fa
+
+Package: installous.translations
+Priority: standard
+Section: Development
+Maintainer: Dissident <apps@hackulo.us>
+Author: Dissident <apps@hackulo.us>
+Architecture: iphoneos-arm
+Version: 1.0
+Description: Installous foreign translations
+Name: Installous Translations
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.translations-1.0/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.translations-1.0/sileo.json
+Filename: us.hackulo.translations-1.0.deb
+Size: 17276444
+MD5sum: 2b38f92b299b2a7bf261c36d14ffe655
+SHA1: 950ca19fac5cfe60fa0389cb836fec32aa288286
+SHA256: 554dc2fecd0666ebe29ccfd28c2c078bf17e4d084719e4f406eab3f90a084d1a
+SHA512: 7e71e8fdfb8d5fa94e1c77db5488bb33c63f13c059d077772191a6ba9fd4badd89f5c86a06ef07946e4052de669ce5e1e22f44297cb9d0ec9791ea97d829021e
+
+Package: installous.translations
+Priority: standard
+Section: Development
+Depends: com.hackulo.us.installous
+Maintainer: Dissident <apps@hackulo.us>
+Author: Dissident <apps@hackulo.us>
+Architecture: iphoneos-arm
+Version: 1.1
+Description: Installous foreign translations
+Name: Installous Translations
+Depiction: https://playday-ios.github.io/repo/depictions/us.hackulo.translations-1.1/depiction.html
+SileoDepiction: https://playday-ios.github.io/repo/depictions/us.hackulo.translations-1.1/sileo.json
+Filename: us.hackulo.translations-1.1.deb
+Size: 17324900
+MD5sum: c82eea469105f4e7ca4c39b80ccb01cf
+SHA1: 97dbc7017420c7cf3f90f36e7a865e09dd6c069a
+SHA256: 7e6baff283179260a4e02d758efa41a181a54e33b808101ca606628367baf594
+SHA512: 504b5abdc068a862b2754380f3e1ef16aa86992cc88e98e02b9fd556ad657b4c6b1eca8472a32735144517ab737f3085b9e34c04cc69e35099cd89c499711250

@@ -1,0 +1,48 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Origin: PlayDay-iOS (Stable)
+Label: PlayDay-iOS (Stable)
+Suite: stable
+Codename: stable
+Date: Wed, 11 Nov 2026 12:02:56 UTC
+Architectures: iphoneos-arm iphoneos-arm64 all
+Components: .
+Description: APT repository for iOS packages published by PlayDay. (Stable)
+MD5Sum:
+ 34e854ebe22bf8dbe941b2f0eea57b6a           195830 Packages
+ 65543c855533c6777e196ef18439521a            35522 Packages.bz2
+ 1aa9a815729fcacf0266541a5f67ffef            33837 Packages.gz
+ 598c420437a7f0d414488f8f870f0b99            35784 Packages.xz
+SHA1:
+ 4a1b047e602f509d2b2d60d721de48625fc28dd7           195830 Packages
+ 569e42b2f48a6548747b8a3d8e4eb2fdda74cdb6            35522 Packages.bz2
+ daf03e215f24644c8f8b7a88810e3c5a5d4b0872            33837 Packages.gz
+ 59f1b7faca58e3b47fda07fea9fc0eea49fa1b54            35784 Packages.xz
+SHA256:
+ f0021408ee393987921e091f3de982bc9ec1735da9cb8b6b25b7af9ad4878660           195830 Packages
+ 711566c4373dfb1180b5afd78af4c96fc1179e3b8a8c75ff27460faa43aec101            35522 Packages.bz2
+ 87ba15f955e6a4863548b7aa8fb3b3c279a436a5c4c1d460af3f33d49d471ca7            33837 Packages.gz
+ 09bba7a8fe3b27c4dd9f6fc9a87b6be4ab102f82c62ba58d687079245070d572            35784 Packages.xz
+SHA512:
+ 0a9bc22c0b50a68d18ca3e0adde4e5b049db5b5f91c44d9e5741588ecf9780dfa24b56822516ceff148f701191ad1820a6eba2bb0ad3e9955f42fcd2ef451ad9           195830 Packages
+ 63da3a76454eac9ed9c5e715b441238ff893933db83ee6376670407a9b67f3e5e1b6adad32fb831a7a5604ef572454228604536227cdf2274933a363d933407a            35522 Packages.bz2
+ b3da5cff3aa4509e347657e9085f2e00d2c7dcc197876f97331ed370a337d3e2808dddd39174bae07c93e58f27c7dd67c4a617a4c0672c3f8c7dce8833d88e38            33837 Packages.gz
+ ee179151d04ac6c3fe6d5c726997bb3080ea4a961612df3a483435fd1200e4c64d8657aa9753f282070eb5d83ccf2d2a6d79da124bc3f3ad28e99733fc41eba0            35784 Packages.xz
+
+-----BEGIN PGP SIGNATURE-----
+
+wsGpBAEBCABdBYJq9FmlCRDvMU6FgBAigzUUAAAAAAAcABBzYWx0QG5vdGF0aW9u
+cy5vcGVucGdwanMub3JnBsjf8EsD1D6RNlJ6ksepmBYhBOsxuKMUkEDQE6Ayyu8x
+ToWAECKDAADNfQ/9Gf2oj1JHMxHvgKilVk1UQb4ieOd+7CqSUzHYrUq/rexFkvdL
+gJUGsITtcpAySm6x0nY2xjFXunW8kUHb88PAtb1jeVq8DFdm09iYMYbZt//VHSLq
+qd/foLi/llIRRpmFgA/yZDTXHd7loyRRvGRGRDG5YQSggJlA6n0jFGKHCahO0L2v
+vngFxVD9BI7thvMF0AcChMj2idB9NYf549f8ivxfggdh6ithrgRMP7KcpmvT/7cR
+aOmMhu5xt4AFwJtJjJZ+qHMzc3Gd4UMUTUnHAtjWgAPuJ1mwtbKyLcS40YXSS6LO
+7iQmpopDsebJ1zm3uaqw4QCRAz6A8rR4qBLBKYirn4e+OJbmuGkS/4CpwZSQw4K6
+ZsENOxSQdd1tQVpSX0g3Fc/gLrdL8qSwUs5f0JBuIy/YNtlbwRHFyxDhRJl9v9U6
+PgHLN6fCzQdr0krEaOg+eYXGIWuYAoF/tR5evWrJXwMiql9Q3IhUULYjXJEegZDF
+D8hF/jr2+o5tu2a7AQUbBhZcoINIegxLpfwqQxdrC9Q8u7nXNdWLDjx8cplpDRJ+
+y3UDL2HuZ3fue6aVApDidaHZPxwurdCuwgl0tcdTgb5FF49H1AFVMYfuvcpBK/PQ
+GQhA270roLDposCsSbzxaF4t6Ulqh6q/NmkM0YzHwM6xcJptZVmjF6SZ7lE=
+-----END PGP SIGNATURE-----
